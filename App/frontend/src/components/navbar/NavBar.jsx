@@ -1,6 +1,7 @@
 import { Link as RRDLink } from "react-router-dom";
 import { Box, HStack, Heading, Icon, Link } from "@chakra-ui/react";
 import { FaSpaceAwesome } from "react-icons/fa6";
+import { motion } from "framer-motion";
 
 const CustomLink = ({ path, label }) => {
   return (
@@ -18,8 +19,15 @@ const CustomLink = ({ path, label }) => {
 };
 
 const Navbar = () => {
+  const MotionBox = motion(Box);
+
   return (
-    <Box as="header" w="100%">
+    <MotionBox
+      as="header"
+      w="100%"
+      initial={{ y: -500 }}
+      animate={{ y: 0, transition: { duration: 0.4 } }}
+    >
       <HStack alignItems="center" justifyContent="space-between">
         <RRDLink to="/">
           <HStack gap={5}>
@@ -39,7 +47,7 @@ const Navbar = () => {
           <CustomLink path="./missions" label="Missions" />
         </HStack>
       </HStack>
-    </Box>
+    </MotionBox>
   );
 };
 

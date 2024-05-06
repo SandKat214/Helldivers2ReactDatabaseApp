@@ -1,9 +1,21 @@
 import { Box, Heading, Text, VStack } from "@chakra-ui/react";
+import { motion } from "framer-motion";
+import Typewriter from "typewriter-effect";
 
 const HeroSection = () => {
+  const MotionBox = motion(Box);
+  const MotionVStack = motion(VStack);
+  const MotionText = motion(Text);
+
   return (
     <VStack gap={16}>
-      <Box p={0.5} backgroundColor="red.500" borderRadius="full">
+      <MotionBox
+        p={0.5}
+        backgroundColor="red.500"
+        borderRadius="full"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1, transition: { delay: 0.4, duration: 0.2 } }}
+      >
         <Box
           backgroundColor="background.700"
           borderRadius="full"
@@ -14,10 +26,26 @@ const HeroSection = () => {
             Recruit for Your Next Mission
           </Text>
         </Box>
-      </Box>
+      </MotionBox>
       <VStack gap={8}>
-        <Heading color="white" textAlign="center" fontSize="7xl">
-          Spread Democracy{" "}
+        <MotionVStack
+          gap={0}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, transition: { delay: 0.8, duration: 0.2 } }}
+        >
+          <Heading color="white" textAlign="center" fontSize="7xl">
+            <Typewriter
+              options={{
+                strings: [
+                  "Spread Democracy",
+                  "Liberate Planets",
+                  "Build Communities",
+                ],
+                autoStart: true,
+                loop: true,
+              }}
+            />
+          </Heading>
           <Heading
             as="span"
             color="red.500"
@@ -29,12 +57,14 @@ const HeroSection = () => {
           >
             Like Never Before.
           </Heading>
-        </Heading>
-        <Text
+        </MotionVStack>
+        <MotionText
           color="gray.100"
           fontWeight="bold"
           fontSize="xl"
           textAlign="center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, transition: { delay: 1.2, duration: 0.2 } }}
         >
           Find you liberation squad with a
           <Text
@@ -49,7 +79,7 @@ const HeroSection = () => {
           >
             click of a button
           </Text>
-        </Text>
+        </MotionText>
       </VStack>
     </VStack>
   );
