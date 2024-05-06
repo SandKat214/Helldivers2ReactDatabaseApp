@@ -45,6 +45,8 @@ const Navbar = () => {
           <CustomLink path="./teams" label="Teams" />
           <CustomLink path="./planets" label="Planets" />
           <CustomLink path="./missions" label="Missions" />
+          <CustomLink path="./languages" label="Languages" />
+          <CustomLink path="./register" label="Register Player to Team" />
         </HStack>
       </HStack>
     </MotionBox>

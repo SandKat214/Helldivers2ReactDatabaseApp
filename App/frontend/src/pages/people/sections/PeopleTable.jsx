@@ -23,8 +23,7 @@ const PeopleTable = () => {
       maxH="500px"
       overflowY="auto"
       borderRadius="md"
-      px={1}
-      py={5}
+      p={1}
       boxShadow="0px 2px 12px rgba(229, 62, 62, 0.3)"
     >
       <TableContainer w="100%">

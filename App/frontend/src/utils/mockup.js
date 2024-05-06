@@ -204,4 +204,90 @@ export const players = [
   },
 ];
 
-export default players;
+export const teamsTable = [
+  {
+    teamID: 1,
+    teamTitle: "Shield of Democracy",
+    teamMeet: "2024-05-02 14:30:00",
+    difficulty: 3,
+    notes: "LGBTQIA+ friendly",
+    "18Up": true,
+    chat: true,
+    count: 2,
+    missionID: 2,
+    planetID: 3,
+    langID: "ENGL",
+  },
+  {
+    teamID: 2,
+    teamTitle: "Indominus Legion",
+    teamMeet: "2024-05-07 11:15:00",
+    difficulty: 5,
+    notes: null,
+    "18Up": false,
+    chat: false,
+    count: 3,
+    missionID: 5,
+    planetID: 2,
+    langID: null,
+  },
+  {
+    teamID: 3,
+    teamTitle: "FHC",
+    teamMeet: "2024-05-08 13:00:00",
+    difficulty: 5,
+    notes: "Europe/Canada",
+    "18Up": false,
+    chat: true,
+    count: 1,
+    missionID: 5,
+    planetID: 1,
+    langID: "FRNC",
+  },
+  {
+    teamID: 4,
+    teamTitle: "Holy Divers",
+    teamMeet: "2024-05-08 15:30:00",
+    difficulty: 2,
+    notes: null,
+    "18Up": false,
+    chat: true,
+    count: 0,
+    missionID: 3,
+    planetID: 2,
+    langID: "ENGL",
+  },
+];
+
+export const planets = [
+  {
+    planetID: 1,
+    planetName: "Alathfar XI",
+    terrain: "Mountains",
+  },
+  {
+    planetID: 2,
+    planetName: "Klen Dahth II",
+    terrain: "Ocean",
+  },
+  {
+    planetID: 3,
+    planetName: "Marfark",
+    terrain: "Desert",
+  },
+  {
+    planetID: 4,
+    planetName: "Electra Bay",
+    terrain: "Swamp",
+  },
+  {
+    planetID: 5,
+    planetName: "Achernar Secundus",
+    terrain: "Earth Like",
+  },
+  {
+    planetID: 6,
+    planetName: "Viridia Prime",
+    terrain: "Icy",
+  },
+];
