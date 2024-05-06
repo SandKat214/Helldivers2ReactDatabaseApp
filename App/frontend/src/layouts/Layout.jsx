@@ -4,15 +4,9 @@ import { Outlet, useLocation } from "react-router-dom";
 import Footer from "../components/footer/Footer";
 
 const Layout = () => {
-  const location = useLocation();
-
   return (
     <VStack w="100vw" minH="100vh" alignItems="center" pt={8}>
-      <VStack
-        maxW="1200px"
-        w="1300px"
-        gap={location.pathname === "/" ? 28 : 20}
-      >
+      <VStack maxW="1200px" w="1300px" gap={20}>
         <Navbar />
         <Outlet />
         <Footer />
