@@ -1,11 +1,1 @@
-html {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  background-color: #0b111d !important;
-}
 
-html li {
-  list-style-type: none;
-}
