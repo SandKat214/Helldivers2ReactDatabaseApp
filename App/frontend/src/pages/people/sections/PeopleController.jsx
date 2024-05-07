@@ -106,14 +106,14 @@ const PeopleController = () => {
                 </FormControl>
                 <FormControl color="white">
                   <FormLabel>Level</FormLabel>
-                  <Input type="text" variant="filled" placeholder="Name..." />
+                  <Input type="number" variant="filled" placeholder="Level..." min={1} max={150} />
                   <FormHelperText color="gray.400">
                     Level defaults to 1.
                   </FormHelperText>
                 </FormControl>
                 <FormControl color="white">
                   <FormLabel>Age</FormLabel>
-                  <Input type="text" variant="filled" placeholder="Name..." />
+                  <Input type="number" variant="filled" placeholder="Name..." min={12} />
                   <FormHelperText color="gray.400">Must be 12+.</FormHelperText>
                 </FormControl>
                 <FormControl color="white">

@@ -32,7 +32,7 @@ const ControllerButton = ({ icon, label, onClick }) => {
   );
 };
 
-const PlanetsConrtoller = () => {
+const PlanetsController = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -87,10 +87,9 @@ const PlanetsConrtoller = () => {
                     <option value="">Mountains</option>
                     <option value="">Ocean</option>
                     <option value="">Swamp</option>
-                    <option value="">Earth Like</option>
+                    <option value="">Forest</option>
                   </Select>
                   <FormHelperText color="gray.400">
-                    Both first and last name.
                   </FormHelperText>
                 </FormControl>
               </VStack>
@@ -107,4 +106,4 @@ const PlanetsConrtoller = () => {
   );
 };
 
-export default PlanetsConrtoller;
+export default PlanetsController;

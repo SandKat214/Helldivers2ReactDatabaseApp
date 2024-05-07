@@ -216,7 +216,7 @@ export const teamsTable = [
     count: 2,
     missionID: 2,
     planetID: 3,
-    langID: "ENGL",
+    langID: "English",
   },
   {
     teamID: 2,
@@ -242,7 +242,7 @@ export const teamsTable = [
     count: 1,
     missionID: 5,
     planetID: 1,
-    langID: "FRNC",
+    langID: "Francais",
   },
   {
     teamID: 4,
@@ -255,7 +255,7 @@ export const teamsTable = [
     count: 0,
     missionID: 3,
     planetID: 2,
-    langID: "ENGL",
+    langID: "English",
   },
 ];
 
@@ -283,11 +283,89 @@ export const planets = [
   {
     planetID: 5,
     planetName: "Achernar Secundus",
-    terrain: "Earth Like",
+    terrain: "Forest",
   },
   {
     planetID: 6,
     planetName: "Viridia Prime",
     terrain: "Icy",
+  },
+];
+
+export const missionTypes = [
+  {
+    missionName: 'Terminate Illegal Broadcast',
+    missionDesc: 'Destroy the illegal propaganda broadcast.',
+    missionDuration: 40,
+  },
+  {
+    missionName: 'Pump Fuel to ICBM',
+    missionDesc: 'Reactivate the fueling station and launch ICBM.',
+    missionDuration: 40,
+  },
+  {
+    missionName: 'Unload Escape Pod Data',
+    missionDesc: 'Extract valuable data from teh crashed escape pod.',
+    missionDuration: 40,
+  },
+  {
+    missionName: 'Blitz: Search and Destroy',
+    missionDesc: 'Locate and seal bug holes or automaton fabricators.',
+    missionDuration: 12,
+  },
+  {
+    missionName: 'Eradicate Terminid Swarm',
+    missionDesc: 'Kill terminids to thin their numbers.',
+    missionDuration: 15,
+  },
+];
+
+export const languages = [
+  {
+    langID: 'ENGL',
+    langName: 'English',
+  },
+  {
+    langID: 'ESPL',
+    langName: 'Espanol',
+  },
+  {
+    langID: 'FRNC',
+    langName: 'Francais',
+  },
+  {
+    langID: 'DEUT',
+    langName: 'Deutsch',
+  },
+  {
+    langID: 'PRTG',
+    langName: 'Portugues',
+  },
+];
+
+export const teamPlayers = [
+  {
+    teamName: 'Shield of Democracy',
+    playerAlias: 'thinkTwice',
+  },
+  {
+    teamName: 'Shield of Democracy',
+    playerAlias: 'Lord1745',
+  },
+  {
+    teamName: 'Indominus Legion',
+    playerAlias: 'leafonthewind',
+  },
+  {
+    teamName: 'Indominus Legion',
+    playerAlias: 'Lazarus',
+  },
+  {
+    teamName: 'Indominus Legion',
+    playerAlias: 'thinkTwice',
+  },
+  {
+    teamName: 'FHC',
+    playerAlias: 'leafonthewind',
   },
 ];

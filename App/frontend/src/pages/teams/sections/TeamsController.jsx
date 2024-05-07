@@ -150,8 +150,8 @@ const TeamsController = () => {
                 <FormControl color="white">
                   <FormLabel>Language</FormLabel>
                   <Select variant="filled" color="background.700">
-                    <option value="1">Planet 1</option>
-                    <option value="2">Planet 2</option>
+                    <option value="1">English</option>
+                    <option value="2">Espanol</option>
                   </Select>
                   <FormHelperText color="gray.400">
                     Can be empty.
