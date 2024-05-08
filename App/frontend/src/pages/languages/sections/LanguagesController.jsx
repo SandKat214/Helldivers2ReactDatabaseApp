@@ -46,7 +46,6 @@ import {
           border="1px solid white"
         >
           <ControllerButton icon={FaPlus} label="Add" onClick={() => onOpen()} />
-          <ControllerButton icon={FaTrash} label="Delete" onClick={() => {}} />
         </HStack>
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />

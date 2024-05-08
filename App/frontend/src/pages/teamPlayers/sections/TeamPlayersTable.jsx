@@ -12,7 +12,7 @@ import {
     Tr,
   } from "@chakra-ui/react";
   import { teamPlayers } from "../../../utils/mockup";
-  import { MdJoinFull } from "react-icons/md";
+  import { FaTrash } from "react-icons/fa6";
   
   const TeamPlayersTable = () => {
     return (
@@ -53,6 +53,19 @@ import {
                   >
                     <Td textAlign="center">{teamPlayer.teamName}</Td>
                     <Td textAlign="center">{teamPlayer.playerAlias}</Td>
+                    <Td>
+                      <HStack justifyContent="flex-end">
+                        <Tooltip label="Remove from Team" placement="top">
+                          <IconButton
+                          colorScheme="red"
+                          color="white"
+                          aria-label="Edit button"
+                          icon={<FaTrash />}
+                          size="sm"
+                        />
+                        </Tooltip>
+                      </HStack>
+                    </Td>
                   </Tr>
                 );
               })}

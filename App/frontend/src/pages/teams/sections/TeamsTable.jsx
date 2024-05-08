@@ -12,7 +12,7 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { teamsTable } from "../../../utils/mockup";
-import { MdJoinFull } from "react-icons/md";
+import { MdJoinFull, MdEdit } from "react-icons/md";
 
 const TeamsTable = () => {
   return (
@@ -64,6 +64,15 @@ const TeamsTable = () => {
                   <Td>{team.langID ?? "n/a"}</Td>
                   <Td>
                     <HStack>
+                      <Tooltip label="Edit team" placement="top">
+                          <IconButton
+                            colorScheme="red"
+                            color="white"
+                            aria-label="Delete button"
+                            icon={<MdEdit />}
+                            size="sm"
+                          />
+                        </Tooltip>
                       <Tooltip label="Join team" placement="top">
                         <IconButton
                           icon={<MdJoinFull />}

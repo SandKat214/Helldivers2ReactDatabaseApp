@@ -46,7 +46,6 @@ const TeamsController = () => {
         border="1px solid white"
       >
         <ControllerButton icon={FaPlus} label="Add" onClick={() => onOpen()} />
-        <ControllerButton icon={FaTrash} label="Delete" onClick={() => {}} />
       </HStack>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -82,6 +81,7 @@ const TeamsController = () => {
                     type="number"
                     variant="filled"
                     placeholder="Difficulty..."
+                    min={1}
                     max={9}
                   />
                   <FormHelperText color="gray.400">

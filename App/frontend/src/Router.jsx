@@ -65,18 +65,6 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "missions",
-        element: (
-          <TableLayout
-            header="MissionTypes Table"
-            desc="This is a category table that contains the details of the different Mission Types. 1:M relationship between MissionTypes and Teams, with missionID as a FK inside Teams. A mission type can be linked to zero or more team recruitments.
-            "
-          >
-            <MissionTypes />
-          </TableLayout>
-        ),
-      },
-      {
         path: "languages",
         element: (
           <TableLayout
