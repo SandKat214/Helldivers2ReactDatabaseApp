@@ -15,7 +15,7 @@ import { FaTrash } from "react-icons/fa6";
 import { players } from "../../../utils/mockup";
 import { MdEdit } from "react-icons/md";
 
-const PeopleTable = () => {
+const PlayerTable = () => {
   return (
     <Box
       backgroundColor="background.200"
@@ -105,4 +105,4 @@ const PeopleTable = () => {
   );
 };
 
-export default PeopleTable;
+export default PlayerTable;

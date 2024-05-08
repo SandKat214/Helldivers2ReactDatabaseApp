@@ -6,11 +6,11 @@ import Footer from "../components/footer/Footer";
 const Layout = () => {
   return (
     <VStack w="100vw" minH="100vh" alignItems="center" pt={8}>
-      <VStack maxW="1200px" w="1300px" gap={20}>
+      <VStack maxW="1200px" w="1300px" gap={20} alignItems="stretch" mb={20}>
         <Navbar />
         <Outlet />
-        <Footer />
       </VStack>
+      <Footer />
     </VStack>
   );
 };

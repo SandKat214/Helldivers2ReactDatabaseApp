@@ -6,6 +6,7 @@ import {
   TableContainer,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tooltip,
@@ -26,18 +27,38 @@ const TeamsTable = () => {
       boxShadow="0px 2px 12px rgba(229, 62, 62, 0.3)"
     >
       <TableContainer w="100%">
-        <Table variant="unstyled" w="100%">
+        <Table>
           <Thead>
             <Tr>
-              <Th color="white">Team Title</Th>
-              <Th color="white">Meeting Time</Th>
-              <Th color="white">18+</Th>
-              <Th color="white">Chat Friendly</Th>
-              <Th color="white">Member Count</Th>
-              <Th color="white">Planet</Th>
-              <Th color="white">Mission Type</Th>
-              <Th color="white">Language</Th>
-              <Th color="white">Actions</Th>
+              <Th borderColor="transparent" color="white">
+                Team Title
+              </Th>
+              <Th borderColor="transparent" color="white">
+                Meeting Time
+              </Th>
+              <Th borderColor="transparent" color="white">
+                18+
+              </Th>
+              <Th borderColor="transparent" color="white">
+                <Text>Chat</Text>
+                <Text>Friendly</Text>
+              </Th>
+              <Th color="white" borderColor="transparent">
+                <Text>Member</Text>
+                <Text>Count</Text>
+              </Th>
+              <Th borderColor="transparent" color="white">
+                Planet
+              </Th>
+              <Th borderColor="transparent" color="white">
+                Mission Type
+              </Th>
+              <Th borderColor="transparent" color="white">
+                Language
+              </Th>
+              <Th borderColor="transparent" color="white">
+                Actions
+              </Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -53,32 +74,40 @@ const TeamsTable = () => {
                   _hover={{
                     backgroundColor: "#0B111D",
                   }}
+                  h={24}
                 >
-                  <Td>{team.teamTitle}</Td>
-                  <Td>{team.teamMeet.slice(0, team.teamMeet.length - 3)}</Td>
-                  <Td>{team["18Up"] ? "true" : "false"}</Td>
-                  <Td>{team.chat ? "true" : "false"}</Td>
-                  <Td>{team.count}</Td>
-                  <Td>{team.planetID}</Td>
-                  <Td>{team.missionID}</Td>
-                  <Td>{team.langID ?? "n/a"}</Td>
-                  <Td>
+                  <Td borderColor="transparent">{team.teamTitle}</Td>
+                  <Td borderColor="transparent">
+                    {team.teamMeet.slice(0, team.teamMeet.length - 3)}
+                  </Td>
+                  <Td borderColor="transparent">
+                    {team["18Up"] ? "true" : "false"}
+                  </Td>
+                  <Td borderColor="transparent">
+                    {team.chat ? "true" : "false"}
+                  </Td>
+                  <Td borderColor="transparent">{team.count}</Td>
+                  <Td borderColor="transparent">{team.planetID}</Td>
+                  <Td borderColor="transparent">{team.missionID}</Td>
+                  <Td borderColor="transparent">{team.langID ?? "n/a"}</Td>
+                  <Td borderColor="transparent">
                     <HStack>
                       <Tooltip label="Edit team" placement="top">
-                          <IconButton
-                            colorScheme="red"
-                            color="white"
-                            aria-label="Delete button"
-                            icon={<MdEdit />}
-                            size="sm"
-                          />
-                        </Tooltip>
+                        <IconButton
+                          colorScheme="red"
+                          color="white"
+                          aria-label="Delete button"
+                          icon={<MdEdit />}
+                          size="sm"
+                        />
+                      </Tooltip>
                       <Tooltip label="Join team" placement="top">
                         <IconButton
                           icon={<MdJoinFull />}
+                          colorScheme="red"
                           backgroundColor="red.500"
                           color="white"
-                          _hover={{ backgroundColor: "red.700" }}
+                          size="sm"
                         />
                       </Tooltip>
                     </HStack>

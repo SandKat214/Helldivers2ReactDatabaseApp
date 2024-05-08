@@ -19,9 +19,8 @@ import {
   Button,
   Select,
 } from "@chakra-ui/react";
-import { useRef } from "react";
-import { FaPlus, FaTrash } from "react-icons/fa6";
-import { IoCloudUpload, IoSave } from "react-icons/io5";
+import { FaPlus } from "react-icons/fa6";
+import { IoSave } from "react-icons/io5";
 
 const ControllerButton = ({ icon, label, onClick }) => {
   return (

@@ -50,6 +50,7 @@ const PlanetsTable = () => {
                   _hover={{
                     backgroundColor: "#0B111D",
                   }}
+                  h={24}
                 >
                   <Td textAlign="center">{planet.planetName}</Td>
                   <Td textAlign="center">{planet.terrain}</Td>

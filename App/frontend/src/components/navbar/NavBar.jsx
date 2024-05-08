@@ -1,4 +1,4 @@
-import { Link as RRDLink } from "react-router-dom";
+import { NavLink as RRDLink } from "react-router-dom";
 import { Box, HStack, Heading, Icon, Link } from "@chakra-ui/react";
 import { FaSpaceAwesome } from "react-icons/fa6";
 import { motion } from "framer-motion";
@@ -12,6 +12,7 @@ const CustomLink = ({ path, label }) => {
       borderColor="gray.100"
       color="gray.100"
       _hover={{ borderColor: "red.500", color: "red.500" }}
+      _activeLink={{ borderColor: "red.500", color: "red.500" }}
     >
       {label}
     </Link>

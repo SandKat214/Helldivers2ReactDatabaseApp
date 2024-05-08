@@ -31,7 +31,7 @@ const ControllerButton = ({ icon, label, onClick }) => {
   );
 };
 
-const PeopleController = () => {
+const PlayerController = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const imageUploaderRef = useRef(null);
 
@@ -106,14 +106,25 @@ const PeopleController = () => {
                 </FormControl>
                 <FormControl color="white">
                   <FormLabel>Level</FormLabel>
-                  <Input type="number" variant="filled" placeholder="Level..." min={1} max={150} />
+                  <Input
+                    type="number"
+                    variant="filled"
+                    placeholder="Level..."
+                    min={1}
+                    max={150}
+                  />
                   <FormHelperText color="gray.400">
                     Level defaults to 1.
                   </FormHelperText>
                 </FormControl>
                 <FormControl color="white">
                   <FormLabel>Age</FormLabel>
-                  <Input type="number" variant="filled" placeholder="Name..." min={12} />
+                  <Input
+                    type="number"
+                    variant="filled"
+                    placeholder="Name..."
+                    min={12}
+                  />
                   <FormHelperText color="gray.400">Must be 12+.</FormHelperText>
                 </FormControl>
                 <FormControl color="white">
@@ -147,4 +158,4 @@ const PeopleController = () => {
   );
 };
 
-export default PeopleController;
+export default PlayerController;
