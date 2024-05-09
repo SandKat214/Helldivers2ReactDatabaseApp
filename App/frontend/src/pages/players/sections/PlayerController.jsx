@@ -43,7 +43,7 @@ const PlayerController = () => {
         py={2}
         borderRadius="full"
         gap={5}
-        border="1px solid white"
+        boxShadow="0px 2px 12px rgba(229, 62, 62, 1)"
       >
         <ControllerButton icon={FaPlus} label="Add" onClick={() => onOpen()} />
         <ControllerButton icon={FaTrash} label="Delete" onClick={() => {}} />

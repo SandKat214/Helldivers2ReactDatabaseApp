@@ -1,7 +1,9 @@
 import {
   Box,
   HStack,
+  Icon,
   IconButton,
+  Image,
   Table,
   TableContainer,
   Tbody,
@@ -11,9 +13,11 @@ import {
   Thead,
   Tooltip,
   Tr,
+  VStack,
 } from "@chakra-ui/react";
 import { teamsTable } from "../../../utils/mockup";
 import { MdJoinFull, MdEdit } from "react-icons/md";
+import { FaCalendar, FaClock } from "react-icons/fa6";
 
 const TeamsTable = () => {
   return (
@@ -30,6 +34,10 @@ const TeamsTable = () => {
         <Table>
           <Thead>
             <Tr>
+              <Th borderColor="transparent" color="white">
+                <Text>Team</Text>
+                <Text>Photo</Text>
+              </Th>
               <Th borderColor="transparent" color="white">
                 Team Title
               </Th>
@@ -51,7 +59,8 @@ const TeamsTable = () => {
                 Planet
               </Th>
               <Th borderColor="transparent" color="white">
-                Mission Type
+                <Text>Mission</Text>
+                <Text>Type</Text>
               </Th>
               <Th borderColor="transparent" color="white">
                 Language
@@ -76,9 +85,28 @@ const TeamsTable = () => {
                   }}
                   h={24}
                 >
-                  <Td borderColor="transparent">{team.teamTitle}</Td>
                   <Td borderColor="transparent">
-                    {team.teamMeet.slice(0, team.teamMeet.length - 3)}
+                    <Image w={10} h={10} borderRadius="md" />
+                  </Td>
+                  <Td borderColor="transparent">
+                    <Text w="10ch" whiteSpace="normal">
+                      {team.teamTitle}
+                    </Text>
+                  </Td>
+                  <Td borderColor="transparent">
+                    <VStack alignItems="stretch">
+                      <HStack>
+                        <Icon as={FaCalendar} color="red.500" />
+                        <Text>{team.teamMeet.slice(0, 10)}</Text>
+                      </HStack>
+                      <HStack>
+                        <Icon as={FaClock} color="red.500" />
+                        <Text>
+                          {team.teamMeet.slice(10, team.teamMeet.length - 3)}{" "}
+                          {team.teamMeet.slice(10, 13) > 11 ? "PM" : "AM"}
+                        </Text>
+                      </HStack>
+                    </VStack>
                   </Td>
                   <Td borderColor="transparent">
                     {team["18Up"] ? "true" : "false"}

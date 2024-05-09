@@ -5,8 +5,8 @@ import TeamsController from "./sections/TeamsController";
 const Teams = () => {
   return (
     <VStack gap={20} alignItems="stretch" w="100%">
-      <TeamsTable />
       <TeamsController />
+      <TeamsTable />
     </VStack>
   );
 };

@@ -5,8 +5,8 @@ import PlayerController from "./sections/PlayerController";
 const Player = () => {
   return (
     <VStack gap={20} alignItems="stretch" w="100%">
-      <PlayerTable />
       <PlayerController />
+      <PlayerTable />
     </VStack>
   );
 };

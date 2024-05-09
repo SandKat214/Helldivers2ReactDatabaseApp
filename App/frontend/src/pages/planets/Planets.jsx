@@ -5,8 +5,8 @@ import PlanetsController from "./sections/PlanetsController";
 const Planets = () => {
   return (
     <VStack gap={20} alignItems="center" w="100%">
-      <PlanetsTable />
       <PlanetsController />
+      <PlanetsTable />
     </VStack>
   );
 };

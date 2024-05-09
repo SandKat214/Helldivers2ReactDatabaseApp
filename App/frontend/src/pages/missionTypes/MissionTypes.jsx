@@ -5,8 +5,8 @@ import MissionTypesController from "./sections/MissionTypesController";
 const MissionTypes = () => {
   return (
     <VStack gap={20} alignItems="center" w="100%">
-      <MissionTypesTable />
       <MissionTypesController />
+      <MissionTypesTable />
     </VStack>
   );
 };
