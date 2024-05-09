@@ -86,7 +86,15 @@ const TeamsTable = () => {
                   h={24}
                 >
                   <Td borderColor="transparent">
-                    <Image w={10} h={10} borderRadius="md" />
+                    <Image
+                      w={10}
+                      h={10}
+                      borderRadius="md"
+                      src={
+                        team.teamPhoto ??
+                        "https://avatars.githubusercontent.com/u/424443?v=4"
+                      }
+                    />
                   </Td>
                   <Td borderColor="transparent">
                     <Text w="10ch" whiteSpace="normal">
