@@ -18,8 +18,25 @@ import {
 import { teamsTable } from "../../../utils/mockup";
 import { MdJoinFull, MdEdit } from "react-icons/md";
 import { FaCalendar, FaClock } from "react-icons/fa6";
+import { wrap } from "framer-motion";
 
-const TeamsTable = () => {
+const TeamsTable = ({ setUpdateTeam, setPrevTeam }) => {
+  
+  const triggerEdit = (teamToEdit) => {
+    console.log(teamToEdit);
+    setPrevTeam({
+      title: teamToEdit.teamTitle || "",
+      meet: teamToEdit.teamMeet || "",
+      difficulty: teamToEdit.teamDifficulty || "",
+      team18Up: teamToEdit.team18UP || "",
+      chat: teamToEdit.teamChat || "",
+      mission: teamToEdit.missionID || "",
+      planet: teamToEdit.planetID || "",
+      language: teamToEdit.langID || null
+    });
+    setUpdateTeam(true);
+  }
+
   return (
     <Box
       backgroundColor="background.200"
@@ -117,24 +134,25 @@ const TeamsTable = () => {
                     </VStack>
                   </Td>
                   <Td borderColor="transparent">
-                    {team["18Up"] ? "true" : "false"}
+                    {team.team18Up === 1 ? "True" : "False"}
                   </Td>
                   <Td borderColor="transparent">
-                    {team.chat ? "true" : "false"}
+                    {team.teamChat === 1 ? "True" : "False"}
                   </Td>
-                  <Td borderColor="transparent">{team.count}</Td>
-                  <Td borderColor="transparent">{team.planetID}</Td>
-                  <Td borderColor="transparent">{team.missionID}</Td>
-                  <Td borderColor="transparent">{team.langID ?? "n/a"}</Td>
+                  <Td borderColor="transparent">{team.teamCount}</Td>
+                  <Td borderColor="transparent">{team.planetName}</Td>
+                  <Td borderColor="transparent">{team.missionName}</Td>
+                  <Td borderColor="transparent">{team.langName ?? "n/a"}</Td>
                   <Td borderColor="transparent">
                     <HStack>
                       <Tooltip label="Edit team" placement="top">
                         <IconButton
                           colorScheme="red"
                           color="white"
-                          aria-label="Delete button"
+                          aria-label="Edit button"
                           icon={<MdEdit />}
                           size="sm"
+                          onClick={() => triggerEdit(team)}
                         />
                       </Tooltip>
                       <Tooltip label="Join team" placement="top">
