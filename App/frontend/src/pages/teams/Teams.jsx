@@ -3,11 +3,8 @@ import { VStack } from "@chakra-ui/react";
 import TeamsTable from "./sections/TeamsTable";
 import TeamsAddController from "./sections/TeamsAddController";
 import TeamsEditController from "./sections/TeamsEditController";
-import LanguagesController from "../languages/sections/LanguagesController";
 
 const Teams = () => {
-  const [newLang, setNewLang] = useState(false);
-  const [formType, setFormType] = useState("add");
   const [updateTeam, setUpdateTeam] = useState(false);
   const [addTeam, setAddTeam] = useState(false);
   const [isChat, setIsChat] = useState(true);
@@ -23,46 +20,45 @@ const Teams = () => {
     language: null
   });
 
+  // keep track of new form data
   const handleDataChange = (e) => {
     const { name, value } = e.target;
     setTeamData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
+    console.log(teamData);
   };
 
   // add team to database
-  const handleAdd = () => {
+  const handleAdd = (e) => {
+    // prevent page reload
+    e.preventDefault();
+
+    // close form
+    setAddTeam(false);
+    
+    // will add async team creation
     console.log(teamData);
     console.log("add");
     resetFormFields();
   };
 
   // edit team from database
-  const handleUpdate = () => {
+  const handleUpdate = (e) => {
+    // prevent page reload
+    e.preventDefault();
+
+    // close form
+    setUpdateTeam(false);
+
+    // will add async update based on id
     console.log(teamData);
     console.log("edit");
     resetFormFields();
   };
 
-  const checkNewLang = (e) => {
-    // prevent page reload
-    e.preventDefault();
-
-    // close form
-    setAddTeam(false);
-    setUpdateTeam(false);
-
-    // open language form if new language requested
-    if (teamData.language === "add") {
-      setNewLang(true);
-    } else if (formType === "add") {
-      handleAdd();
-    } else {
-      handleUpdate();
-    };
-  };
-
+  // reset teamData to empty fields
   const resetFormFields = () => {
     setTeamData({
       id: null,
@@ -83,9 +79,10 @@ const Teams = () => {
       <TeamsAddController 
         addTeam={addTeam} 
         setAddTeam={setAddTeam} 
-        handleChange={handleDataChange} 
-        checkNewLang={checkNewLang} 
-        setForm={setFormType} 
+        handleChange={handleDataChange}
+        isChat={isChat}
+        setIsChat={setIsChat}
+        handleSubmit={handleAdd} 
       />
       <TeamsTable 
         setUpdateTeam={setUpdateTeam} 
@@ -97,19 +94,9 @@ const Teams = () => {
         updateTeam={updateTeam} 
         setUpdateTeam={setUpdateTeam} 
         handleChange={handleDataChange}
-        checkNewLang={checkNewLang}
-        setForm={setFormType}
         isChat={isChat}
         setIsChat={setIsChat}
-      />
-      <LanguagesController 
-        newLang={newLang} 
-        setNewLang={setNewLang}
-        setTeamData={setTeamData} 
-        formType={formType}
-        handleAdd={handleAdd}
-        handleUpdate={handleUpdate} 
-
+        handleSubmit={handleUpdate}
       />
     </VStack>
   );

@@ -32,7 +32,7 @@ const ControllerButton = ({ icon, label, onClick }) => {
   );
 };
 
-const LanguagesController = ({ newLang, setNewLang, setTeamData, formType, handleAdd, handleUpdate }) => {
+const LanguagesController = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [langData, setLangData] = useState({
@@ -45,36 +45,34 @@ const LanguagesController = ({ newLang, setNewLang, setTeamData, formType, handl
     e.preventDefault();
 
     // Close form
-    setNewLang(false);
+    onClose();
 
     // Will add async language creation
     console.log(langData);
-
-    // Then call appropriate submit for teams
-    if (formType === "add") {
-      handleAdd();
-    } else {
-      handleUpdate();
-    }
+    resetFormFields();
   };
 
+  // keep track of new form data
   const handleDataChange = (e) => {
     const { name, value } = e.target;
     setLangData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
+  };
 
-    // Update teamData w/ new ID
-    setTeamData((prevData) => ({
-    ...prevData,
-    ["language"]: langData.langID,
-    }));
+  // default to empty fields
+  const resetFormFields = () => {
+    setLangData({
+      langID: null,
+      langName: ""
+    });
+    console.log("reset");
   };
 
   return (
     <HStack justifyContent="center">
-      {/* <HStack
+      <HStack
         backgroundColor="red.500"
         px={8}
         py={2}
@@ -83,8 +81,8 @@ const LanguagesController = ({ newLang, setNewLang, setTeamData, formType, handl
         boxShadow="0px 2px 12px rgba(229, 62, 62, 1)"
       >
         <ControllerButton icon={FaPlus} label="Add" onClick={() => onOpen()} />
-      </HStack> */}
-      <Modal isOpen={newLang}>
+      </HStack>
+      <Modal isOpen={isOpen}>
         <ModalOverlay />
         <ModalContent backgroundColor="background.300" w="1000px">
           <ModalHeader>

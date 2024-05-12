@@ -21,12 +21,13 @@ import {
     Show,
     Hide,
   } from "@chakra-ui/react";
-  import { useState, useEffect } from "react";
+  import { useEffect } from "react";
   import { IoSave } from "react-icons/io5";
   import { missionTypes, planets, languages } from "../../../utils/mockup";
   
-  const TeamsEditController = ({ prevTeam, updateTeam, setUpdateTeam, handleChange, checkNewLang, setForm, isChat, setIsChat }) => {
-  
+  const TeamsEditController = ({ prevTeam, updateTeam, setUpdateTeam, handleChange, isChat, setIsChat, handleSubmit }) => {
+    
+    // close/open language input based on chat
     const handleChatChange = (e) => {
       if (e.target.value === "0") {
         setIsChat(false);
@@ -38,7 +39,7 @@ import {
 
     return (
       <HStack justifyContent="center">
-        <Modal isOpen={updateTeam}> 
+        <Modal isOpen={updateTeam} onClose={() => setUpdateTeam(false)}> 
           <ModalOverlay />
           <ModalContent backgroundColor="background.300" w="1000px">
             <ModalHeader>
@@ -49,7 +50,7 @@ import {
                 </Text>
               </Heading>
             </ModalHeader>
-            <form onSubmit={checkNewLang}>
+            <form onSubmit={handleSubmit}>
               <ModalBody>
                 <VStack gap={4}>
                   <FormControl color="white">
@@ -114,7 +115,7 @@ import {
                       <option value="0">False</option>
                     </Select>
                     <FormHelperText color="gray.400">
-                      Select between true and false.
+                      Select True or False.
                     </FormHelperText>
                   </FormControl>
                   <FormControl color="white">
@@ -132,7 +133,7 @@ import {
                       <option value="0">False</option>
                     </Select>
                     <FormHelperText color="gray.400">
-                      Select between true and false.
+                      Select True or False.
                     </FormHelperText>
                   </FormControl>
                   <FormControl color="white">
@@ -158,7 +159,7 @@ import {
                       })};
                     </Select>
                     <FormHelperText color="gray.400">
-                      Choose from available.
+                      Select from available.
                     </FormHelperText>
                   </FormControl>
                   <FormControl color="white">
@@ -184,7 +185,7 @@ import {
                       })};
                     </Select>
                     <FormHelperText color="gray.400">
-                      Choose from available.
+                      Select from available.
                     </FormHelperText>
                   </FormControl>
                   {isChat && 
@@ -209,10 +210,9 @@ import {
                             </option>
                           );
                         })};
-                        <option value="add">Add New</option>
                       </Select>
                       <FormHelperText color="gray.400">
-                        Select from available or add new.
+                        Select from available.
                       </FormHelperText>
                     </FormControl>
                   }
@@ -223,7 +223,7 @@ import {
                   type="submit" 
                   colorScheme="red" 
                   rightIcon={<IoSave />}
-                  onClick={() => setForm("edit")}>
+                >
                   Save
                 </Button>
               </ModalFooter>

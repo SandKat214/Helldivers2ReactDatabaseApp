@@ -21,19 +21,24 @@ import { FaCalendar, FaClock } from "react-icons/fa6";
 
 const TeamsTable = ({ setUpdateTeam, setPrevTeam, setIsChat }) => {
   
+  // sets formData to team's that is being edited
   const triggerEdit = (teamToEdit) => {
     setPrevTeam({
       id: teamToEdit.teamID,
-      title: teamToEdit.teamTitle || "",
-      meet: teamToEdit.teamMeet || "",
-      difficulty: teamToEdit.teamDifficulty || "",
+      title: teamToEdit.teamTitle,
+      meet: teamToEdit.teamMeet,
+      difficulty: teamToEdit.teamDifficulty,
       team18Up: teamToEdit.team18Up,
       chat: teamToEdit.teamChat,
-      mission: teamToEdit.missionID || "",
-      planet: teamToEdit.planetID || "",
-      language: teamToEdit.langID || null
+      mission: teamToEdit.missionID,
+      planet: teamToEdit.planetID,
+      language: teamToEdit.langID
     });
+
+    // open/close language input based on chat boolean
     setIsChat(teamToEdit.teamChat === 1 ? true : false);
+
+    // Open update form
     setUpdateTeam(true);
   };
 

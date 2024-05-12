@@ -21,7 +21,6 @@ import {
   Show,
   Hide,
 } from "@chakra-ui/react";
-import { useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { IoSave } from "react-icons/io5";
 import { missionTypes, planets, languages } from "../../../utils/mockup";
@@ -36,11 +35,10 @@ const ControllerButton = ({ icon, label, onClick }) => {
   );
 };
 
-const TeamsAddController = ({ addTeam, setAddTeam, handleChange, checkNewLang, setForm }) => {
+const TeamsAddController = ({ addTeam, setAddTeam, handleChange, isChat, setIsChat, handleSubmit }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const [isChat, setIsChat] = useState(true);
-
+  // close/open language input based on chat boolean
   const handleChatChange = (e) => {
     if (e.target.value === "0") {
       setIsChat(false);
@@ -62,7 +60,7 @@ const TeamsAddController = ({ addTeam, setAddTeam, handleChange, checkNewLang, s
       >
         <ControllerButton icon={FaPlus} label="Add" onClick={() => setAddTeam(true)} />
       </HStack>
-      <Modal isOpen={addTeam}>
+      <Modal isOpen={addTeam} onClose={() => setAddTeam(false)}>
         <ModalOverlay />
         <ModalContent backgroundColor="background.300" w="1000px">
           <ModalHeader>
@@ -73,7 +71,7 @@ const TeamsAddController = ({ addTeam, setAddTeam, handleChange, checkNewLang, s
               </Text>
             </Heading>
           </ModalHeader>
-          <form onSubmit={checkNewLang}>
+          <form onSubmit={handleSubmit}>
             <ModalBody>
               <VStack gap={4}>
                 <FormControl color="white">
@@ -225,10 +223,9 @@ const TeamsAddController = ({ addTeam, setAddTeam, handleChange, checkNewLang, s
                           </option>
                         );
                       })};
-                      <option value="add">Add New</option>
                     </Select>
                     <FormHelperText color="gray.400">
-                      Select from available or add new.
+                      Select from available.
                     </FormHelperText>
                   </FormControl>
                 }
@@ -239,7 +236,6 @@ const TeamsAddController = ({ addTeam, setAddTeam, handleChange, checkNewLang, s
                 type="submit" 
                 colorScheme="red" 
                 rightIcon={<IoSave />}
-                onClick={() => setForm("add")}
               >
                 Save
               </Button>
