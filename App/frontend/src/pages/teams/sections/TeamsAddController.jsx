@@ -35,18 +35,8 @@ const ControllerButton = ({ icon, label, onClick }) => {
   );
 };
 
-const TeamsAddController = ({ addTeam, setAddTeam, handleChange, isChat, setIsChat, handleSubmit }) => {
+const TeamsAddController = ({ addTeam, setAddTeam, isChat, handleChatChange, handleChange, handleSubmit }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  // close/open language input based on chat boolean
-  const handleChatChange = (e) => {
-    if (e.target.value === "0") {
-      setIsChat(false);
-    } else {
-      setIsChat(true);
-    };
-    handleChange(e);
-  };
 
   return (
     <HStack justifyContent="center">
@@ -59,6 +49,7 @@ const TeamsAddController = ({ addTeam, setAddTeam, handleChange, isChat, setIsCh
         boxShadow="0px 2px 12px rgba(229, 62, 62, 1)"
       >
         <ControllerButton icon={FaPlus} label="Add" onClick={() => setAddTeam(true)} />
+        {/* <ControllerButton icon={FaTrash} label="Delete" onClick={() => {}} /> */}
       </HStack>
       <Modal isOpen={addTeam} onClose={() => setAddTeam(false)}>
         <ModalOverlay />

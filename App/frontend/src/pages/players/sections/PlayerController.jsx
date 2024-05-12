@@ -46,7 +46,7 @@ const PlayerController = () => {
         boxShadow="0px 2px 12px rgba(229, 62, 62, 1)"
       >
         <ControllerButton icon={FaPlus} label="Add" onClick={() => onOpen()} />
-        <ControllerButton icon={FaTrash} label="Delete" onClick={() => {}} />
+        {/* <ControllerButton icon={FaTrash} label="Delete" onClick={() => {}} /> */}
       </HStack>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

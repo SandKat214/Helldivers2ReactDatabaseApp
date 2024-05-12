@@ -40,18 +40,6 @@ const LanguagesController = () => {
     langName: ""
   });
 
-  const handleSubmit = (e) => {
-    // Prevent page reload
-    e.preventDefault();
-
-    // Close form
-    onClose();
-
-    // Will add async language creation
-    console.log(langData);
-    resetFormFields();
-  };
-
   // keep track of new form data
   const handleDataChange = (e) => {
     const { name, value } = e.target;
@@ -59,6 +47,16 @@ const LanguagesController = () => {
       ...prevData,
       [name]: value,
     }));
+  };
+
+  // add language to database
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onClose();
+
+    // Will add async language creation
+    console.log(langData);
+    resetFormFields();
   };
 
   // default to empty fields
@@ -81,6 +79,7 @@ const LanguagesController = () => {
         boxShadow="0px 2px 12px rgba(229, 62, 62, 1)"
       >
         <ControllerButton icon={FaPlus} label="Add" onClick={() => onOpen()} />
+        {/* <ControllerButton icon={FaTrash} label="Delete" onClick={() => {}} /> */}
       </HStack>
       <Modal isOpen={isOpen}>
         <ModalOverlay />

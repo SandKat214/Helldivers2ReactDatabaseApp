@@ -30,12 +30,15 @@ const Teams = () => {
     console.log(teamData);
   };
 
+  // close/open language input based on chat boolean
+  const handleChatChange = (e) => {
+    setIsChat(e.target.value === "0" ? false : true);
+    handleDataChange(e);
+  };
+
   // add team to database
   const handleAdd = (e) => {
-    // prevent page reload
     e.preventDefault();
-
-    // close form
     setAddTeam(false);
     
     // will add async team creation
@@ -46,10 +49,7 @@ const Teams = () => {
 
   // edit team from database
   const handleUpdate = (e) => {
-    // prevent page reload
     e.preventDefault();
-
-    // close form
     setUpdateTeam(false);
 
     // will add async update based on id
@@ -78,10 +78,10 @@ const Teams = () => {
     <VStack gap={20} alignItems="stretch" w="100%">
       <TeamsAddController 
         addTeam={addTeam} 
-        setAddTeam={setAddTeam} 
-        handleChange={handleDataChange}
+        setAddTeam={setAddTeam}
         isChat={isChat}
-        setIsChat={setIsChat}
+        handleChatChange={handleChatChange}
+        handleChange={handleDataChange}
         handleSubmit={handleAdd} 
       />
       <TeamsTable 
@@ -92,10 +92,10 @@ const Teams = () => {
       <TeamsEditController 
         prevTeam={teamData} 
         updateTeam={updateTeam} 
-        setUpdateTeam={setUpdateTeam} 
-        handleChange={handleDataChange}
+        setUpdateTeam={setUpdateTeam}
         isChat={isChat}
-        setIsChat={setIsChat}
+        handleChatChange={handleChatChange}
+        handleChange={handleDataChange}
         handleSubmit={handleUpdate}
       />
     </VStack>

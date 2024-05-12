@@ -25,17 +25,7 @@ import {
   import { IoSave } from "react-icons/io5";
   import { missionTypes, planets, languages } from "../../../utils/mockup";
   
-  const TeamsEditController = ({ prevTeam, updateTeam, setUpdateTeam, handleChange, isChat, setIsChat, handleSubmit }) => {
-    
-    // close/open language input based on chat
-    const handleChatChange = (e) => {
-      if (e.target.value === "0") {
-        setIsChat(false);
-      } else {
-        setIsChat(true);
-      };
-      handleChange(e);
-    };
+  const TeamsEditController = ({ prevTeam, updateTeam, setUpdateTeam, isChat, handleChatChange, handleChange, handleSubmit }) => {
 
     return (
       <HStack justifyContent="center">
