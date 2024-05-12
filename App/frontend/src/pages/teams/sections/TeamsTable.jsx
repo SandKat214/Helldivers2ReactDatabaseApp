@@ -18,24 +18,24 @@ import {
 import { teamsTable } from "../../../utils/mockup";
 import { MdJoinFull, MdEdit } from "react-icons/md";
 import { FaCalendar, FaClock } from "react-icons/fa6";
-import { wrap } from "framer-motion";
 
-const TeamsTable = ({ setUpdateTeam, setPrevTeam }) => {
+const TeamsTable = ({ setUpdateTeam, setPrevTeam, setIsChat }) => {
   
   const triggerEdit = (teamToEdit) => {
-    console.log(teamToEdit);
     setPrevTeam({
+      id: teamToEdit.teamID,
       title: teamToEdit.teamTitle || "",
       meet: teamToEdit.teamMeet || "",
       difficulty: teamToEdit.teamDifficulty || "",
-      team18Up: teamToEdit.team18UP || "",
-      chat: teamToEdit.teamChat || "",
+      team18Up: teamToEdit.team18Up,
+      chat: teamToEdit.teamChat,
       mission: teamToEdit.missionID || "",
       planet: teamToEdit.planetID || "",
       language: teamToEdit.langID || null
     });
+    setIsChat(teamToEdit.teamChat === 1 ? true : false);
     setUpdateTeam(true);
-  }
+  };
 
   return (
     <Box

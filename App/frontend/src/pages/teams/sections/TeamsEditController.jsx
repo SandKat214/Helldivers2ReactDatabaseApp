@@ -25,8 +25,7 @@ import {
   import { IoSave } from "react-icons/io5";
   import { missionTypes, planets, languages } from "../../../utils/mockup";
   
-  const TeamsEditController = ({ prevTeam, updateTeam, setUpdateTeam, handleChange }) => {  
-    const [isChat, setIsChat] = useState(true);
+  const TeamsEditController = ({ prevTeam, updateTeam, setUpdateTeam, handleChange, checkNewLang, setForm, isChat, setIsChat }) => {
   
     const handleChatChange = (e) => {
       if (e.target.value === "0") {
@@ -36,10 +35,10 @@ import {
       };
       handleChange(e);
     };
-  
+
     return (
       <HStack justifyContent="center">
-        <Modal isOpen={updateTeam} onClose={() => setUpdateTeam(false)}> 
+        <Modal isOpen={updateTeam}> 
           <ModalOverlay />
           <ModalContent backgroundColor="background.300" w="1000px">
             <ModalHeader>
@@ -50,7 +49,7 @@ import {
                 </Text>
               </Heading>
             </ModalHeader>
-            <form>
+            <form onSubmit={checkNewLang}>
               <ModalBody>
                 <VStack gap={4}>
                   <FormControl color="white">
@@ -197,6 +196,7 @@ import {
                         color="background.700"
                         placeholder="Choose..."
                         defaultValue={prevTeam.language}
+                        onChange={handleChange}
                         isRequired
                       >
                         {languages.map((language) => {
@@ -209,6 +209,7 @@ import {
                             </option>
                           );
                         })};
+                        <option value="add">Add New</option>
                       </Select>
                       <FormHelperText color="gray.400">
                         Select from available or add new.
@@ -218,7 +219,11 @@ import {
                 </VStack>
               </ModalBody>
               <ModalFooter>
-                <Button type="submit" colorScheme="red" rightIcon={<IoSave />}>
+                <Button 
+                  type="submit" 
+                  colorScheme="red" 
+                  rightIcon={<IoSave />}
+                  onClick={() => setForm("edit")}>
                   Save
                 </Button>
               </ModalFooter>

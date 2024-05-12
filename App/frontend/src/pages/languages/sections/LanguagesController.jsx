@@ -19,7 +19,7 @@ import {
   Button,
   Select,
 } from "@chakra-ui/react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { FaPlus, FaTrash } from "react-icons/fa6";
 import { IoSave } from "react-icons/io5";
 
@@ -32,12 +32,49 @@ const ControllerButton = ({ icon, label, onClick }) => {
   );
 };
 
-const LanguagesController = () => {
+const LanguagesController = ({ newLang, setNewLang, setTeamData, formType, handleAdd, handleUpdate }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [langData, setLangData] = useState({
+    langID: "",
+    langName: ""
+  });
+
+  const handleSubmit = (e) => {
+    // Prevent page reload
+    e.preventDefault();
+
+    // Close form
+    setNewLang(false);
+
+    // Will add async language creation
+    console.log(langData);
+
+    // Then call appropriate submit for teams
+    if (formType === "add") {
+      handleAdd();
+    } else {
+      handleUpdate();
+    }
+  };
+
+  const handleDataChange = (e) => {
+    const { name, value } = e.target;
+    setLangData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+
+    // Update teamData w/ new ID
+    setTeamData((prevData) => ({
+    ...prevData,
+    ["language"]: langData.langID,
+    }));
+  };
 
   return (
     <HStack justifyContent="center">
-      <HStack
+      {/* <HStack
         backgroundColor="red.500"
         px={8}
         py={2}
@@ -46,8 +83,8 @@ const LanguagesController = () => {
         boxShadow="0px 2px 12px rgba(229, 62, 62, 1)"
       >
         <ControllerButton icon={FaPlus} label="Add" onClick={() => onOpen()} />
-      </HStack>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      </HStack> */}
+      <Modal isOpen={newLang}>
         <ModalOverlay />
         <ModalContent backgroundColor="background.300" w="1000px">
           <ModalHeader>
@@ -58,16 +95,19 @@ const LanguagesController = () => {
               </Text>
             </Heading>
           </ModalHeader>
-          <form>
+          <form onSubmit={handleSubmit}>
             <ModalBody>
               <VStack gap={4}>
                 <FormControl color="white">
                   <FormLabel>Language ID</FormLabel>
                   <Input
                     type="text"
+                    name="langID"
                     variant="filled"
                     placeholder="ID..."
                     maxLength={4}
+                    onChange={handleDataChange}
+                    isRequired
                     _focus={{ backgroundColor: "white" }}
                   />
                   <FormHelperText color="gray.400">
@@ -78,9 +118,11 @@ const LanguagesController = () => {
                   <FormLabel>Language Name</FormLabel>
                   <Input
                     type="text"
+                    name="langName"
                     variant="filled"
                     placeholder="Language Name..."
-                    maxLength={4}
+                    onChange={handleDataChange}
+                    isRequired
                     _focus={{ backgroundColor: "white" }}
                   />
                   <FormHelperText color="gray.400">
@@ -90,7 +132,7 @@ const LanguagesController = () => {
               </VStack>
             </ModalBody>
             <ModalFooter>
-              <Button colorScheme="red" rightIcon={<IoSave />}>
+              <Button type="submit" colorScheme="red" rightIcon={<IoSave />}>
                 Save
               </Button>
             </ModalFooter>

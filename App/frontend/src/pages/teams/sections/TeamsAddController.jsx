@@ -36,7 +36,7 @@ const ControllerButton = ({ icon, label, onClick }) => {
   );
 };
 
-const TeamsAddController = ({ handleChange }) => {
+const TeamsAddController = ({ addTeam, setAddTeam, handleChange, checkNewLang, setForm }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [isChat, setIsChat] = useState(true);
@@ -60,9 +60,9 @@ const TeamsAddController = ({ handleChange }) => {
         gap={5}
         boxShadow="0px 2px 12px rgba(229, 62, 62, 1)"
       >
-        <ControllerButton icon={FaPlus} label="Add" onClick={() => onOpen()} />
+        <ControllerButton icon={FaPlus} label="Add" onClick={() => setAddTeam(true)} />
       </HStack>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={addTeam}>
         <ModalOverlay />
         <ModalContent backgroundColor="background.300" w="1000px">
           <ModalHeader>
@@ -73,7 +73,7 @@ const TeamsAddController = ({ handleChange }) => {
               </Text>
             </Heading>
           </ModalHeader>
-          <form>
+          <form onSubmit={checkNewLang}>
             <ModalBody>
               <VStack gap={4}>
                 <FormControl color="white">
@@ -212,6 +212,7 @@ const TeamsAddController = ({ handleChange }) => {
                       variant="filled" 
                       color="background.700"
                       placeholder="Choose..."
+                      onChange={handleChange}
                       isRequired
                     >
                       {languages.map((language) => {
@@ -224,6 +225,7 @@ const TeamsAddController = ({ handleChange }) => {
                           </option>
                         );
                       })};
+                      <option value="add">Add New</option>
                     </Select>
                     <FormHelperText color="gray.400">
                       Select from available or add new.
@@ -233,7 +235,12 @@ const TeamsAddController = ({ handleChange }) => {
               </VStack>
             </ModalBody>
             <ModalFooter>
-              <Button type="submit" colorScheme="red" rightIcon={<IoSave />}>
+              <Button 
+                type="submit" 
+                colorScheme="red" 
+                rightIcon={<IoSave />}
+                onClick={() => setForm("add")}
+              >
                 Save
               </Button>
             </ModalFooter>
