@@ -15,7 +15,7 @@ import { FaTrash } from "react-icons/fa6";
 import { players } from "../../../utils/mockup";
 import { MdEdit } from "react-icons/md";
 
-const PlayerTable = () => {
+const PlayerTable = ({ setSelectedRow, onOpen }) => {
   return (
     <Box
       backgroundColor="background.200"
@@ -82,15 +82,19 @@ const PlayerTable = () => {
                       <IconButton
                         colorScheme="red"
                         color="white"
-                        aria-label="Edit button"
-                        icon={<FaTrash />}
+                        aria-label="Delete button"
+                        icon={<MdEdit />}
                         size="sm"
+                        onClick={() => {
+                          setSelectedRow({ ...player });
+                          onOpen();
+                        }}
                       />
                       <IconButton
                         colorScheme="red"
                         color="white"
-                        aria-label="Delete button"
-                        icon={<MdEdit />}
+                        aria-label="Edit button"
+                        icon={<FaTrash />}
                         size="sm"
                       />
                     </HStack>
