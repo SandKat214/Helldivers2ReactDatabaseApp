@@ -27,6 +27,7 @@ import { FaPlus, FaTrash } from "react-icons/fa6";
 import { IoCloudUpload, IoImage, IoSave } from "react-icons/io5";
 import axios from "axios";
 import { useFormik } from "formik";
+import { format, parse } from "date-fns";
 
 const ControllerButton = ({ icon, label, onClick }) => {
   return (
@@ -47,14 +48,12 @@ const PlayerController = ({
   const imageUploaderRef = useRef(null);
   const formik = useFormik({
     initialValues: {
-      image: selectedRow ? selectedRow.image : "",
-      name: selectedRow ? selectedRow.name : "",
-      username: selectedRow ? selectedRow.username : "",
-      level: selectedRow ? selectedRow.level : "",
-      age: selectedRow ? selectedRow.age : "",
-      dateJoined: selectedRow
-        ? selectedRow.dateJoined
-        : new Date().toISOString().slice(0, 10),
+      image: "",
+      name: "",
+      username: "",
+      level: "",
+      age: "",
+      dateJoined: new Date().toISOString().split("T")[0],
     },
   });
 
@@ -67,8 +66,12 @@ const PlayerController = ({
           username: selectedRow.username || "",
           level: selectedRow.level || "",
           age: selectedRow.age || "",
-          dateJoined:
-            selectedRow.dateJoined || new Date().toISOString().slice(0, 10),
+          dateJoined: selectedRow.dateJoined
+            ? format(
+                parse(selectedRow.dateJoined, "MM/dd/yyyy", new Date()),
+                "yyyy-MM-dd"
+              )
+            : new Date().toISOString().slice(0, 10),
         },
       });
     }
@@ -78,7 +81,7 @@ const PlayerController = ({
 
   const uploadFile = async () => {
     const formData = new FormData();
-    formData.append("file", image);
+    formData.append("file", formik.values.image);
     formData.append(
       "upload_preset",
       import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
