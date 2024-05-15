@@ -18,8 +18,10 @@ import {
 import { teamsTable } from "../../../utils/mockup";
 import { MdJoinFull, MdEdit } from "react-icons/md";
 import { FaCalendar, FaClock } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 
 const TeamsTable = ({ setUpdateTeam, setPrevTeam, setIsChat }) => {
+  const navigate = useNavigate();
   
   // sets formData to team's that is being edited
   const triggerEdit = (teamToEdit) => {
@@ -41,6 +43,10 @@ const TeamsTable = ({ setUpdateTeam, setPrevTeam, setIsChat }) => {
     // Open update form
     setUpdateTeam(true);
   };
+
+  const handleJoin = (teamToManage) => {
+    navigate("../register/" + teamToManage.teamID, { state: {teamToManage} });
+  }
 
   return (
     <Box
@@ -175,6 +181,7 @@ const TeamsTable = ({ setUpdateTeam, setPrevTeam, setIsChat }) => {
                           backgroundColor="red.500"
                           color="white"
                           size="sm"
+                          onClick={() => handleJoin(team)}
                         />
                       </Tooltip>
                     </HStack>

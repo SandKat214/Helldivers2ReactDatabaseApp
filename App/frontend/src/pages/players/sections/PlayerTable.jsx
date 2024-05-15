@@ -57,7 +57,7 @@ const PlayerTable = ({ setSelectedRow, onOpen }) => {
             {players.map((player, index) => {
               return (
                 <Tr
-                  key={player.username}
+                  key={player.playerID}
                   color="white"
                   backgroundColor={
                     index % 2 === 0 ? "background.600" : "transparent"

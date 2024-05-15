@@ -39,10 +39,7 @@ const Teams = () => {
   const handleAdd = (e) => {
     e.preventDefault();
     setAddTeam(false);
-    
     // will add async team creation
-    console.log(teamData);
-    console.log("add");
     resetFormFields();
   };
 
@@ -50,10 +47,7 @@ const Teams = () => {
   const handleUpdate = (e) => {
     e.preventDefault();
     setUpdateTeam(false);
-
     // will add async update based on id
-    console.log(teamData);
-    console.log("edit");
     resetFormFields();
   };
 

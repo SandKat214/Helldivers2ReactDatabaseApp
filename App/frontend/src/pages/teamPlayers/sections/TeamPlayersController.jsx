@@ -19,8 +19,9 @@ import {
   Button,
   Select,
 } from "@chakra-ui/react";
-import { useRef } from "react";
-import { FaPlus, FaTrash } from "react-icons/fa6";
+import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { FaPlus, FaAnglesUp } from "react-icons/fa6";
 import { IoSave } from "react-icons/io5";
 
 const ControllerButton = ({ icon, label, onClick }) => {
@@ -32,8 +33,17 @@ const ControllerButton = ({ icon, label, onClick }) => {
   );
 };
 
-const TeamPlayersController = () => {
+const TeamPlayersController = ({ status }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const navigate = useNavigate();
+
+  const [teamPlayerID, setTeamPlayerID] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // will add async team creation
+    onClose();
+  };
 
   return (
     <HStack justifyContent="center">
@@ -45,8 +55,8 @@ const TeamPlayersController = () => {
         gap={5}
         boxShadow="0px 2px 12px rgba(229, 62, 62, 1)"
       >
-        <ControllerButton icon={FaPlus} label="Add" onClick={() => onOpen()} />
-        {/* <ControllerButton icon={FaTrash} label="Delete" onClick={() => {}} /> */}
+        {status && <ControllerButton icon={FaPlus} label="Add" onClick={() => onOpen()} />}
+        <ControllerButton icon={FaAnglesUp} label="Back" onClick={() => navigate("../teams")} />
       </HStack>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -59,43 +69,30 @@ const TeamPlayersController = () => {
               </Text>
             </Heading>
           </ModalHeader>
-          <form>
+          <form onSubmit={handleSubmit}>  
             <ModalBody>
               <VStack gap={4}>
-                <FormControl color="white">
-                  <FormLabel>Team Name</FormLabel>
-                  <Select
-                    type="text"
-                    variant="filled"
-                    color="background.700"
-                    _focus={{ backgroundColor: "white" }}
-                  >
-                    <option value="">Shield of Democracy</option>
-                    <option value="">Indominus Legion</option>
-                  </Select>
-                  <FormHelperText color="gray.400">
-                    Choose available team.
-                  </FormHelperText>
-                </FormControl>
                 <FormControl color="white">
                   <FormLabel>Username</FormLabel>
                   <Select
                     type="text"
                     variant="filled"
                     color="background.700"
+                    placeholder="Choose..."
                     _focus={{ backgroundColor: "white" }}
+                    onChange={e => setTeamPlayerID(e.target.value)}
                   >
-                    <option value="">Goblin</option>
-                    <option value="">leafonthewind</option>
+                    <option value="3">Goblin</option>
+                    <option value="5">leafonthewind</option>
                   </Select>
                   <FormHelperText color="gray.400">
-                    Choose recruit.
+                    Choose available recruit.
                   </FormHelperText>
                 </FormControl>
               </VStack>
             </ModalBody>
             <ModalFooter>
-              <Button colorScheme="red" rightIcon={<IoSave />}>
+              <Button type="submit" colorScheme="red" rightIcon={<IoSave />}>
                 Save
               </Button>
             </ModalFooter>

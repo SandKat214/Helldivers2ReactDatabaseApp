@@ -92,7 +92,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "register",
+        path: "register/:teamID",
         element: (
           <TableLayout
             header="TeamPlayers Table"
