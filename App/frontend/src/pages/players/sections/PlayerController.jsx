@@ -20,7 +20,7 @@ import {
   useToast,
   Tooltip,
 } from "@chakra-ui/react";
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdEdit } from "react-icons/md";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { FaPlus, FaTrash } from "react-icons/fa6";
@@ -149,7 +149,7 @@ const PlayerController = ({
                 username: "",
                 level: "",
                 age: "",
-                dateJoined: new Date().toISOString().slice(0, 10),
+                dateJoined: new Date().toISOString().split("T")[0],
               },
             });
           }
@@ -159,7 +159,7 @@ const PlayerController = ({
         <ModalContent backgroundColor="background.300" w="1000px">
           <ModalHeader>
             <Heading as="h3" color="white" fontSize="2xl">
-              Add{" "}
+              {selectedRow ? "Edit" : "Add"}{" "}
               <Text as="span" color="red.500">
                 Players
               </Text>
@@ -304,12 +304,12 @@ const PlayerController = ({
             <ModalFooter>
               <Button
                 colorScheme="red"
-                rightIcon={isPending ? null : <IoSave />}
+                rightIcon={selectedRow ? <MdEdit /> : <IoSave />}
                 onClick={mutateAsync}
                 isLoading={isPending}
                 loadingText="Saving"
               >
-                Save
+                {selectedRow ? "Edit" : "Save"}
               </Button>
             </ModalFooter>
           </form>
