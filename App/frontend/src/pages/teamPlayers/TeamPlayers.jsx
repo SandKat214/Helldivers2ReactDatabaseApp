@@ -13,7 +13,7 @@ const TeamPlayers = () => {
 
   return (
     <VStack gap={20} alignItems="center" w="100%">
-      <TeamPlayersController status={status} />
+      <TeamPlayersController status={status} team={team}/>
       <TeamPlayersTable team={team} status={status} setStatus={setStatus} />
     </VStack>
   );
