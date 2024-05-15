@@ -76,7 +76,7 @@ const TeamsAddController = ({ addTeam, setAddTeam, isChat, handleChatChange, han
                     isRequired
                   />
                   <FormHelperText color="gray.400">
-                    Permanent team title.
+                    Enter team title.
                   </FormHelperText>
                 </FormControl>
                 <FormControl color="white">
@@ -90,7 +90,7 @@ const TeamsAddController = ({ addTeam, setAddTeam, isChat, handleChatChange, han
                     isRequired
                   />
                   <FormHelperText color="gray.400">
-                    Time must be in military format.
+                    Date & time to meet.
                   </FormHelperText>
                 </FormControl>
                 <FormControl color="white">

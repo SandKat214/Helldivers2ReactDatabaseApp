@@ -42,6 +42,7 @@ const Navbar = () => {
           </HStack>
         </RRDLink>
         <HStack gap={10}>
+          <CustomLink path="./" label="Home Base" />
           <CustomLink path="./players" label="Players" />
           <CustomLink path="./teams" label="Teams" />
           <CustomLink path="./planets" label="Planets" />

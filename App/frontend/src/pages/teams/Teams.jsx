@@ -27,7 +27,6 @@ const Teams = () => {
       ...prevData,
       [name]: value,
     }));
-    console.log(teamData);
   };
 
   // close/open language input based on chat boolean

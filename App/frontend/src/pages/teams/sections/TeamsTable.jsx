@@ -66,16 +66,16 @@ const TeamsTable = ({ setUpdateTeam, setPrevTeam, setIsChat }) => {
               <Th borderColor="transparent" color="white">
                 Meeting Time
               </Th>
+              <Th color="white" borderColor="transparent">
+                <Text>Difficulty</Text>
+                <Text>Setting</Text>
+              </Th>
               <Th borderColor="transparent" color="white">
                 18+
               </Th>
               <Th borderColor="transparent" color="white">
                 <Text>Chat</Text>
                 <Text>Friendly</Text>
-              </Th>
-              <Th color="white" borderColor="transparent">
-                <Text>Member</Text>
-                <Text>Count</Text>
               </Th>
               <Th borderColor="transparent" color="white">
                 Planet
@@ -138,15 +138,23 @@ const TeamsTable = ({ setUpdateTeam, setPrevTeam, setIsChat }) => {
                       </HStack>
                     </VStack>
                   </Td>
+                  <Td borderColor="transparent">{team.teamDifficulty}</Td>
                   <Td borderColor="transparent">
                     {team.team18Up === 1 ? "True" : "False"}
                   </Td>
                   <Td borderColor="transparent">
                     {team.teamChat === 1 ? "True" : "False"}
                   </Td>
-                  <Td borderColor="transparent">{team.teamCount}</Td>
-                  <Td borderColor="transparent">{team.planetName}</Td>
-                  <Td borderColor="transparent">{team.missionName}</Td>
+                  <Td borderColor="transparent">
+                    <Text w="8ch" whiteSpace="normal">
+                      {team.planetName}
+                    </Text>
+                  </Td>
+                  <Td borderColor="transparent">
+                    <Text w="10ch" whiteSpace="normal">
+                      {team.missionName}
+                    </Text>
+                  </Td>
                   <Td borderColor="transparent">{team.langName ?? "n/a"}</Td>
                   <Td borderColor="transparent">
                     <HStack>
