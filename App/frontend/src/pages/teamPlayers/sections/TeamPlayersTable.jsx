@@ -48,7 +48,7 @@ const TeamPlayersTable = ({ team, status, setStatus }) => {
         borderRadius="md"
         p={1}
         boxShadow="0px 2px 12px rgba(229, 62, 62, 0.3)"
-        w="70%"
+        w="65%"
       >
         <Text color="red.500" pt={2} pl={3} textTransform="uppercase" fontWeight="bold" fontSize="md">Current recruits:</Text>
         <TableContainer>
@@ -70,7 +70,7 @@ const TeamPlayersTable = ({ team, status, setStatus }) => {
                 <Th borderColor="transparent" color="white">
                   Age
                 </Th>
-                <Th borderColor="transparent" color="white" isNumeric>
+                <Th borderColor="transparent" color="white" textAlign="center">
                   Actions
                 </Th>
               </Tr>
@@ -98,12 +98,12 @@ const TeamPlayersTable = ({ team, status, setStatus }) => {
                     <Td borderColor="transparent">{teamPlayer.level}</Td>
                     <Td borderColor="transparent">{teamPlayer.age}</Td>
                     <Td>
-                      <HStack justifyContent="flex-end">
+                      <HStack justifyContent="center">
                         <Tooltip label="Remove from Team" placement="top">
                           <IconButton
                             colorScheme="red"
                             color="white"
-                            aria-label="Edit button"
+                            aria-label="Delete button"
                             icon={<FaTrash />}
                             size="sm"
                           />

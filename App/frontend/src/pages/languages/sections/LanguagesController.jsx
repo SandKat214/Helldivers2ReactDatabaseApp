@@ -81,7 +81,7 @@ const LanguagesController = () => {
         <ControllerButton icon={FaPlus} label="Add" onClick={() => onOpen()} />
         {/* <ControllerButton icon={FaTrash} label="Delete" onClick={() => {}} /> */}
       </HStack>
-      <Modal isOpen={isOpen}>
+      <Modal isOpen={isOpen} onClose={() => onClose()}>
         <ModalOverlay />
         <ModalContent backgroundColor="background.300" w="1000px">
           <ModalHeader>

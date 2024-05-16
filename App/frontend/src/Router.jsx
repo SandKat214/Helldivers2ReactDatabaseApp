@@ -96,7 +96,7 @@ const router = createBrowserRouter([
         element: (
           <TableLayout
             header="TeamPlayers Table"
-            desc="This is an intersection table, used recruit players to teams."
+            desc="This is an intersection table, used to recruit players to teams."
             relationships={[
               "M:1 relationship between TeamPlayers and Players, with playerID as a FK inside TeamPlayers",
               "M:1 relationship between TeamPlayers and Teams, with teamID as a FK inside TeamPlayers.",
