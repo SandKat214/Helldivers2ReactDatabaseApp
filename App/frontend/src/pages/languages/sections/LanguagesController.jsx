@@ -1,3 +1,9 @@
+// Citation for handleSubmit() function:
+// Date: 5/17/2024
+// Copied & Adapted from React-Starter-App
+// Source URL: https://github.com/osu-cs340-ecampus/react-starter-app
+// Authors: Devin Daniels and Zachary Maes
+
 import {
   Center,
   HStack,
@@ -18,10 +24,12 @@ import {
   ModalFooter,
   Button,
   Select,
+  useToast
 } from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import { FaPlus, FaTrash } from "react-icons/fa6";
 import { IoSave } from "react-icons/io5";
+import axios from "axios";
 
 const ControllerButton = ({ icon, label, onClick }) => {
   return (
@@ -32,13 +40,15 @@ const ControllerButton = ({ icon, label, onClick }) => {
   );
 };
 
-const LanguagesController = () => {
+const LanguagesController = ({ fetchLanguages }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [langData, setLangData] = useState({
     langID: "",
     langName: ""
   });
+
+  const toast = useToast();
 
   // keep track of new form data
   const handleDataChange = (e) => {
@@ -50,22 +60,40 @@ const LanguagesController = () => {
   };
 
   // add language to database
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    // prevent reload & close modal
     e.preventDefault();
     onClose();
 
-    // Will add async language creation
-    console.log(langData);
+    // create new language object
+    const newLang = {
+      langID: langData.langID,
+      langName: langData.langName,
+    };
+
+    try {
+      const URL = import.meta.env.VITE_API_URL + "languages";
+      const response = await axios.post(URL, newLang);
+      if (response.status === 201) {
+        toast({ description: "Language submitted", status: "success" });
+        fetchLanguages();
+      } else {
+        toast({ description: "Error submitting language", status: "error" });
+      }
+    } catch (error) {
+      alert("Error creating language");
+      console.error("Error creating language:", error);
+    }
+    // Reset the form fields
     resetFormFields();
   };
 
   // default to empty fields
   const resetFormFields = () => {
     setLangData({
-      langID: null,
+      langID: "",
       langName: ""
     });
-    console.log("reset");
   };
 
   return (

@@ -11,10 +11,12 @@ import {
   Tooltip,
   Tr,
 } from "@chakra-ui/react";
-import { languages } from "../../../utils/mockup";
+// import { languages } from "../../../utils/mockup";
+import { useState, useEffect } from "react";
 import { MdJoinFull } from "react-icons/md";
 
-const LanguagesTable = () => {
+const LanguagesTable = ({ languages }) => {
+
   return (
     <Box
       backgroundColor="background.200"
