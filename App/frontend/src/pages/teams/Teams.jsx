@@ -22,7 +22,13 @@ const Teams = () => {
 
   // keep track of new form data
   const handleDataChange = (e) => {
-    const { name, value } = e.target;
+    let { name, value } = e.target;
+    // format date type to correct SQL datetime format
+    if (name === "meet") {
+      const tzoffset = (new Date()).getTimezoneOffset() * 60000;     //offset in milliseconds
+      const valDate = new Date(value);
+      value = new Date(valDate - tzoffset).toISOString().slice(0, 19).replace("T", " ");
+    };
     setTeamData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -38,6 +44,7 @@ const Teams = () => {
   // add team to database
   const handleAdd = (e) => {
     e.preventDefault();
+    console.log(teamData);
     setAddTeam(false);
     // will add async team creation
     resetFormFields();
@@ -46,6 +53,7 @@ const Teams = () => {
   // edit team from database
   const handleUpdate = (e) => {
     e.preventDefault();
+    console.log(teamData);
     setUpdateTeam(false);
     // will add async update based on id
     resetFormFields();

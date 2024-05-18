@@ -18,7 +18,7 @@ import { teamPlayers, players } from "../../../utils/mockup";
 import { FaTrash } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 
-const TeamPlayersTable = ({ team, status, setStatus }) => {
+const TeamPlayersTable = ({ team, setStatus }) => {
   const [teamMembers, setTeamMembers] = useState([]);
 
   const fetchTeamPlayers = () => {
@@ -31,12 +31,14 @@ const TeamPlayersTable = ({ team, status, setStatus }) => {
 
   useEffect(() => {
     fetchTeamPlayers();
-    console.log(team);
-    if (team.teamCount >= 4) {
+    // registration closed if team full or meet date has passed
+    const meetSched = new Date(team.teamMeet);
+    const now = new Date();
+    if (team.teamCount >= 4 || meetSched < now) {
       setStatus(false);
     };
-    console.log(status);
-  }, []);
+    console.log(team.teamCount);
+  }, [team]);
 
   return (
     <VStack w="1300px" gap={5}>

@@ -33,7 +33,7 @@ const ControllerButton = ({ icon, label, onClick }) => {
   );
 };
 
-const TeamPlayersController = ({ status, team }) => {
+const TeamPlayersController = ({ status, team, fetchTeam }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
 
@@ -41,7 +41,8 @@ const TeamPlayersController = ({ status, team }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // will add async team creation
+    // will add async teamPlayer creation
+    fetchTeam();      // update team
     onClose();
   };
 

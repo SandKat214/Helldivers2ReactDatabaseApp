@@ -161,7 +161,7 @@ const PlayerController = ({
             <Heading as="h3" color="white" fontSize="2xl">
               {selectedRow ? "Edit" : "Add"}{" "}
               <Text as="span" color="red.500">
-                Players
+                Player
               </Text>
             </Heading>
           </ModalHeader>

@@ -182,7 +182,7 @@ export const teamsTable = [
   {
     teamID: 1,
     teamTitle: "Shield of Democracy",
-    teamMeet: "2024-05-02 14:30:00",
+    teamMeet: "2024-05-25 14:30:00",
     teamDifficulty: 3,
     team18Up: 1,
     teamChat: 1,
@@ -197,7 +197,7 @@ export const teamsTable = [
   {
     teamID: 2,
     teamTitle: "Indominus Legion",
-    teamMeet: "2024-05-07 11:15:00",
+    teamMeet: "2024-05-27 11:15:00",
     teamDifficulty: 5,
     team18Up: 0,
     teamChat: 0,
@@ -226,7 +226,7 @@ export const teamsTable = [
   {
     teamID: 4,
     teamTitle: "Holy Divers",
-    teamMeet: "2024-05-08 15:30:00",
+    teamMeet: "2024-05-30 15:30:00",
     teamDifficulty: 2,
     team18Up: 0,
     teamChat: 1,
