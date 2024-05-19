@@ -43,7 +43,7 @@ const PlayerController = ({
   onClose,
   selectedRow,
   setSelectedRow,
-  refetch
+  refetch,
 }) => {
   const imageUploaderRef = useRef(null);
   const formik = useFormik({
@@ -68,7 +68,7 @@ const PlayerController = ({
           username: selectedRow.playerAlias || "",
           level: selectedRow.playerLevel || "",
           age: selectedRow.playerAge || "",
-          dateJoined: format(new Date(selectedRow.playerJoin), 'yyyy-MM-dd')
+          dateJoined: format(new Date(selectedRow.playerJoin), "yyyy-MM-dd"),
         },
       });
     }
@@ -98,53 +98,58 @@ const PlayerController = ({
     return req.data.secure_url;
   };
 
-const { isPending, mutateAsync } = useMutation({
-  mutationFn: async () => {
-    let imageUrl = "";
-    if (formik.values.image) {
-      if (selectedRow) {
-        if (selectedRow !== formik.values.image) {
+  const { isPending, mutateAsync } = useMutation({
+    mutationFn: async () => {
+      let imageUrl = "";
+      if (formik.values.image) {
+        if (selectedRow) {
+          if (selectedRow !== formik.values.image) {
+            imageUrl = await uploadFile();
+          }
+        } else {
           imageUrl = await uploadFile();
         }
-      } else {
-        imageUrl = await uploadFile();
       }
-    }
 
-    const body = {
-      playerName: formik.values.name,
-      playerAlias: formik.values.username,
-      playerLevel: formik.values.level,
-      playerAge: formik.values.age,
-      playerJoin: formik.values.dateJoined || new Date().toISOString().split("T")[0], // Ensure valid date
-      playerImage: imageUrl,
-    };
+      const body = {
+        playerName: formik.values.name,
+        playerAlias: formik.values.username,
+        playerLevel: formik.values.level,
+        playerAge: formik.values.age,
+        playerJoin:
+          formik.values.dateJoined || new Date().toISOString().split("T")[0], // Ensure valid date
+        playerImage: imageUrl,
+      };
 
-    if (selectedRow) {
-      await axios.put(`${import.meta.env.VITE_API_URL}player/${selectedRow.playerID}`, body);
-    } else {
-      await axios.post(`${import.meta.env.VITE_API_URL}player/`, body);
-    }
-  },
-  onSuccess: async () => {
-    toast({ description: "Submission saved", status: "success" });
-    onClose();
-    formik.resetForm({
-      values: {
-        image: "",
-        name: "",
-        username: "",
-        level: "",
-        age: "",
-        dateJoined: new Date().toISOString().split("T")[0],
-      },
-    });
-    refetch();
-  },
-  onError: () => {
-    toast({ description: "Error saving submission", status: "error" });
-  },
-});
+      if (selectedRow) {
+        await axios.put(
+          `${import.meta.env.VITE_API_URL}player/${selectedRow.playerID}`,
+          body
+        );
+      } else {
+        await axios.post(`${import.meta.env.VITE_API_URL}player/`, body);
+      }
+    },
+    onSuccess: async () => {
+      toast({ description: "Submission saved", status: "success" });
+      setSelectedRow(undefined);
+      onClose();
+      formik.resetForm({
+        values: {
+          image: "",
+          name: "",
+          username: "",
+          level: "",
+          age: "",
+          dateJoined: new Date().toISOString().split("T")[0],
+        },
+      });
+      refetch();
+    },
+    onError: () => {
+      toast({ description: "Error saving submission", status: "error" });
+    },
+  });
   const handleChange = (e) => {
     const { name, value } = e.target;
     formik.setFieldValue(name, value);
@@ -195,7 +200,7 @@ const { isPending, mutateAsync } = useMutation({
           <form>
             <ModalBody>
               <VStack gap={4}>
-                <FormControl color="white"> 
+                <FormControl color="white">
                   <FormLabel>Profile Photo</FormLabel>
                   <Center
                     borderWidth="1px"
@@ -223,7 +228,7 @@ const { isPending, mutateAsync } = useMutation({
                     ref={imageUploaderRef}
                   />
                   <FormHelperText color="gray.400">
-                    {selectedRow?"Change":"Upload"} your profile photo
+                    {selectedRow ? "Change" : "Upload"} your profile photo
                   </FormHelperText>
                   {formik.values.image && !selectedRow && (
                     <HStack
