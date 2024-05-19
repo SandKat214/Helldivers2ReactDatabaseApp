@@ -9,7 +9,6 @@ import {
   ModalContent,
   ModalHeader,
   ModalBody,
-  useDisclosure,
   Heading,
   FormControl,
   FormLabel,
@@ -22,12 +21,12 @@ import {
 } from "@chakra-ui/react";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { useMutation } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
-import { FaPlus, FaTrash } from "react-icons/fa6";
+import { useEffect, useRef } from "react";
+import { FaPlus } from "react-icons/fa6";
 import { IoCloudUpload, IoImage, IoSave } from "react-icons/io5";
 import axios from "axios";
 import { useFormik } from "formik";
-import { format, parse } from "date-fns";
+import { format } from "date-fns";
 
 const ControllerButton = ({ icon, label, onClick }) => {
   return (
@@ -44,6 +43,7 @@ const PlayerController = ({
   onClose,
   selectedRow,
   setSelectedRow,
+  refetch
 }) => {
   const imageUploaderRef = useRef(null);
   const formik = useFormik({
@@ -57,21 +57,18 @@ const PlayerController = ({
     },
   });
 
+  // should we let users edit their profile photo?
+
   useEffect(() => {
     if (selectedRow) {
       formik.resetForm({
         values: {
-          image: selectedRow.image || "",
-          name: selectedRow.name || "",
-          username: selectedRow.username || "",
-          level: selectedRow.level || "",
-          age: selectedRow.age || "",
-          dateJoined: selectedRow.dateJoined
-            ? format(
-                parse(selectedRow.dateJoined, "MM/dd/yyyy", new Date()),
-                "yyyy-MM-dd"
-              )
-            : new Date().toISOString().slice(0, 10),
+          image: selectedRow.playerImage || "",
+          name: selectedRow.playerName || "",
+          username: selectedRow.playerAlias || "",
+          level: selectedRow.playerLevel || "",
+          age: selectedRow.playerAge || "",
+          dateJoined: format(new Date(selectedRow.playerJoin), 'yyyy-MM-dd')
         },
       });
     }
@@ -86,7 +83,7 @@ const PlayerController = ({
       "upload_preset",
       import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
     );
-    const req = axios.post(
+    const req = await axios.post(
       `https://api.cloudinary.com/v1_1/${
         import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
       }/image/upload`,
@@ -98,26 +95,56 @@ const PlayerController = ({
       }
     );
 
-    const data = await req.json();
-
-    return data;
+    return req.data.secure_url;
   };
 
-  const { isPending, mutateAsync } = useMutation({
-    mutationFn: async () => {
-      if (formik.values.image) {
-        const imageUrl = await uploadFile();
-        console.log(imageUrl);
+const { isPending, mutateAsync } = useMutation({
+  mutationFn: async () => {
+    let imageUrl = "";
+    if (formik.values.image) {
+      if (selectedRow) {
+        if (selectedRow !== formik.values.image) {
+          imageUrl = await uploadFile();
+        }
+      } else {
+        imageUrl = await uploadFile();
       }
-    },
-    onSuccess: () => {
-      toast({ description: "Submission saved", status: "success" });
-    },
-    onError: () => {
-      toast({ description: "Error saving submission", status: "error" });
-    },
-  });
+    }
 
+    const body = {
+      playerName: formik.values.name,
+      playerAlias: formik.values.username,
+      playerLevel: formik.values.level,
+      playerAge: formik.values.age,
+      playerJoin: formik.values.dateJoined || new Date().toISOString().split("T")[0], // Ensure valid date
+      playerImage: imageUrl,
+    };
+
+    if (selectedRow) {
+      await axios.put(`${import.meta.env.VITE_API_URL}player/${selectedRow.playerID}`, body);
+    } else {
+      await axios.post(`${import.meta.env.VITE_API_URL}player/`, body);
+    }
+  },
+  onSuccess: async () => {
+    toast({ description: "Submission saved", status: "success" });
+    onClose();
+    formik.resetForm({
+      values: {
+        image: "",
+        name: "",
+        username: "",
+        level: "",
+        age: "",
+        dateJoined: new Date().toISOString().split("T")[0],
+      },
+    });
+    refetch();
+  },
+  onError: () => {
+    toast({ description: "Error saving submission", status: "error" });
+  },
+});
   const handleChange = (e) => {
     const { name, value } = e.target;
     formik.setFieldValue(name, value);
@@ -168,7 +195,7 @@ const PlayerController = ({
           <form>
             <ModalBody>
               <VStack gap={4}>
-                <FormControl color="white">
+                <FormControl color="white"> 
                   <FormLabel>Profile Photo</FormLabel>
                   <Center
                     borderWidth="1px"
@@ -196,9 +223,9 @@ const PlayerController = ({
                     ref={imageUploaderRef}
                   />
                   <FormHelperText color="gray.400">
-                    Upload your profile photo
+                    {selectedRow?"Change":"Upload"} your profile photo
                   </FormHelperText>
-                  {formik.values.image && (
+                  {formik.values.image && !selectedRow && (
                     <HStack
                       my={2}
                       color="gray.200"
@@ -294,6 +321,7 @@ const PlayerController = ({
                     value={formik.values.dateJoined}
                     name="dateJoined"
                     onChange={handleChange}
+                    disabled
                   />
                   <FormHelperText color="gray.400">
                     Default is today.
