@@ -15,7 +15,8 @@ app.use(express.json());
 
 // API Routes for backend CRUD:
 app.use("/api/people", require("./routes/peopleRoutes"));
-app.use("/api/languages", require("./routes/languageRoutes"))
+app.use("/api/languages", require("./routes/languageRoutes"));
+app.use("/api/teams", require("./routes/teamRoutes"));
 
 
 // Add your Connect DB Activitiy Code Below:

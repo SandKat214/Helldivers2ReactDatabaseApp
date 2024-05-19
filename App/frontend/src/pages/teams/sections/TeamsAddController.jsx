@@ -1,5 +1,4 @@
 import {
-  Center,
   HStack,
   Icon,
   Text,
@@ -18,12 +17,9 @@ import {
   ModalFooter,
   Button,
   Select,
-  Show,
-  Hide,
 } from "@chakra-ui/react";
 import { FaPlus } from "react-icons/fa6";
 import { IoSave } from "react-icons/io5";
-import { missionTypes, planets, languages } from "../../../utils/mockup";
 
 
 const ControllerButton = ({ icon, label, onClick }) => {
@@ -35,8 +31,17 @@ const ControllerButton = ({ icon, label, onClick }) => {
   );
 };
 
-const TeamsAddController = ({ addTeam, setAddTeam, isChat, handleChatChange, handleChange, handleSubmit }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+const TeamsAddController = ({ 
+  addTeam, 
+  setAddTeam, 
+  isChat, 
+  handleChatChange, 
+  handleChange, 
+  handleSubmit,
+  missions,
+  planets,
+  languages
+}) => {
 
   return (
     <HStack justifyContent="center">
@@ -49,7 +54,6 @@ const TeamsAddController = ({ addTeam, setAddTeam, isChat, handleChatChange, han
         boxShadow="0px 2px 12px rgba(229, 62, 62, 1)"
       >
         <ControllerButton icon={FaPlus} label="Add" onClick={() => setAddTeam(true)} />
-        {/* <ControllerButton icon={FaTrash} label="Delete" onClick={() => {}} /> */}
       </HStack>
       <Modal isOpen={addTeam} onClose={() => setAddTeam(false)}>
         <ModalOverlay />
@@ -178,7 +182,7 @@ const TeamsAddController = ({ addTeam, setAddTeam, isChat, handleChatChange, han
                     onChange={handleChange}
                     isRequired
                   >
-                    {missionTypes.map((mission) => {
+                    {missions.map((mission) => {
                       return (
                         <option 
                           key={mission.missionID} 

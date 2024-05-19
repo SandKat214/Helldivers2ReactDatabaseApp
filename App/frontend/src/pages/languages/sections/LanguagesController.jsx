@@ -42,13 +42,12 @@ const ControllerButton = ({ icon, label, onClick }) => {
 
 const LanguagesController = ({ fetchLanguages }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
 
   const [langData, setLangData] = useState({
     langID: "",
     langName: ""
   });
-
-  const toast = useToast();
 
   // keep track of new form data
   const handleDataChange = (e) => {

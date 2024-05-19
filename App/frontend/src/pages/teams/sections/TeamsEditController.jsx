@@ -18,14 +18,21 @@ import {
     ModalFooter,
     Button,
     Select,
-    Show,
-    Hide,
   } from "@chakra-ui/react";
-  import { useEffect } from "react";
   import { IoSave } from "react-icons/io5";
-  import { missionTypes, planets, languages } from "../../../utils/mockup";
   
-  const TeamsEditController = ({ prevTeam, updateTeam, setUpdateTeam, isChat, handleChatChange, handleChange, handleSubmit }) => {
+  const TeamsEditController = ({ 
+    prevTeam, 
+    updateTeam, 
+    setUpdateTeam, 
+    isChat, 
+    handleChatChange, 
+    handleChange, 
+    handleSubmit,
+    missions,
+    planets,
+    languages
+   }) => {
 
     return (
       <HStack justifyContent="center">
@@ -163,7 +170,7 @@ import {
                       onChange={handleChange}
                       isRequired
                     >
-                      {missionTypes.map((mission) => {
+                      {missions.map((mission) => {
                       return (
                         <option 
                           key={mission.missionID} 

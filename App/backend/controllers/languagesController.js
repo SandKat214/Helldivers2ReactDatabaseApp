@@ -9,8 +9,6 @@
 const db = require("../database/config");
 // Load .env variables
 require("dotenv").config();
-// Util to deep-compare two objects
-const lodash = require("lodash");
 
 // Returns all rows of languages in Languages
 const getLanguages = async (req, res) => {

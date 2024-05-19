@@ -15,12 +15,11 @@ import {
   Tr,
   VStack,
 } from "@chakra-ui/react";
-import { teamsTable } from "../../../utils/mockup";
 import { MdJoinFull, MdEdit } from "react-icons/md";
 import { FaCalendar, FaClock } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 
-const TeamsTable = ({ setUpdateTeam, setPrevTeam, setIsChat }) => {
+const TeamsTable = ({ teams, setUpdateTeam, setPrevTeam, setIsChat }) => {
   const navigate = useNavigate();
   
   // sets formData to team's that is being edited
@@ -32,14 +31,13 @@ const TeamsTable = ({ setUpdateTeam, setPrevTeam, setIsChat }) => {
       difficulty: teamToEdit.teamDifficulty,
       team18Up: teamToEdit.team18Up,
       chat: teamToEdit.teamChat,
+      photo: teamToEdit.teamPhoto,
       mission: teamToEdit.missionID,
       planet: teamToEdit.planetID,
       language: teamToEdit.langID
     });
-
     // open/close language input based on chat boolean
     setIsChat(teamToEdit.teamChat === 1 ? true : false);
-
     // Open update form
     setUpdateTeam(true);
   };
@@ -93,13 +91,13 @@ const TeamsTable = ({ setUpdateTeam, setPrevTeam, setIsChat }) => {
               <Th borderColor="transparent" color="white">
                 Language
               </Th>
-              <Th borderColor="transparent" color="white">
+              <Th borderColor="transparent" color="white" textAlign="center">
                 Actions
               </Th>
             </Tr>
           </Thead>
           <Tbody>
-            {teamsTable.map((team, index) => {
+            {teams.map((team, index) => {
               return (
                 <Tr
                   key={team.teamID}
@@ -138,13 +136,13 @@ const TeamsTable = ({ setUpdateTeam, setPrevTeam, setIsChat }) => {
                       <HStack>
                         <Icon as={FaClock} color="red.500" />
                         <Text>
-                          {team.teamMeet.slice(10, team.teamMeet.length - 3)}{" "}
-                          {team.teamMeet.slice(10, 13) > 11 ? "PM" : "AM"}
+                          {team.teamMeet.slice(11, 16)}{" "}
+                          {team.teamMeet.slice(11, 13) > 11 ? "PM" : "AM"}
                         </Text>
                       </HStack>
                     </VStack>
                   </Td>
-                  <Td borderColor="transparent">{team.teamDifficulty}</Td>
+                  <Td borderColor="transparent" textAlign="center">{team.teamDifficulty}</Td>
                   <Td borderColor="transparent">
                     {team.team18Up === 1 ? "True" : "False"}
                   </Td>
@@ -162,7 +160,7 @@ const TeamsTable = ({ setUpdateTeam, setPrevTeam, setIsChat }) => {
                     </Text>
                   </Td>
                   <Td borderColor="transparent">{team.langName ?? "n/a"}</Td>
-                  <Td borderColor="transparent">
+                  <Td borderColor="transparent" alignContent="center">
                     <HStack>
                       <Tooltip label="Edit team" placement="top">
                         <IconButton
