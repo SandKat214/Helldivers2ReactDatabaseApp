@@ -75,10 +75,10 @@ const LanguagesController = ({ fetchLanguages }) => {
       const URL = import.meta.env.VITE_API_URL + "languages";
       const response = await axios.post(URL, newLang);
       if (response.status === 201) {
-        toast({ description: "Language submitted", status: "success" });
+        toast({ description: "Submission saved", status: "success" });
         fetchLanguages();
       } else {
-        toast({ description: "Error submitting language", status: "error" });
+        toast({ description: "Error saving submission", status: "error" });
       }
     } catch (error) {
       alert("Error creating language");

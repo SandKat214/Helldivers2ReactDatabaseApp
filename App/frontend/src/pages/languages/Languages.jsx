@@ -26,6 +26,7 @@ const Languages = () => {
     }
   };
 
+  // automatic load on first render
   useEffect(() => {
     fetchLanguages();
   }, []);
