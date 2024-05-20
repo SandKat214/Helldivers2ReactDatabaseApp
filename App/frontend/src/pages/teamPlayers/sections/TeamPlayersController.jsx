@@ -95,7 +95,7 @@ const TeamPlayersController = ({ status, team, setTeam }) => {
         {" "}at{" "}
         <Text as="span" color="red.500">
           {team.teamMeet.slice(11, 16)}{" "}
-          {team.teamMeet.slice(10, 13) > 11 ? "PM" : "AM"}
+          {team.teamMeet.slice(11, 13) > 11 ? "PM" : "AM"}
         </Text>
       </Heading>
       <Text color="white" fontSize="x-large">
