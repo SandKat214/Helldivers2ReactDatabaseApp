@@ -46,7 +46,6 @@ const TeamPlayersController = ({ status, team }) => {
   };
 
   return (
-
     <VStack gap={20}>
       <Heading as="h3" color="white" fontSize="3xl">
         <Text as="span" color="red.500">
@@ -55,8 +54,8 @@ const TeamPlayersController = ({ status, team }) => {
         on{" "}
         <Text as="span" color="red.500">
           {team.teamMeet.slice(0, 10)}
-        </Text>
-        {" "}at{" "}
+        </Text>{" "}
+        at{" "}
         <Text as="span" color="red.500">
           {team.teamMeet.slice(10, team.teamMeet.length - 3)}{" "}
           {team.teamMeet.slice(10, 13) > 11 ? "PM" : "AM"}
@@ -65,7 +64,7 @@ const TeamPlayersController = ({ status, team }) => {
       <Text color="white" fontSize="x-large">
         This team is currently{" "}
         <Text as="span" color="red.500">
-        {status ? "open" : "closed"}{" "}
+          {status ? "open" : "closed"}{" "}
         </Text>
         for registration.
       </Text>
@@ -76,10 +75,20 @@ const TeamPlayersController = ({ status, team }) => {
           py={2}
           borderRadius="full"
           gap={5}
-          boxShadow="0px 2px 12px rgba(229, 62, 62, 1)"
+          boxShadow="red"
         >
-          {status && <ControllerButton icon={FaPlus} label="Add" onClick={() => onOpen()} />}
-          <ControllerButton icon={FaAnglesUp} label="Back" onClick={() => navigate("../teams")} />
+          {status && (
+            <ControllerButton
+              icon={FaPlus}
+              label="Add"
+              onClick={() => onOpen()}
+            />
+          )}
+          <ControllerButton
+            icon={FaAnglesUp}
+            label="Back"
+            onClick={() => navigate("../teams")}
+          />
         </HStack>
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
@@ -92,7 +101,7 @@ const TeamPlayersController = ({ status, team }) => {
                 </Text>
               </Heading>
             </ModalHeader>
-            <form onSubmit={handleSubmit}>  
+            <form onSubmit={handleSubmit}>
               <ModalBody>
                 <VStack gap={4}>
                   <FormControl color="white">
@@ -103,7 +112,7 @@ const TeamPlayersController = ({ status, team }) => {
                       color="background.700"
                       placeholder="Choose..."
                       _focus={{ backgroundColor: "white" }}
-                      onChange={e => setTeamPlayerID(e.target.value)}
+                      onChange={(e) => setTeamPlayerID(e.target.value)}
                     >
                       <option value="3">Goblin</option>
                       <option value="5">leafonthewind</option>

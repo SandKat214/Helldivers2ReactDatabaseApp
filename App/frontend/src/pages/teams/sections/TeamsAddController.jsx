@@ -25,7 +25,6 @@ import { FaPlus } from "react-icons/fa6";
 import { IoSave } from "react-icons/io5";
 import { missionTypes, planets, languages } from "../../../utils/mockup";
 
-
 const ControllerButton = ({ icon, label, onClick }) => {
   return (
     <VStack color="white" cursor="pointer">
@@ -35,7 +34,14 @@ const ControllerButton = ({ icon, label, onClick }) => {
   );
 };
 
-const TeamsAddController = ({ addTeam, setAddTeam, isChat, handleChatChange, handleChange, handleSubmit }) => {
+const TeamsAddController = ({
+  addTeam,
+  setAddTeam,
+  isChat,
+  handleChatChange,
+  handleChange,
+  handleSubmit,
+}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -46,9 +52,13 @@ const TeamsAddController = ({ addTeam, setAddTeam, isChat, handleChatChange, han
         py={2}
         borderRadius="full"
         gap={5}
-        boxShadow="0px 2px 12px rgba(229, 62, 62, 1)"
+        boxShadow="red"
       >
-        <ControllerButton icon={FaPlus} label="Add" onClick={() => setAddTeam(true)} />
+        <ControllerButton
+          icon={FaPlus}
+          label="Add"
+          onClick={() => setAddTeam(true)}
+        />
         {/* <ControllerButton icon={FaTrash} label="Delete" onClick={() => {}} /> */}
       </HStack>
       <Modal isOpen={addTeam} onClose={() => setAddTeam(false)}>
@@ -66,13 +76,13 @@ const TeamsAddController = ({ addTeam, setAddTeam, isChat, handleChatChange, han
             <ModalBody>
               <VStack gap={4}>
                 <FormControl color="white">
-                  <FormLabel >Team Title</FormLabel>
-                  <Input 
-                    name="title" 
-                    type="text" 
-                    variant="filled" 
+                  <FormLabel>Team Title</FormLabel>
+                  <Input
+                    name="title"
+                    type="text"
+                    variant="filled"
                     placeholder="Title..."
-                    onChange={handleChange} 
+                    onChange={handleChange}
                     isRequired
                   />
                   <FormHelperText color="gray.400">
@@ -81,12 +91,12 @@ const TeamsAddController = ({ addTeam, setAddTeam, isChat, handleChatChange, han
                 </FormControl>
                 <FormControl color="white">
                   <FormLabel>Time</FormLabel>
-                  <Input 
-                    name="meet"  
-                    type="datetime-local" 
-                    variant="filled" 
+                  <Input
+                    name="meet"
+                    type="datetime-local"
+                    variant="filled"
                     placeholder="Meet Time..."
-                    onChange={handleChange} 
+                    onChange={handleChange}
                     isRequired
                   />
                   <FormHelperText color="gray.400">
@@ -113,7 +123,7 @@ const TeamsAddController = ({ addTeam, setAddTeam, isChat, handleChatChange, han
                   <FormLabel>Is 18+</FormLabel>
                   <Select
                     name="team18Up"
-                    variant="filled" 
+                    variant="filled"
                     color="background.700"
                     placeholder="Choose..."
                     onChange={handleChange}
@@ -128,9 +138,9 @@ const TeamsAddController = ({ addTeam, setAddTeam, isChat, handleChatChange, han
                 </FormControl>
                 <FormControl color="white">
                   <FormLabel>Is chat friendly</FormLabel>
-                  <Select 
+                  <Select
                     name="chat"
-                    variant="filled" 
+                    variant="filled"
                     color="background.700"
                     onChange={handleChatChange}
                     isRequired
@@ -145,9 +155,9 @@ const TeamsAddController = ({ addTeam, setAddTeam, isChat, handleChatChange, han
                 </FormControl>
                 <FormControl color="white">
                   <FormLabel>Planet</FormLabel>
-                  <Select 
+                  <Select
                     name="planet"
-                    variant="filled" 
+                    variant="filled"
                     color="background.700"
                     placeholder="Choose..."
                     onChange={handleChange}
@@ -155,14 +165,12 @@ const TeamsAddController = ({ addTeam, setAddTeam, isChat, handleChatChange, han
                   >
                     {planets.map((planet) => {
                       return (
-                        <option 
-                          key={planet.planetID} 
-                          value={planet.planetID}
-                        >
+                        <option key={planet.planetID} value={planet.planetID}>
                           {planet.planetName}
                         </option>
                       );
-                    })};
+                    })}
+                    ;
                   </Select>
                   <FormHelperText color="gray.400">
                     Choose from available.
@@ -170,9 +178,9 @@ const TeamsAddController = ({ addTeam, setAddTeam, isChat, handleChatChange, han
                 </FormControl>
                 <FormControl color="white">
                   <FormLabel>Mission Type</FormLabel>
-                  <Select 
+                  <Select
                     name="mission"
-                    variant="filled" 
+                    variant="filled"
                     color="background.700"
                     placeholder="Choose..."
                     onChange={handleChange}
@@ -180,25 +188,26 @@ const TeamsAddController = ({ addTeam, setAddTeam, isChat, handleChatChange, han
                   >
                     {missionTypes.map((mission) => {
                       return (
-                        <option 
-                          key={mission.missionID} 
+                        <option
+                          key={mission.missionID}
                           value={mission.missionID}
                         >
                           {mission.missionName}
                         </option>
                       );
-                    })};
+                    })}
+                    ;
                   </Select>
                   <FormHelperText color="gray.400">
                     Choose from available.
                   </FormHelperText>
                 </FormControl>
-                {isChat && 
+                {isChat && (
                   <FormControl color="white">
                     <FormLabel>Language</FormLabel>
-                    <Select 
-                      name="language" 
-                      variant="filled" 
+                    <Select
+                      name="language"
+                      variant="filled"
                       color="background.700"
                       placeholder="Choose..."
                       onChange={handleChange}
@@ -206,28 +215,22 @@ const TeamsAddController = ({ addTeam, setAddTeam, isChat, handleChatChange, han
                     >
                       {languages.map((language) => {
                         return (
-                          <option 
-                            key={language.langID} 
-                            value={language.langID}
-                          >
+                          <option key={language.langID} value={language.langID}>
                             {language.langName}
                           </option>
                         );
-                      })};
+                      })}
+                      ;
                     </Select>
                     <FormHelperText color="gray.400">
                       Select from available.
                     </FormHelperText>
                   </FormControl>
-                }
+                )}
               </VStack>
             </ModalBody>
             <ModalFooter>
-              <Button 
-                type="submit" 
-                colorScheme="red" 
-                rightIcon={<IoSave />}
-              >
+              <Button type="submit" colorScheme="red" rightIcon={<IoSave />}>
                 Save
               </Button>
             </ModalFooter>
