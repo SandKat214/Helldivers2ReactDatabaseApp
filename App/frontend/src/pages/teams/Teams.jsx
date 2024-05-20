@@ -54,29 +54,29 @@ const Teams = () => {
     }
   };
 
-  // retrieve missions from database for drop-downs
-  const fetchMissions = async () => {
-    try {
-      const URL = import.meta.env.VITE_API_URL + "teams/missions";
-      const response = await axios.get(URL);
-      setMissions(response.data);
-    } catch (error) {
-      alert("Error fetching missions from the server.");
-      console.error("Error fetching missions:", error);
-    }
-  };
+  // // retrieve missions from database for drop-downs
+  // const fetchMissions = async () => {
+  //   try {
+  //     const URL = import.meta.env.VITE_API_URL + "";
+  //     const response = await axios.get(URL);
+  //     setMissions(response.data);
+  //   } catch (error) {
+  //     alert("Error fetching missions from the server.");
+  //     console.error("Error fetching missions:", error);
+  //   }
+  // };
 
-  // retrieve planets from database for drop-downs
-  const fetchPlanets = async () => {
-    try {
-      const URL = import.meta.env.VITE_API_URL + "teams/planets";
-      const response = await axios.get(URL);
-      setPlanets(response.data);
-    } catch (error) {
-      alert("Error fetching planets from the server.");
-      console.error("Error fetching planets:", error);
-    }
-  };
+  // // retrieve planets from database for drop-downs
+  // const fetchPlanets = async () => {
+  //   try {
+  //     const URL = import.meta.env.VITE_API_URL + "";
+  //     const response = await axios.get(URL);
+  //     setPlanets(response.data);
+  //   } catch (error) {
+  //     alert("Error fetching planets from the server.");
+  //     console.error("Error fetching planets:", error);
+  //   }
+  // };
 
   // retrieve languages from database for drop-downs
   const fetchLanguages = async () => {
@@ -197,8 +197,8 @@ const Teams = () => {
   // automatic load on first render
   useEffect(() => {
     fetchTeams();
-    fetchMissions();
-    fetchPlanets();
+    // fetchMissions();
+    // fetchPlanets();
     fetchLanguages();
   }, []);
 

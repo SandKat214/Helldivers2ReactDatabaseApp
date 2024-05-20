@@ -19,7 +19,8 @@ import {
   Button,
   Select,
 } from "@chakra-ui/react";
-import { useRef, useState } from "react";
+import axios from "axios";
+import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaPlus, FaAnglesUp } from "react-icons/fa6";
 import { IoSave } from "react-icons/io5";
@@ -33,11 +34,45 @@ const ControllerButton = ({ icon, label, onClick }) => {
   );
 };
 
-const TeamPlayersController = ({ status, team, fetchTeam }) => {
+const TeamPlayersController = ({ status, team, setTeam }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
 
-  const [teamPlayerID, setTeamPlayerID] = useState("");
+  const [availPlayers, setAvailPlayers] = useState([]);
+
+  // fetch updated team from db backend
+  const fetchTeam = async () => {
+    try {
+      const URL = import.meta.env.VITE_API_URL + "teams/" + team.teamID;
+      const response = await axios.get(URL);
+      const updatedTeam = response.data;
+      // set time to local time
+      const tzoffset = (new Date()).getTimezoneOffset() * 60000;
+      const valDate = new Date(updatedTeam.teamMeet);
+      updatedTeam.teamMeet = new Date(valDate - tzoffset).toISOString().slice(0, 19);
+      setTeam(updatedTeam);
+    } catch (error) {
+      alert("Error fetching team from the server.");
+      console.error("Error fetching team:", error);
+    }
+  };
+
+  // fetch available players from db backend
+  const fetchAvailPlayers = async () => {
+    try {
+      const URL = import.meta.env.VITE_API_URL + "teamPlayers/availPlayers/" + team.teamID;
+      const response = await axios.get(URL);
+      setAvailPlayers(response.data);
+    } catch (error) {
+      alert("Error fetching available players from the server.");
+      console.error("Error fetching available players:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAvailPlayers();
+  }, []);
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -59,7 +94,7 @@ const TeamPlayersController = ({ status, team, fetchTeam }) => {
         </Text>
         {" "}at{" "}
         <Text as="span" color="red.500">
-          {team.teamMeet.slice(10, team.teamMeet.length - 3)}{" "}
+          {team.teamMeet.slice(11, 16)}{" "}
           {team.teamMeet.slice(10, 13) > 11 ? "PM" : "AM"}
         </Text>
       </Heading>
@@ -104,10 +139,17 @@ const TeamPlayersController = ({ status, team, fetchTeam }) => {
                       color="background.700"
                       placeholder="Choose..."
                       _focus={{ backgroundColor: "white" }}
-                      onChange={e => setTeamPlayerID(e.target.value)}
                     >
-                      <option value="3">Goblin</option>
-                      <option value="5">leafonthewind</option>
+                      {availPlayers.map((player) => {
+                        return (
+                          <option 
+                            key={player.playerID} 
+                            value={player.playerID}
+                          >
+                            {player.playerAlias}
+                          </option>
+                        );
+                      })}
                     </Select>
                     <FormHelperText color="gray.400">
                       Choose available recruit.

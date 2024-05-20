@@ -17,6 +17,7 @@ app.use(express.json());
 app.use("/api/people", require("./routes/peopleRoutes"));
 app.use("/api/languages", require("./routes/languageRoutes"));
 app.use("/api/teams", require("./routes/teamRoutes"));
+app.use("/api/teamPlayers", require("./routes/teamPlayerRoutes"));
 
 
 // Add your Connect DB Activitiy Code Below:

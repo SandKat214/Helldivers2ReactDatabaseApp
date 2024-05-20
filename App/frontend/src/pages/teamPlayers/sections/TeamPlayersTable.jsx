@@ -1,3 +1,10 @@
+// Citation for fetch function:
+// Date: 5/19/2024
+// Copied & Adapted from React-Starter-App
+// Source URL: https://github.com/osu-cs340-ecampus/react-starter-app
+// Authors: Devin Daniels and Zachary Maes
+
+
 import {
   Avatar,
   Box,
@@ -14,20 +21,24 @@ import {
   Tr,
   VStack
 } from "@chakra-ui/react";
-import { teamPlayers, players } from "../../../utils/mockup";
+import axios from "axios";
 import { FaTrash } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 
 const TeamPlayersTable = ({ team, setStatus }) => {
-  const [teamMembers, setTeamMembers] = useState([]);
+  const [teamPlayers, setTeamPlayers] = useState([]);
 
-  const fetchTeamPlayers = () => {
-    // this will be an async function to gets data from the BE,
-    // for now it sorts the info from the mockup.
-    const teamObjs = teamPlayers.filter((teamPlayer) => teamPlayer.teamID === parseInt(team.teamID));
-    const idArray = teamObjs.map((id) => id.playerID);
-    setTeamMembers(players.filter((player) => idArray.includes(player.playerID)));
-  }
+  // retrieve team players from database
+  const fetchTeamPlayers = async () => {
+    try {
+      const URL = import.meta.env.VITE_API_URL + "teamPlayers/" + team.teamID;
+      const response = await axios.get(URL);
+      setTeamPlayers(response.data);
+    } catch (error) {
+      alert("Error fetching team players from the server.");
+      console.error("Error fetching team players:", error);
+    }
+  };
 
   useEffect(() => {
     fetchTeamPlayers();
@@ -37,7 +48,6 @@ const TeamPlayersTable = ({ team, setStatus }) => {
     if (team.teamCount >= 4 || meetSched < now) {
       setStatus(false);
     };
-    console.log(team.teamCount);
   }, [team]);
 
   return (
@@ -78,10 +88,10 @@ const TeamPlayersTable = ({ team, setStatus }) => {
               </Tr>
             </Thead>
             <Tbody>
-              {teamMembers.map((teamPlayer, index) => {
+              {teamPlayers.map((teamPlayer, index) => {
                 return (
                   <Tr
-                    key={teamPlayer.playerID}
+                    key={teamPlayer.teamPlayerID}
                     color="white"
                     backgroundColor={
                       index % 2 === 0 ? "background.600" : "transparent"
@@ -95,10 +105,10 @@ const TeamPlayersTable = ({ team, setStatus }) => {
                     <Td borderColor="transparent">
                       <Avatar src="https://www.nikkoindustries.com/cdn/shop/files/Image-Render.000_e98f6660-9faa-47ff-8d91-8df35964c70e_946x946.png?v=1708613784" />
                     </Td>
-                    <Td borderColor="transparent">{teamPlayer.name}</Td>
-                    <Td borderColor="transparent">{teamPlayer.username}</Td>
-                    <Td borderColor="transparent">{teamPlayer.level}</Td>
-                    <Td borderColor="transparent">{teamPlayer.age}</Td>
+                    <Td borderColor="transparent">{teamPlayer.playerName}</Td>
+                    <Td borderColor="transparent">{teamPlayer.playerAlias}</Td>
+                    <Td borderColor="transparent">{teamPlayer.playerLevel}</Td>
+                    <Td borderColor="transparent">{teamPlayer.playerAge}</Td>
                     <Td>
                       <HStack justifyContent="center">
                         <Tooltip label="Remove from Team" placement="top">

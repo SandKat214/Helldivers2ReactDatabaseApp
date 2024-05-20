@@ -35,33 +35,21 @@ const getTeams = async (req, res) => {
   }
 };
 
-// Returns all missionType IDs and names for drop-down menus
-const getMissions = async (req, res) => {
+// Returns a single team by their unique ID from Teams
+const getTeamByID = async (req, res) => {
   try {
-    // Select IDs and names from the "MissionTypes" table
-    const query = "SELECT missionID, missionName FROM MissionTypes";
-    // Execute the query using the "db" object from the configuration file
-    const [rows] = await db.query(query);
-    // Send back the rows to the client
-    res.status(200).json(rows);
+    const teamID = req.params.id;
+    const query = "SELECT * FROM Teams WHERE teamID = ?";
+    const [result] = await db.query(query, [teamID]);
+    // Check if team was found
+    if (result.length === 0) {
+      return res.status(404).json({ error: "Team not found" });
+    }
+    const team = result[0];
+    res.json(team);
   } catch (error) {
-    console.error("Error fetching mission info from the database:", error);
-    res.status(500).json({ error: "Error fetching mission info" });
-  }
-};
-
-// Returns all planet IDs and names for drop-down menus
-const getPlanets = async (req, res) => {
-  try {
-    // Select IDs and names from the "Planets" table
-    const query = "SELECT planetID, planetName FROM Planets";
-    // Execute the query using the "db" object from the configuration file
-    const [rows] = await db.query(query);
-    // Send back the rows to the client
-    res.status(200).json(rows);
-  } catch (error) {
-    console.error("Error fetching planet info from the database:", error);
-    res.status(500).json({ error: "Error fetching planet info" });
+    console.error("Error fetching team from the database:", error);
+    res.status(500).json({ error: "Error fetching team" });
   }
 };
 
@@ -127,52 +115,10 @@ const updateTeam = async (req, res) => {
   };
 };
 
-// Endpoint to delete a customer from the database
-const deletePerson = async (req, res) => {
-  console.log("Deleting person with id:", req.params.id);
-  const personID = req.params.id;
-
-  try {
-    // Ensure the person exitst
-    const [isExisting] = await db.query(
-      "SELECT 1 FROM bsg_people WHERE id = ?",
-      [personID]
-    );
-
-    // If the person doesn't exist, return an error
-    if (isExisting.length === 0) {
-      return res.status(404).send("Person not found");
-    }
-
-    // Delete related records from the intersection table (see FK contraints bsg_cert_people)
-    const [response] = await db.query(
-      "DELETE FROM bsg_cert_people WHERE pid = ?",
-      [personID]
-    );
-
-    console.log(
-      "Deleted",
-      response.affectedRows,
-      "rows from bsg_cert_people intersection table"
-    );
-
-    // Delete the person from bsg_people
-    await db.query("DELETE FROM bsg_people WHERE id = ?", [personID]);
-
-    // Return the appropriate status code
-    res.status(204).json({ message: "Person deleted successfully" })
-  } catch (error) {
-    console.error("Error deleting person from the database:", error);
-    res.status(500).json({ error: error.message });
-  }
-};
-
 // Export the functions as methods of an object
 module.exports = {
   getTeams,
-  getMissions,
-  getPlanets,
+  getTeamByID,
   createTeam,
   updateTeam,
-//   deletePerson,
 };

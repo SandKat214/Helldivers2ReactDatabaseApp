@@ -4,23 +4,17 @@
 // Source URL: https://github.com/osu-cs340-ecampus/react-starter-app
 // Authors: Devin Daniels and Zachary Maes
 
-
 const express = require("express");
 const router = express.Router();
 const {
-  getTeams,
-  getTeamByID,
-  getMissions,
-  getPlanets,
-  createTeam,
-  updateTeam,
-//   deletePerson,
-} = require("../controllers/teamsController");
+  getTeamPlayers,
+  getAvailPlayers,
+} = require("../controllers/teamPlayersController");
 
-router.get("/", getTeams);
-router.get("/:id", getTeamByID);
-router.post("/", createTeam);
-router.put("/:id", updateTeam);
+router.get("/:id", getTeamPlayers);
+router.get("/availPlayers/:id", getAvailPlayers);
+// router.post("/", createPerson);
+// router.put("/:id", updatePerson);
 // router.delete("/:id", deletePerson);
 
 module.exports = router;
