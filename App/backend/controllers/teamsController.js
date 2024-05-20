@@ -18,7 +18,7 @@ const getTeams = async (req, res) => {
     // Select all rows from the "Teams" table with mission, planet, and language info
     const query = 
     "SELECT Teams.teamID, Teams.teamTitle, Teams.teamMeet, Teams.teamDifficulty, Teams.team18Up,\
-    Teams.teamChat, Teams.teamCount, Teams.teamPhoto, Teams.missionID, MissionTypes.missionName, Teams.planetID,\
+    Teams.teamChat, Teams.teamCount, Teams.teamImage, Teams.missionID, MissionTypes.missionName, Teams.planetID,\
     Planets.planetName, Languages.langID, Languages.langName\
     FROM Teams\
         INNER JOIN MissionTypes on Teams.missionID=MissionTypes.missionID\
@@ -68,9 +68,9 @@ const getPlanets = async (req, res) => {
 // Returns status of creation of new team in Teams
 const createTeam = async (req, res) => {
   try {
-    const { teamTitle, teamMeet, teamDifficulty, team18Up, teamChat, teamPhoto, missionID, planetID, langID } = req.body;
+    const { teamTitle, teamMeet, teamDifficulty, team18Up, teamChat, teamImage, missionID, planetID, langID } = req.body;
     const query =
-      "INSERT INTO Teams (teamTitle, teamMeet, teamDifficulty, team18Up, teamChat, teamPhoto, missionID, planetID, langID)\
+      "INSERT INTO Teams (teamTitle, teamMeet, teamDifficulty, team18Up, teamChat, teamImage, missionID, planetID, langID)\
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     const response = await db.query(query, [
       teamTitle, 
@@ -78,7 +78,7 @@ const createTeam = async (req, res) => {
       teamDifficulty, 
       team18Up, 
       teamChat, 
-      teamPhoto, 
+      teamImage, 
       missionID, 
       planetID, 
       langID
@@ -96,12 +96,12 @@ const updateTeam = async (req, res) => {
   // Get the team ID
   const teamID = req.params.id;
   // Get the team object
-  const { teamTitle, teamMeet, teamDifficulty, team18Up, teamChat, teamPhoto, missionID, planetID, langID } = req.body;
+  const { teamTitle, teamMeet, teamDifficulty, team18Up, teamChat, teamImage, missionID, planetID, langID } = req.body;
   try {
     const query =
       "UPDATE Teams\
       SET teamTitle = ?, teamMeet = ?, teamDifficulty = ?, team18Up = ?, teamChat = ?,\
-        teamPhoto = ?, missionID = ?, planetID = ?, langID = ?\
+        teamImage = ?, missionID = ?, planetID = ?, langID = ?\
       WHERE teamID = ?";
 
     // Perform the update
@@ -111,7 +111,7 @@ const updateTeam = async (req, res) => {
       teamDifficulty, 
       team18Up, 
       teamChat, 
-      teamPhoto, 
+      teamImage, 
       missionID, 
       planetID, 
       langID,

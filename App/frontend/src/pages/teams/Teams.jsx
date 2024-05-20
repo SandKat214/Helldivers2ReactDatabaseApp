@@ -29,7 +29,7 @@ const Teams = () => {
     difficulty: "",
     team18Up: "",
     chat: "",
-    photo: null,
+    image: null,
     mission: "",
     planet: "",
     language: null
@@ -158,7 +158,7 @@ const Teams = () => {
       teamDifficulty: teamData.difficulty,
       team18Up: teamData.team18Up,
       teamChat: teamData.chat,
-      teamPhoto: teamData.photo,
+      teamImage: teamData.image,
       missionID: teamData.mission,
       planetID: teamData.planet,
       langID: teamData.language

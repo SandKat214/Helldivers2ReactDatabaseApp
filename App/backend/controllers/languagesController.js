@@ -47,6 +47,6 @@ const createLanguage = async (req, res) => {
 
   // Export the functions as methods of an object
 module.exports = {
-    getLanguages,
-    createLanguage,
-  };
+  getLanguages,
+  createLanguage,
+};

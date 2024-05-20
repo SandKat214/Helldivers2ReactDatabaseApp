@@ -19,7 +19,7 @@ import {
     Button,
     Select,
   } from "@chakra-ui/react";
-  import { IoSave } from "react-icons/io5";
+  import { MdEdit } from "react-icons/md";
   
   const TeamsEditController = ({ 
     prevTeam, 
@@ -219,9 +219,9 @@ import {
                 <Button 
                   type="submit" 
                   colorScheme="red" 
-                  rightIcon={<IoSave />}
+                  rightIcon={<MdEdit />}
                 >
-                  Save
+                  Edit
                 </Button>
               </ModalFooter>
             </form>

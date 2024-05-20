@@ -31,7 +31,7 @@ const TeamsTable = ({ teams, setUpdateTeam, setPrevTeam, setIsChat }) => {
       difficulty: teamToEdit.teamDifficulty,
       team18Up: teamToEdit.team18Up,
       chat: teamToEdit.teamChat,
-      photo: teamToEdit.teamPhoto,
+      image: teamToEdit.teamImage,
       mission: teamToEdit.missionID,
       planet: teamToEdit.planetID,
       language: teamToEdit.langID
@@ -117,7 +117,7 @@ const TeamsTable = ({ teams, setUpdateTeam, setPrevTeam, setIsChat }) => {
                       h={10}
                       borderRadius="md"
                       src={
-                        team.teamPhoto ??
+                        team.teamImage ??
                         "https://avatars.githubusercontent.com/u/424443?v=4"
                       }
                     />
