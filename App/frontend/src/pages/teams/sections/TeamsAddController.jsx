@@ -88,7 +88,8 @@ const TeamsAddController = ({
                   <Input 
                     name="meet"  
                     type="datetime-local" 
-                    variant="filled" 
+                    variant="filled"
+                    min={new Date().toISOString().slice(0,16)} 
                     placeholder="Meet Time..."
                     onChange={handleChange} 
                     isRequired

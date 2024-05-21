@@ -35,6 +35,36 @@ const getTeams = async (req, res) => {
   }
 };
 
+// Returns missionID and missionName from Missions for add & update dropdowns
+const getMissions = async (req, res) => {
+  try {
+    // Select id and name from the "MissionTypes" table
+    const query = "SELECT missionID, missionName FROM MissionTypes";
+    // Execute the query using the "db" object from the configuration file
+    const [rows] = await db.query(query);
+    // Send back the rows to the client
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error("Error fetching mission data from the database:", error);
+    res.status(500).json({ error: "Error fetching mission data" });
+  }
+};
+
+// Returns planetID and planetName from Planets for add & update dropdowns
+const getPlanets = async (req, res) => {
+  try {
+    // Select id and name from the "Planets" table
+    const query = "SELECT planetID, planetName FROM Planets";
+    // Execute the query using the "db" object from the configuration file
+    const [rows] = await db.query(query);
+    // Send back the rows to the client
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error("Error fetching planet data from the database:", error);
+    res.status(500).json({ error: "Error fetching planet data" });
+  }
+};
+
 // Returns a single team by their unique ID from Teams
 const getTeamByID = async (req, res) => {
   try {
@@ -50,6 +80,25 @@ const getTeamByID = async (req, res) => {
   } catch (error) {
     console.error("Error fetching team from the database:", error);
     res.status(500).json({ error: "Error fetching team" });
+  }
+};
+
+// Returns a single team by their unique ID from Teams
+const getMinors = async (req, res) => {
+  try {
+    // Select all minors on a team from the "TeamPlayers" table
+    const teamID = req.params.id;
+    const query = 
+      "SELECT * FROM TeamPlayers INNER JOIN Players\
+        ON TeamPlayers.playerID=Players.playerID\
+        WHERE Players.playerAge < 18 AND TeamPlayers.teamID = ?";
+    // Execute the query using the "db" object from the configuration file
+    const [rows] = await db.query(query, [teamID]);
+    // Send back the rows to the client
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error("Error fetching minors from the database:", error);
+    res.status(500).json({ error: "Error fetching minors" });
   }
 };
 
@@ -107,18 +156,21 @@ const updateTeam = async (req, res) => {
     ]);
     // Inform client of success and return 
     return res.json({ message: "Team updated successfully." });
-  } catch (error) {
-    console.log("Error updating team", error);
+  } catch (err) {
+    console.log("Error updating team", err);
     res
       .status(500)
-      .json({ error: `Error updating the team with id ${teamID}` });
+      .json({ error: err });
   };
 };
 
 // Export the functions as methods of an object
 module.exports = {
   getTeams,
+  getMissions,
+  getPlanets,
   getTeamByID,
+  getMinors,
   createTeam,
   updateTeam,
 };

@@ -9,12 +9,15 @@ const router = express.Router();
 const {
   getTeamPlayers,
   getAvailPlayers,
+  getAdultPlayers,
+  createTeamPlayer,
+  deleteTeamPlayer,
 } = require("../controllers/teamPlayersController");
 
 router.get("/:id", getTeamPlayers);
 router.get("/availPlayers/:id", getAvailPlayers);
-// router.post("/", createPerson);
-// router.put("/:id", updatePerson);
-// router.delete("/:id", deletePerson);
+router.get("/adultPlayers/:id", getAdultPlayers);
+router.post("/", createTeamPlayer);
+router.delete("/:id", deleteTeamPlayer);
 
 module.exports = router;

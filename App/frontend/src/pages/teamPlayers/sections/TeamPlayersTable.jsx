@@ -19,13 +19,16 @@ import {
   Text,
   Tooltip,
   Tr,
+  useToast,
   VStack
 } from "@chakra-ui/react";
 import axios from "axios";
 import { FaTrash } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 
-const TeamPlayersTable = ({ team, setStatus }) => {
+const TeamPlayersTable = ({ team, setStatus, fetchTeam }) => {
+  const toast = useToast();
+
   const [teamPlayers, setTeamPlayers] = useState([]);
 
   // retrieve team players from database
@@ -40,6 +43,21 @@ const TeamPlayersTable = ({ team, setStatus }) => {
     }
   };
 
+  const deleteTeamPlayer = async (id) => {
+    try {
+      const URL = import.meta.env.VITE_API_URL + "teamPlayers/" + id;
+      const response = await axios.delete(URL);
+      // Ensure that the team player was deleted successfully
+      if (response.status === 204) {
+        toast({ description: "Deletion successful", status: "success" });
+        fetchTeam();
+      }
+    } catch (err) {
+      alert(err.response.data.error || "Error deleting team player");
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     fetchTeamPlayers();
     // registration closed if team full or meet date has passed
@@ -47,6 +65,8 @@ const TeamPlayersTable = ({ team, setStatus }) => {
     const now = new Date();
     if (team.teamCount >= 4 || meetSched < now) {
       setStatus(false);
+    } else {
+      setStatus(true);
     };
   }, [team]);
 
@@ -118,6 +138,7 @@ const TeamPlayersTable = ({ team, setStatus }) => {
                             aria-label="Delete button"
                             icon={<FaTrash />}
                             size="sm"
+                            onClick={() => deleteTeamPlayer(teamPlayer.teamPlayerID)}
                           />
                         </Tooltip>
                       </HStack>

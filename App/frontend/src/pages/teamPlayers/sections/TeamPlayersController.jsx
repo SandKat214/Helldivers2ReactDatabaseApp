@@ -18,6 +18,7 @@ import {
   ModalFooter,
   Button,
   Select,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useRef, useState, useEffect } from "react";
@@ -34,28 +35,13 @@ const ControllerButton = ({ icon, label, onClick }) => {
   );
 };
 
-const TeamPlayersController = ({ status, team, setTeam }) => {
+const TeamPlayersController = ({ status, team, fetchTeam }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
+  const toast = useToast();
 
   const [availPlayers, setAvailPlayers] = useState([]);
-
-  // fetch updated team from db backend
-  const fetchTeam = async () => {
-    try {
-      const URL = import.meta.env.VITE_API_URL + "teams/" + team.teamID;
-      const response = await axios.get(URL);
-      const updatedTeam = response.data;
-      // set time to local time
-      const tzoffset = (new Date()).getTimezoneOffset() * 60000;
-      const valDate = new Date(updatedTeam.teamMeet);
-      updatedTeam.teamMeet = new Date(valDate - tzoffset).toISOString().slice(0, 19);
-      setTeam(updatedTeam);
-    } catch (error) {
-      alert("Error fetching team from the server.");
-      console.error("Error fetching team:", error);
-    }
-  };
+  const [player, setPlayer] = useState("");
 
   // fetch available players from db backend
   const fetchAvailPlayers = async () => {
@@ -69,16 +55,53 @@ const TeamPlayersController = ({ status, team, setTeam }) => {
     }
   };
 
+  // fetch available adult players from db backend
+  const fetchAdultPlayers = async () => {
+    try {
+      const URL = import.meta.env.VITE_API_URL + "teamPlayers/adultPlayers/" + team.teamID;
+      const response = await axios.get(URL);
+      setAvailPlayers(response.data);
+    } catch (error) {
+      alert("Error fetching available adult players from the server.");
+      console.error("Error fetching available adult players:", error);
+    }
+  };
+
   useEffect(() => {
-    fetchAvailPlayers();
-  }, []);
+    // if adult players only
+    if (team.team18Up === 1) {
+      fetchAdultPlayers();
+    } else {
+      fetchAvailPlayers();
+    };    
+  }, [team]);
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    // Prevent page reload & close modal
     e.preventDefault();
-    // will add async teamPlayer creation
-    fetchTeam();      // update team
     onClose();
+    // Create team player object
+    const teamPlayer = {
+      teamID: team.teamID,
+      playerID: player,
+    };
+    try {
+      const URL = import.meta.env.VITE_API_URL + "teamPlayers";
+      const response = await axios.post(URL, teamPlayer);
+      if (response.status !== 201) {
+        console.log(response.status);
+        toast({ description: "Error saving submission", status: "error" });
+      } else {
+        toast({ description: "Submission saved", status: "success" });
+        fetchTeam();
+      };
+    } catch (err) {
+      alert("Error creating team player");
+      console.log("Error creating team player:", err);
+    };
+    // Reset the form fields
+    setPlayer("");
   };
 
   return (
@@ -138,6 +161,7 @@ const TeamPlayersController = ({ status, team, setTeam }) => {
                       variant="filled"
                       color="background.700"
                       placeholder="Choose..."
+                      onChange={(e) => setPlayer(e.target.value)}
                       _focus={{ backgroundColor: "white" }}
                     >
                       {availPlayers.map((player) => {
