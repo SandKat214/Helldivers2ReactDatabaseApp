@@ -36,33 +36,6 @@ import {
     languages
    }) => {
 
-    const [minors, setMinors] = useState([]);
-    const [under18, setUnder18] = useState(false);
-
-    // retrieve team minors from database
-    const fetchMinors = async () => {
-      try {
-        const URL = import.meta.env.VITE_API_URL + "teams/minors/" + prevTeam.id;
-        const response = await axios.get(URL);
-        setMinors(response.data);
-      } catch (error) {
-        alert("Error fetching minors from the server.");
-        console.error("Error fetching minors:", error);
-      }
-    };
-
-    // useEffect(() => {
-    //   setMinors(new Array());
-    //   if (prevTeam.team18Up === 0) {
-    //     fetchMinors();
-    //     setUnder18(minors.length > 0 ? true : false);
-    //   } else {
-    //     setUnder18(false);
-    //   };
-    //   console.log(prevTeam.id);
-    //   console.log(minors);
-    // }, [prevTeam]);
-
     return (
       <HStack justifyContent="center">
         <Modal isOpen={updateTeam} onClose={() => setUpdateTeam(false)}> 
@@ -129,7 +102,6 @@ import {
                   </FormControl>
                   <FormControl color="white">
                     <FormLabel>Is 18+</FormLabel>
-                    {under18 ? <Text color="red.500" fontSize="md" fontWeight="bolder">FALSE</Text> :
                     <Select
                       name="team18Up"
                       variant="filled" 
@@ -141,9 +113,9 @@ import {
                     >
                       <option value="1">True</option>
                       <option value="0">False</option>
-                    </Select> }
+                    </Select>
                     <FormHelperText color="gray.400">
-                      {under18 ? "Cannot change once minors are recruited." : "Select True or False."}
+                      Select True or False.
                     </FormHelperText>
                   </FormControl>
                   <FormControl color="white">

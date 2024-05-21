@@ -12,7 +12,6 @@ const {
   getTeamByID,
   getMissions,
   getPlanets,
-  getMinors,
   createTeam,
   updateTeam,
 } = require("../controllers/teamsController");
@@ -21,7 +20,6 @@ router.get("/", getTeams);
 router.get("/data/missions", getMissions);
 router.get("/data/planets", getPlanets);
 router.get("/:id", getTeamByID);
-router.get("/minors/:id", getMinors);
 router.post("/", createTeam);
 router.put("/:id", updateTeam);
 // router.delete("/:id", deletePerson);

@@ -83,25 +83,6 @@ const getTeamByID = async (req, res) => {
   }
 };
 
-// Returns a single team by their unique ID from Teams
-const getMinors = async (req, res) => {
-  try {
-    // Select all minors on a team from the "TeamPlayers" table
-    const teamID = req.params.id;
-    const query = 
-      "SELECT * FROM TeamPlayers INNER JOIN Players\
-        ON TeamPlayers.playerID=Players.playerID\
-        WHERE Players.playerAge < 18 AND TeamPlayers.teamID = ?";
-    // Execute the query using the "db" object from the configuration file
-    const [rows] = await db.query(query, [teamID]);
-    // Send back the rows to the client
-    res.status(200).json(rows);
-  } catch (error) {
-    console.error("Error fetching minors from the database:", error);
-    res.status(500).json({ error: "Error fetching minors" });
-  }
-};
-
 // Returns status of creation of new team in Teams
 const createTeam = async (req, res) => {
   try {
@@ -170,7 +151,6 @@ module.exports = {
   getMissions,
   getPlanets,
   getTeamByID,
-  getMinors,
   createTeam,
   updateTeam,
 };
