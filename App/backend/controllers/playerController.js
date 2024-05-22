@@ -5,10 +5,10 @@ require("dotenv").config();
 // Util to deep-compare two objects
 const lodash = require("lodash");
 
-// Returns all rows of people in bsg_people
+// Returns all rows of people in Players
 const getPlayer = async (req, res) => {
   try {
-    // Select all rows from the "bsg_people" table
+    // Select all rows from the "Players" table
     const query = "SELECT * FROM Players";
     // Execute the query using the "db" object from the configuration file
     const [rows] = await db.query(query);
@@ -20,11 +20,11 @@ const getPlayer = async (req, res) => {
   }
 };
 
-// Returns a single player by their unique ID from bsg_people
+// Returns a single player by their unique ID from Players
 const getPlayerByID = async (req, res) => {
   try {
     const playerID = req.params.id;
-    const query = "SELECT * FROM bsg_people WHERE id = ?";
+    const query = "SELECT * FROM Players WHERE id = ?";
     const [result] = await db.query(query, [playerID]);
     // Check if player was found
     if (result.length === 0) {
@@ -38,15 +38,27 @@ const getPlayerByID = async (req, res) => {
   }
 };
 
-// Returns status of creation of new player in bsg_people
+// Returns status of creation of new player in Players
 const createPlayer = async (req, res) => {
   try {
-    const { playerName, playerAlias, playerLevel, playerAge, playerJoin, playerImage } = req.body;
+    const {
+      playerName,
+      playerAlias,
+      playerLevel,
+      playerAge,
+      playerJoin,
+      playerImage,
+    } = req.body;
     const query =
       "INSERT INTO Players (playerName, playerAlias, playerLevel, playerAge, playerJoin, playerImage) VALUES (?, ?, ?, ?, ?, ?)";
 
     const response = await db.query(query, [
-      playerName, playerAlias, playerLevel, playerAge, playerJoin, playerImage
+      playerName,
+      playerAlias,
+      playerLevel,
+      playerAge,
+      playerJoin,
+      playerImage,
     ]);
     res.status(201).json(response);
   } catch (error) {
@@ -56,7 +68,6 @@ const createPlayer = async (req, res) => {
     res.status(500).json({ error: "Error creating player" });
   }
 };
-
 
 const updatePlayer = async (req, res) => {
   // Get the player ID
@@ -88,7 +99,7 @@ const updatePlayer = async (req, res) => {
 
       // Perform the update
       await db.query(query, values);
-      // Inform client of success and return 
+      // Inform client of success and return
       return res.json({ message: "Player updated successfully." });
     }
 
@@ -130,11 +141,11 @@ const deletePlayer = async (req, res) => {
       "rows from TeamPlayers intersection table"
     );
 
-    // Delete the player from bsg_people
+    // Delete the player from Players
     await db.query("DELETE FROM Players WHERE playerID = ?", [playerID]);
 
     // Return the appropriate status code
-    res.status(204).json({ message: "Player deleted successfully" })
+    res.status(204).json({ message: "Player deleted successfully" });
   } catch (error) {
     console.error("Error deleting player from the database:", error);
     res.status(500).json({ error: error.message });
