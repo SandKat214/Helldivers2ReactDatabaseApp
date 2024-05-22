@@ -49,7 +49,7 @@ const Teams = () => {
       };
       setTeams(teams);
     } catch (error) {
-      alert("Error fetching teams from the server.");
+      toast({ description: "Error fetching teams from server", status: "error" });
       console.error("Error fetching teams:", error);
     }
   };
@@ -61,7 +61,7 @@ const Teams = () => {
       const response = await axios.get(URL);
       setMissions(response.data);
     } catch (error) {
-      alert("Error fetching missions from the server.");
+      toast({ description: "Error fetching missions from server", status: "error" });
       console.error("Error fetching missions:", error);
     }
   };
@@ -73,7 +73,7 @@ const Teams = () => {
       const response = await axios.get(URL);
       setPlanets(response.data);
     } catch (error) {
-      alert("Error fetching planets from the server.");
+      toast({ description: "Error fetching planets from server", status: "error" });
       console.error("Error fetching planets:", error);
     }
   };
@@ -85,7 +85,7 @@ const Teams = () => {
       const response = await axios.get(URL);
       setLanguages(response.data);
     } catch (error) {
-      alert("Error fetching languages from the server.");
+      toast({ description: "Error fetching languages from server", status: "error" });
       console.error("Error fetching languages:", error);
     }
   };
@@ -139,7 +139,7 @@ const Teams = () => {
         toast({ description: "Error saving submission", status: "error" });
       };
     } catch (error) {
-      alert("Error creating team");
+      toast({ description: "Error creating team", status: "error" });
       console.error("Error creating team:", error);
     };
     // Reset the form fields
@@ -173,7 +173,7 @@ const Teams = () => {
         fetchTeams();
       };
     } catch (err) {
-      toast({ description: "Error: " + err.response.data.error.message, status: "error" });
+      toast({ description: err.response.data.error.message, status: "error" });
       console.log("Error updating team:", err);
     };
     // Reset the form fields

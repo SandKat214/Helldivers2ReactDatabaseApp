@@ -1,4 +1,4 @@
-// Citation for fetch function:
+// Citation for fetch & delete functions:
 // Date: 5/19/2024
 // Copied & Adapted from React-Starter-App
 // Source URL: https://github.com/osu-cs340-ecampus/react-starter-app
@@ -38,7 +38,7 @@ const TeamPlayersTable = ({ team, setStatus, fetchTeam }) => {
       const response = await axios.get(URL);
       setTeamPlayers(response.data);
     } catch (error) {
-      alert("Error fetching team players from the server.");
+      toast({ description: "Error fetching team players from server", status: "error" });
       console.error("Error fetching team players:", error);
     }
   };

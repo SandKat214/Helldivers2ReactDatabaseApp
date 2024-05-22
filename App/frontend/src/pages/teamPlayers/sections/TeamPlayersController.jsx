@@ -1,3 +1,10 @@
+// Citation for fetch, & create functions:
+// Date: 5/21/2024
+// Copied & Adapted from React-Starter-App
+// Source URL: https://github.com/osu-cs340-ecampus/react-starter-app
+// Authors: Devin Daniels and Zachary Maes
+
+
 import {
   Center,
   HStack,
@@ -50,7 +57,7 @@ const TeamPlayersController = ({ status, team, fetchTeam }) => {
       const response = await axios.get(URL);
       setAvailPlayers(response.data);
     } catch (error) {
-      alert("Error fetching available players from the server.");
+      toast({ description: "Error fetching available players", status: "error" });
       console.error("Error fetching available players:", error);
     }
   };
@@ -62,7 +69,7 @@ const TeamPlayersController = ({ status, team, fetchTeam }) => {
       const response = await axios.get(URL);
       setAvailPlayers(response.data);
     } catch (error) {
-      alert("Error fetching available adult players from the server.");
+      toast({ description: "Error fetching available players", status: "error" });
       console.error("Error fetching available adult players:", error);
     }
   };
@@ -73,7 +80,7 @@ const TeamPlayersController = ({ status, team, fetchTeam }) => {
       fetchAdultPlayers();
     } else {
       fetchAvailPlayers();
-    };    
+    };
   }, [team]);
 
 
@@ -97,7 +104,7 @@ const TeamPlayersController = ({ status, team, fetchTeam }) => {
         fetchTeam();
       };
     } catch (err) {
-      alert("Error creating team player");
+      toast({ description: "Error creating team player", status: "error" });
       console.log("Error creating team player:", err);
     };
     // Reset the form fields
@@ -124,7 +131,7 @@ const TeamPlayersController = ({ status, team, fetchTeam }) => {
       <Text color="white" fontSize="x-large">
         This team is currently{" "}
         <Text as="span" color="red.500">
-        {status ? "open" : "closed"}{" "}
+          {status ? "open" : "closed"}{" "}
         </Text>
         for registration.
       </Text>
@@ -151,7 +158,7 @@ const TeamPlayersController = ({ status, team, fetchTeam }) => {
                 </Text>
               </Heading>
             </ModalHeader>
-            <form onSubmit={handleSubmit}>  
+            <form onSubmit={handleSubmit}>
               <ModalBody>
                 <VStack gap={4}>
                   <FormControl color="white">
@@ -166,8 +173,8 @@ const TeamPlayersController = ({ status, team, fetchTeam }) => {
                     >
                       {availPlayers.map((player) => {
                         return (
-                          <option 
-                            key={player.playerID} 
+                          <option
+                            key={player.playerID}
                             value={player.playerID}
                           >
                             {player.playerAlias}

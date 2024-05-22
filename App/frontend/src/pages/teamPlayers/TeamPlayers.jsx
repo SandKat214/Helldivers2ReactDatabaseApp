@@ -30,7 +30,7 @@ const TeamPlayers = () => {
       updatedTeam.teamMeet = new Date(valDate - tzoffset).toISOString().slice(0, 19);
       setTeam(updatedTeam);
     } catch (error) {
-      alert("Error fetching team from the server.");
+      toast({ description: "Error fetching team from server", status: "error" });
       console.error("Error fetching team:", error);
     }
   };
