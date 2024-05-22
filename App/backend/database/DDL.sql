@@ -1,7 +1,7 @@
 -- ---------------------------------------------------------
 -- DATA DEFINITION QUERIES & SAMPLE DATA INSERT STATEMENTS
 -- ---------------------------------------------------------
--- Project Step 3 DDL
+-- Project Step 4 DDL
 -- Group 77, Guy Cohen and Katherine Sandeen
 
 
@@ -112,7 +112,7 @@ CREATE OR REPLACE TABLE TeamPlayers (
 -- ---------------------------------------------------------
 -- Update teamCount after TeamPlayers insertion
 DELIMITER $$
-CREATE TRIGGER teamCountInc
+CREATE TRIGGER teamCountIncInsert
     AFTER INSERT ON TeamPlayers FOR EACH ROW
 BEGIN
     UPDATE Teams SET teamCount = teamCount + 1 WHERE teamID=NEW.teamID;
@@ -121,7 +121,7 @@ DELIMITER ;
 
 -- Update teamCount after TeamPlayers deletion
 DELIMITER $$
-CREATE TRIGGER teamCountDec
+CREATE TRIGGER teamCountDecDelete
     AFTER DELETE ON TeamPlayers FOR EACH ROW
 BEGIN
     UPDATE Teams SET teamCount = teamCount - 1 WHERE teamID=OLD.teamID;
@@ -130,7 +130,7 @@ DELIMITER ;
 
 -- Update teamCount before Player deletion
 DELIMITER $$
-CREATE TRIGGER teamPlayerDec
+CREATE TRIGGER teamPlayerDecDelete
     BEFORE DELETE on Players FOR EACH ROW
 BEGIN
     DELETE FROM TeamPlayers WHERE playerID=OLD.playerID;
@@ -139,7 +139,7 @@ DELIMITER ;
 
 -- Verify age before TeamPlayers insert
 DELIMITER $$
-CREATE TRIGGER verifyAge
+CREATE TRIGGER verifyAgeInsert
     BEFORE INSERT ON TeamPlayers FOR EACH ROW
 BEGIN
     DECLARE adultsOnly tinyint(1);
@@ -150,14 +150,14 @@ BEGIN
 
     IF (adultsOnly = 1) AND (age < 18) THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Players recruited to this Team must be 18 or older.';
+        SET MESSAGE_TEXT = 'Team players must be adults';
     END IF;
 END; $$
 DELIMITER ;
 
 -- Restrict update to adults only if team already has minors
 DELIMITER $$
-CREATE TRIGGER restrict18UpFalse
+CREATE TRIGGER restrict18UpFalseUpdate
     BEFORE UPDATE ON Teams FOR EACH ROW
 BEGIN
     DECLARE teamMinors int;
@@ -168,7 +168,25 @@ BEGIN
 
     IF (NEW.team18Up = 1) AND (teamMinors > 0) THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Team has already recruited minors and cannot be changed to adults only.';
+        SET MESSAGE_TEXT = 'Cannot set adults only with minor recruit(s)';
+    END IF;
+END; $$
+DELIMITER ;
+
+-- Restrict update to minor age if already registered to adult team(s)
+DELIMITER $$
+CREATE TRIGGER restrictAgeUpdate
+    BEFORE UPDATE ON Players FOR EACH ROW
+BEGIN
+    DECLARE adultTeams int;
+
+    SELECT COUNT(TeamPlayers.teamID) INTO adultTeams FROM TeamPlayers
+        INNER JOIN Teams ON TeamPlayers.teamID=Teams.teamID
+        WHERE Teams.team18Up=1 AND TeamPlayers.playerID=NEW.playerID;
+
+    IF (adultTeams > 0) AND (NEW.playerAge < 18) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Cannot set minor when registered to adult team(s)';
     END IF;
 END; $$
 DELIMITER ;
@@ -176,7 +194,7 @@ DELIMITER ;
 -- Auto-Set langID to NULL if teamChat is False
 -- & teamChat to False if langID NULL
 DELIMITER $$
-CREATE TRIGGER insertLangNull
+CREATE TRIGGER langNullInsert
     BEFORE INSERT ON Teams FOR EACH ROW
 BEGIN
     IF (NEW.teamChat = 0) THEN
@@ -188,7 +206,7 @@ END; $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE TRIGGER updateLangNull
+CREATE TRIGGER langNullUpdate
     BEFORE UPDATE ON Teams FOR EACH ROW
 BEGIN
     IF (NEW.teamChat = 0) THEN
@@ -201,7 +219,7 @@ DELIMITER ;
 
 -- Auto-set teamChat to false if language is to be deleted
 DELIMITER $$
-CREATE TRIGGER setChatFalse
+CREATE TRIGGER setChatFalseDelete
     BEFORE DELETE ON Languages FOR EACH ROW
 BEGIN
     UPDATE Teams SET teamChat = 0 WHERE langID=OLD.langID;
@@ -210,7 +228,7 @@ DELIMITER ;
 
 -- Prevent double-book of schedule for TeamPlayer
 DELIMITER $$
-CREATE TRIGGER scheduler
+CREATE TRIGGER schedulerInsert
     BEFORE INSERT ON TeamPlayers FOR EACH ROW
 BEGIN
     DECLARE newStart datetime;
@@ -235,7 +253,7 @@ BEGIN
 
     IF (dBookings > 0) THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Player is already committed to another team during that time.';
+        SET MESSAGE_TEXT = 'Time already booked for player';
     END IF;
 END; $$
 DELIMITER ;
