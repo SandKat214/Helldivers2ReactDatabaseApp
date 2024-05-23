@@ -282,7 +282,7 @@ const PlayerController = ({
                   <FormHelperText color="gray.400">
                     {selectedRow ? "Change" : "Upload"} your profile photo
                   </FormHelperText>
-                  {formik.values.image && !selectedRow && (
+                  {formik.values.image && (
                     <HStack
                       my={2}
                       color="gray.200"
