@@ -19,15 +19,17 @@ import {
   Button,
   useToast,
   Tooltip,
+  ModalCloseButton,
 } from "@chakra-ui/react";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import { FaPlus, FaTrash } from "react-icons/fa6";
+import { FaPlus } from "react-icons/fa6";
 import { IoCloudUpload, IoImage, IoSave } from "react-icons/io5";
 import axios from "axios";
 import { useFormik } from "formik";
-import { format, parse } from "date-fns";
+import { format } from "date-fns";
+import * as Yup from "yup";
 
 const ControllerButton = ({ icon, label, onClick }) => {
   return (
@@ -45,6 +47,7 @@ const PlayerController = ({
   selectedRow,
   setSelectedRow,
 }) => {
+  const [isEdited, setIsEdited] = useState(false);
   const imageUploaderRef = useRef(null);
   const formik = useFormik({
     initialValues: {
@@ -55,6 +58,29 @@ const PlayerController = ({
       age: "",
       dateJoined: new Date().toISOString().split("T")[0],
     },
+    validationSchema: Yup.object({
+      image: Yup.string(),
+      name: Yup.string("Name must be a string")
+        .required("Name must be specified")
+        .test(
+          "len",
+          "Must be between 5 and 50 characters",
+          (val) => val.length >= 5 && val.length <= 50
+        ),
+      username: Yup.string("Username must be a string")
+        .required("Username must be specified")
+        .test(
+          "len",
+          "Must be between 5 and 45 characters",
+          (val) => val.length >= 5 && val.length <= 45
+        ),
+      level: Yup.number("Level must be a number")
+        .required("Level must be specified")
+        .max(150, "Level must be between 1-150"),
+      age: Yup.number("Age must be a number")
+        .required("Age must be specified")
+        .min(12, "Age must be over 12"),
+    }),
   });
 
   useEffect(() => {
@@ -112,15 +138,53 @@ const PlayerController = ({
     },
     onSuccess: () => {
       toast({ description: "Submission saved", status: "success" });
+      setSelectedRow(undefined);
+      onClose();
+      formik.resetForm({
+        values: {
+          image: "",
+          name: "",
+          username: "",
+          level: "",
+          age: "",
+          dateJoined: new Date().toISOString().split("T")[0],
+        },
+      });
+      refetch();
     },
     onError: () => {
       toast({ description: "Error saving submission", status: "error" });
     },
   });
 
+  const handleEdit = () => {
+    if (!isEdited) {
+      setIsEdited(true);
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
+    handleEdit();
     formik.setFieldValue(name, value);
+  };
+
+  const handleResetAndClose = () => {
+    onClose();
+    setIsEdited(false);
+    formik.resetForm({
+      values: {
+        image: "",
+        name: "",
+        username: "",
+        level: "",
+        age: "",
+        dateJoined: new Date().toISOString().split("T")[0],
+      },
+    });
+    if (selectedRow) {
+      setSelectedRow(undefined);
+    }
   };
 
   return (
@@ -131,7 +195,7 @@ const PlayerController = ({
         py={2}
         borderRadius="full"
         gap={5}
-        boxShadow="0px 2px 12px rgba(229, 62, 62, 1)"
+        boxShadow="red"
       >
         <ControllerButton icon={FaPlus} label="Add" onClick={() => onOpen()} />
         {/* <ControllerButton icon={FaTrash} label="Delete" onClick={() => {}} /> */}
@@ -139,19 +203,16 @@ const PlayerController = ({
       <Modal
         isOpen={isOpen}
         onClose={() => {
-          onClose();
-          if (selectedRow) {
-            setSelectedRow(undefined);
-            formik.resetForm({
-              values: {
-                image: "",
-                name: "",
-                username: "",
-                level: "",
-                age: "",
-                dateJoined: new Date().toISOString().split("T")[0],
-              },
-            });
+          if (isEdited) {
+            if (
+              window.confirm(
+                "You have unsaved changes, are you sure you want to leave?"
+              )
+            ) {
+              handleResetAndClose();
+            }
+          } else {
+            handleResetAndClose();
           }
         }}
       >
@@ -164,6 +225,7 @@ const PlayerController = ({
                 Player
               </Text>
             </Heading>
+            <ModalCloseButton color="red.500" />
           </ModalHeader>
           <form>
             <ModalBody>
@@ -177,9 +239,12 @@ const PlayerController = ({
                     borderRadius="md"
                     py={3}
                     cursor="pointer"
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation();
                       imageUploaderRef.current?.click();
                     }}
+                    _hover={{ borderColor: "red.500", color: "red.500" }}
+                    transition="all 0.3s"
                   >
                     <HStack>
                       <IoCloudUpload />
@@ -192,6 +257,7 @@ const PlayerController = ({
                     display="none"
                     onChange={(e) => {
                       formik.setFieldValue("image", e.target.files[0]);
+                      handleEdit();
                     }}
                     ref={imageUploaderRef}
                   />
@@ -238,8 +304,10 @@ const PlayerController = ({
                     onChange={handleChange}
                     placeholder="Name..."
                   />
-                  <FormHelperText color="gray.400">
-                    Both first and last name.
+                  <FormHelperText
+                    color={formik.errors.name ? "red.500" : "gray.400"}
+                  >
+                    {formik.errors.name ?? "Both first and last name."}
                   </FormHelperText>
                 </FormControl>
                 <FormControl color="white">
@@ -252,8 +320,10 @@ const PlayerController = ({
                     name="username"
                     onChange={handleChange}
                   />
-                  <FormHelperText color="gray.400">
-                    Username must be unique.
+                  <FormHelperText
+                    color={formik.errors.username ? "red.500" : "gray.400"}
+                  >
+                    {formik.errors.username ?? "Username must be unique."}
                   </FormHelperText>
                 </FormControl>
                 <FormControl color="white">
@@ -268,8 +338,10 @@ const PlayerController = ({
                     min={1}
                     max={150}
                   />
-                  <FormHelperText color="gray.400">
-                    Level defaults to 1.
+                  <FormHelperText
+                    color={formik.errors.level ? "red.500" : "gray.400"}
+                  >
+                    {formik.errors.level ?? "Level must be between 1-150."}
                   </FormHelperText>
                 </FormControl>
                 <FormControl color="white">
@@ -283,7 +355,11 @@ const PlayerController = ({
                     onChange={handleChange}
                     min={12}
                   />
-                  <FormHelperText color="gray.400">Must be 12+.</FormHelperText>
+                  <FormHelperText
+                    color={formik.errors.age ? "red.500" : "gray.400"}
+                  >
+                    {formik.errors.age ?? "Must be 12+."}
+                  </FormHelperText>
                 </FormControl>
                 <FormControl color="white">
                   <FormLabel>Date Joined</FormLabel>
@@ -305,7 +381,12 @@ const PlayerController = ({
               <Button
                 colorScheme="red"
                 rightIcon={selectedRow ? <MdEdit /> : <IoSave />}
-                onClick={mutateAsync}
+                onClick={() => {
+                  if (selectedRow) {
+                    setIsEdited(false);
+                  }
+                  mutateAsync();
+                }}
                 isLoading={isPending}
                 loadingText="Saving"
               >

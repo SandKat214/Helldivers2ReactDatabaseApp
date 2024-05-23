@@ -46,7 +46,7 @@ const LanguagesController = ({ fetchLanguages }) => {
 
   const [langData, setLangData] = useState({
     langID: "",
-    langName: ""
+    langName: "",
   });
 
   // keep track of new form data
@@ -103,7 +103,7 @@ const LanguagesController = ({ fetchLanguages }) => {
         py={2}
         borderRadius="full"
         gap={5}
-        boxShadow="0px 2px 12px rgba(229, 62, 62, 1)"
+        boxShadow="red"
       >
         <ControllerButton icon={FaPlus} label="Add" onClick={() => onOpen()} />
         {/* <ControllerButton icon={FaTrash} label="Delete" onClick={() => {}} /> */}

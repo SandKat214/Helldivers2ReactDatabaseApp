@@ -8,11 +8,17 @@ import MissionTypes from "./pages/missionTypes/MissionTypes";
 import Languages from "./pages/languages/Languages";
 import TeamPlayers from "./pages/teamPlayers/TeamPlayers";
 import Player from "./pages/players/Player";
+import Error from "./components/error/Error";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
+    errorElement: (
+      <Layout>
+        <Error />
+      </Layout>
+    ),
     children: [
       {
         path: "",

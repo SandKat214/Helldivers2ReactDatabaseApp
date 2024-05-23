@@ -112,7 +112,6 @@ const TeamPlayersController = ({ status, team, fetchTeam }) => {
   };
 
   return (
-
     <VStack gap={20}>
       <Heading as="h3" color="white" fontSize="3xl">
         <Text as="span" color="red.500">
@@ -121,8 +120,8 @@ const TeamPlayersController = ({ status, team, fetchTeam }) => {
         on{" "}
         <Text as="span" color="red.500">
           {team.teamMeet.slice(0, 10)}
-        </Text>
-        {" "}at{" "}
+        </Text>{" "}
+        at{" "}
         <Text as="span" color="red.500">
           {team.teamMeet.slice(11, 16)}{" "}
           {team.teamMeet.slice(11, 13) > 11 ? "PM" : "AM"}
@@ -131,6 +130,7 @@ const TeamPlayersController = ({ status, team, fetchTeam }) => {
       <Text color="white" fontSize="x-large">
         This team is currently{" "}
         <Text as="span" color="red.500">
+          {status ? "open" : "closed"}{" "}
           {status ? "open" : "closed"}{" "}
         </Text>
         for registration.
@@ -142,10 +142,20 @@ const TeamPlayersController = ({ status, team, fetchTeam }) => {
           py={2}
           borderRadius="full"
           gap={5}
-          boxShadow="0px 2px 12px rgba(229, 62, 62, 1)"
+          boxShadow="red"
         >
-          {status && <ControllerButton icon={FaPlus} label="Add" onClick={() => onOpen()} />}
-          <ControllerButton icon={FaAnglesUp} label="Back" onClick={() => navigate("../teams")} />
+          {status && (
+            <ControllerButton
+              icon={FaPlus}
+              label="Add"
+              onClick={() => onOpen()}
+            />
+          )}
+          <ControllerButton
+            icon={FaAnglesUp}
+            label="Back"
+            onClick={() => navigate("../teams")}
+          />
         </HStack>
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
@@ -158,6 +168,7 @@ const TeamPlayersController = ({ status, team, fetchTeam }) => {
                 </Text>
               </Heading>
             </ModalHeader>
+            <form onSubmit={handleSubmit}>
             <form onSubmit={handleSubmit}>
               <ModalBody>
                 <VStack gap={4}>

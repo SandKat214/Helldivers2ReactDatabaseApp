@@ -45,4 +45,7 @@ export const customTheme = extendTheme({
       700: "#0B111D",
     },
   },
+  shadows: {
+    red: "0px 2px 12px rgba(229, 62, 62, 1)",
+  },
 });
