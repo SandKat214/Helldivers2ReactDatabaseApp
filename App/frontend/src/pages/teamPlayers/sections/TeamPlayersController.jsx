@@ -169,7 +169,6 @@ const TeamPlayersController = ({ status, team, fetchTeam }) => {
               </Heading>
             </ModalHeader>
             <form onSubmit={handleSubmit}>
-            <form onSubmit={handleSubmit}>
               <ModalBody>
                 <VStack gap={4}>
                   <FormControl color="white">
