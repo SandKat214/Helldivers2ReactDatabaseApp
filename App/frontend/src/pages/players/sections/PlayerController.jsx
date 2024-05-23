@@ -9,7 +9,6 @@ import {
   ModalContent,
   ModalHeader,
   ModalBody,
-  useDisclosure,
   Heading,
   FormControl,
   FormLabel,
@@ -46,6 +45,7 @@ const PlayerController = ({
   onClose,
   selectedRow,
   setSelectedRow,
+  refetch,
 }) => {
   const [isEdited, setIsEdited] = useState(false);
   const imageUploaderRef = useRef(null);
@@ -87,17 +87,12 @@ const PlayerController = ({
     if (selectedRow) {
       formik.resetForm({
         values: {
-          image: selectedRow.image || "",
-          name: selectedRow.name || "",
-          username: selectedRow.username || "",
-          level: selectedRow.level || "",
-          age: selectedRow.age || "",
-          dateJoined: selectedRow.dateJoined
-            ? format(
-                parse(selectedRow.dateJoined, "MM/dd/yyyy", new Date()),
-                "yyyy-MM-dd"
-              )
-            : new Date().toISOString().slice(0, 10),
+          image: selectedRow.playerImage || "",
+          name: selectedRow.playerName || "",
+          username: selectedRow.playerAlias || "",
+          level: selectedRow.playerLevel || "",
+          age: selectedRow.playerAge || "",
+          dateJoined: format(new Date(selectedRow.playerJoin), "yyyy-MM-dd"),
         },
       });
     }
@@ -112,7 +107,7 @@ const PlayerController = ({
       "upload_preset",
       import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
     );
-    const req = axios.post(
+    const req = await axios.post(
       `https://api.cloudinary.com/v1_1/${
         import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
       }/image/upload`,
@@ -124,19 +119,42 @@ const PlayerController = ({
       }
     );
 
-    const data = await req.json();
-
-    return data;
+    return req.data.secure_url;
   };
 
   const { isPending, mutateAsync } = useMutation({
     mutationFn: async () => {
+      let imageUrl = "";
       if (formik.values.image) {
-        const imageUrl = await uploadFile();
-        console.log(imageUrl);
+        if (selectedRow) {
+          if (selectedRow !== formik.values.image) {
+            imageUrl = await uploadFile();
+          }
+        } else {
+          imageUrl = await uploadFile();
+        }
+      }
+
+      const body = {
+        playerName: formik.values.name,
+        playerAlias: formik.values.username,
+        playerLevel: formik.values.level,
+        playerAge: formik.values.age,
+        playerJoin:
+          formik.values.dateJoined || new Date().toISOString().split("T")[0], // Ensure valid date
+        playerImage: imageUrl,
+      };
+
+      if (selectedRow) {
+        await axios.put(
+          `${import.meta.env.VITE_API_URL}player/${selectedRow.playerID}`,
+          body
+        );
+      } else {
+        await axios.post(`${import.meta.env.VITE_API_URL}player/`, body);
       }
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       toast({ description: "Submission saved", status: "success" });
       setSelectedRow(undefined);
       onClose();
@@ -222,7 +240,7 @@ const PlayerController = ({
             <Heading as="h3" color="white" fontSize="2xl">
               {selectedRow ? "Edit" : "Add"}{" "}
               <Text as="span" color="red.500">
-                Player
+                Players
               </Text>
             </Heading>
             <ModalCloseButton color="red.500" />
@@ -262,9 +280,9 @@ const PlayerController = ({
                     ref={imageUploaderRef}
                   />
                   <FormHelperText color="gray.400">
-                    Upload your profile photo
+                    {selectedRow ? "Change" : "Upload"} your profile photo
                   </FormHelperText>
-                  {formik.values.image && (
+                  {formik.values.image && !selectedRow && (
                     <HStack
                       my={2}
                       color="gray.200"
@@ -370,6 +388,7 @@ const PlayerController = ({
                     value={formik.values.dateJoined}
                     name="dateJoined"
                     onChange={handleChange}
+                    disabled
                   />
                   <FormHelperText color="gray.400">
                     Default is today.
