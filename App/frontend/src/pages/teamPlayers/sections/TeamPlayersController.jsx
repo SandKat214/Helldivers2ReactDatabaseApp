@@ -131,7 +131,6 @@ const TeamPlayersController = ({ status, team, fetchTeam }) => {
         This team is currently{" "}
         <Text as="span" color="red.500">
           {status ? "open" : "closed"}{" "}
-          {status ? "open" : "closed"}{" "}
         </Text>
         for registration.
       </Text>
