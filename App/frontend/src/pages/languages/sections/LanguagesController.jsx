@@ -33,8 +33,8 @@ import axios from "axios";
 
 const ControllerButton = ({ icon, label, onClick }) => {
   return (
-    <VStack color="white" cursor="pointer">
-      <Icon as={icon} onClick={onClick} />
+    <VStack color="white" cursor="pointer" onClick={onClick}>
+      <Icon as={icon} />
       <Text fontSize="xs">{label}</Text>
     </VStack>
   );
