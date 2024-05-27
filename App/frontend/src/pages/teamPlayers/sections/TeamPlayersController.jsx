@@ -42,7 +42,7 @@ const ControllerButton = ({ icon, label, onClick }) => {
   );
 };
 
-const TeamPlayersController = ({ status, team, fetchTeam }) => {
+const TeamPlayersController = ({ status, team, archived, fetchTeam }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
   const toast = useToast();
@@ -128,11 +128,17 @@ const TeamPlayersController = ({ status, team, fetchTeam }) => {
         </Text>
       </Heading>
       <Text color="white" fontSize="x-large">
-        This team is currently{" "}
-        <Text as="span" color="red.500">
+        This team is{" "}
+        {archived ? 
+        <Text as="span" color="red.500">archived.</Text> : 
+        <Text as="span">
+          currently{" "}
+          <Text as="span" color="red.500">
           {status ? "open" : "closed"}{" "}
+          </Text>
+          for registration.
         </Text>
-        for registration.
+        }
       </Text>
       <HStack justifyContent="center">
         <HStack

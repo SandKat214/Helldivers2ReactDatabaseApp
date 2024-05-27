@@ -17,6 +17,7 @@ const TeamPlayers = () => {
 
   const [status, setStatus] = useState(true);
   const [team, setTeam] = useState(location.state.teamToManage);
+  const archived = new Date(team.teamMeet) < new Date();
 
   // fetch updated team from db backend
   const fetchTeam = async () => {
@@ -37,8 +38,17 @@ const TeamPlayers = () => {
 
   return (
     <VStack gap={20} alignItems="center" w="100%">
-      <TeamPlayersController status={status} team={team} fetchTeam={fetchTeam}/>
-      <TeamPlayersTable team={team} setStatus={setStatus} fetchTeam={fetchTeam}/>
+      <TeamPlayersController 
+        status={status} 
+        team={team} 
+        archived={archived}
+        fetchTeam={fetchTeam}
+      />
+      <TeamPlayersTable 
+        team={team} 
+        setStatus={setStatus} 
+        archived={archived}
+        fetchTeam={fetchTeam}/>
     </VStack>
   );
 };

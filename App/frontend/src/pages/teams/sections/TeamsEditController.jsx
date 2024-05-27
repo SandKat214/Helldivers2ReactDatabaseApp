@@ -20,8 +20,6 @@ import {
     Select,
   } from "@chakra-ui/react";
   import { MdEdit } from "react-icons/md";
-  import { useState, useEffect } from "react";
-  import axios from "axios";
   
   const TeamsEditController = ({ 
     prevTeam, 

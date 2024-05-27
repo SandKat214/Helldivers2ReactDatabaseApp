@@ -26,7 +26,7 @@ import axios from "axios";
 import { FaTrash } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 
-const TeamPlayersTable = ({ team, setStatus, fetchTeam }) => {
+const TeamPlayersTable = ({ team, setStatus, archived, fetchTeam }) => {
   const toast = useToast();
 
   const [teamPlayers, setTeamPlayers] = useState([]);
@@ -38,7 +38,7 @@ const TeamPlayersTable = ({ team, setStatus, fetchTeam }) => {
       const response = await axios.get(URL);
       setTeamPlayers(response.data);
     } catch (error) {
-      toast({ description: "Error fetching team players from server", status: "error" });
+      toast({ description: "Error fetching team players from server.", status: "error" });
       console.error("Error fetching team players:", error);
     }
   };
@@ -49,11 +49,11 @@ const TeamPlayersTable = ({ team, setStatus, fetchTeam }) => {
       const response = await axios.delete(URL);
       // Ensure that the team player was deleted successfully
       if (response.status === 204) {
-        toast({ description: "Deletion successful", status: "success" });
+        toast({ description: `Player with ID: ${id}, removed from team.`, status: "success" });
         fetchTeam();
       }
     } catch (err) {
-      alert(err.response.data.error || "Error deleting team player");
+      toast({ description: `Failed to remove player with ID: ${id}`, status: "error" });
       console.log(err);
     }
   };
@@ -61,9 +61,7 @@ const TeamPlayersTable = ({ team, setStatus, fetchTeam }) => {
   useEffect(() => {
     fetchTeamPlayers();
     // registration closed if team full or meet date has passed
-    const meetSched = new Date(team.teamMeet);
-    const now = new Date();
-    if (team.teamCount >= 4 || meetSched < now) {
+    if (team.teamCount >= 4 || archived) {
       setStatus(false);
     } else {
       setStatus(true);
@@ -72,7 +70,10 @@ const TeamPlayersTable = ({ team, setStatus, fetchTeam }) => {
 
   return (
     <VStack w="1300px" gap={5}>
+      {archived ?
+      <Text color="white" fontSize="large">This campaign has ended...</Text> :
       <Text color="white" fontSize="large">Teams can register up to 4 players...</Text>
+      }
       <Box
         backgroundColor="background.200"
         maxH="500px"
@@ -82,7 +83,7 @@ const TeamPlayersTable = ({ team, setStatus, fetchTeam }) => {
         boxShadow="0px 2px 12px rgba(229, 62, 62, 0.3)"
         w="65%"
       >
-        <Text color="red.500" pt={2} pl={3} textTransform="uppercase" fontWeight="bold" fontSize="md">Current recruits:</Text>
+        <Text color="red.500" pt={2} pl={3} textTransform="uppercase" fontWeight="bold" fontSize="md">Recruits:</Text>
         <TableContainer>
           <Table variant="unstyled">
             <Thead>
@@ -102,9 +103,9 @@ const TeamPlayersTable = ({ team, setStatus, fetchTeam }) => {
                 <Th borderColor="transparent" color="white">
                   Age
                 </Th>
-                <Th borderColor="transparent" color="white" textAlign="center">
+                {!archived && <Th borderColor="transparent" color="white" textAlign="center">
                   Actions
-                </Th>
+                </Th>}
               </Tr>
             </Thead>
             <Tbody>
@@ -129,7 +130,7 @@ const TeamPlayersTable = ({ team, setStatus, fetchTeam }) => {
                     <Td borderColor="transparent">{teamPlayer.playerAlias}</Td>
                     <Td borderColor="transparent">{teamPlayer.playerLevel}</Td>
                     <Td borderColor="transparent">{teamPlayer.playerAge}</Td>
-                    <Td>
+                    {!archived && <Td>
                       <HStack justifyContent="center">
                         <Tooltip label="Remove from Team" placement="top">
                           <IconButton
@@ -142,7 +143,7 @@ const TeamPlayersTable = ({ team, setStatus, fetchTeam }) => {
                           />
                         </Tooltip>
                       </HStack>
-                    </Td>
+                    </Td>}
                   </Tr>
                 );
               })}

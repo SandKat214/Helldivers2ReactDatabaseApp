@@ -173,7 +173,7 @@ const Teams = () => {
         fetchTeams();
       };
     } catch (err) {
-      toast({ description: err.response.data.error.message, status: "error" });
+      toast({ description: err.response.data.error.message || "Error updating team", status: "error" });
       console.log("Error updating team:", err);
     };
     // Reset the form fields

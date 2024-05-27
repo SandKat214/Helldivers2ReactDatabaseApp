@@ -13,14 +13,16 @@ import {
   Thead,
   Tooltip,
   Tr,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
-import { MdJoinFull, MdEdit } from "react-icons/md";
+import { MdJoinFull, MdEdit, MdAlarmOn } from "react-icons/md";
 import { FaCalendar, FaClock } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 
 const TeamsTable = ({ teams, setUpdateTeam, setPrevTeam, setIsChat }) => {
   const navigate = useNavigate();
+  const toast = useToast();
   
   // sets formData to team's that is being edited
   const triggerEdit = (teamToEdit) => {
@@ -162,17 +164,32 @@ const TeamsTable = ({ teams, setUpdateTeam, setPrevTeam, setIsChat }) => {
                   <Td borderColor="transparent">{team.langName ?? "n/a"}</Td>
                   <Td borderColor="transparent" alignContent="center">
                     <HStack>
-                      <Tooltip label="Edit team" placement="top">
-                        <IconButton
-                          colorScheme="red"
-                          color="white"
-                          aria-label="Edit button"
-                          icon={<MdEdit />}
-                          size="sm"
-                          onClick={() => triggerEdit(team)}
-                        />
-                      </Tooltip>
-                      <Tooltip label="Join team" placement="top">
+                      {new Date(team.teamMeet) < new Date() ?
+                        <Tooltip label="Archived team" placement="top">
+                          <span>
+                            <Icon as={MdAlarmOn} 
+                              colorScheme="red" 
+                              color="red.500"
+                              boxSize="2em"
+                              onClick={() => toast({ 
+                                description: "Campaign has ended. Click manage to see who participated.", 
+                                status: "error" 
+                              })}
+                            />
+                          </span>
+                        </Tooltip> :
+                        <Tooltip label="Edit team" placement="top">
+                          <IconButton
+                            colorScheme="red"
+                            color="white"
+                            aria-label="Edit button"
+                            icon={<MdEdit />}
+                            size="sm"
+                            onClick={() => triggerEdit(team)}
+                          />
+                        </Tooltip>
+                      }
+                      <Tooltip label="Manage team" placement="top">
                         <IconButton
                           icon={<MdJoinFull />}
                           colorScheme="red"
