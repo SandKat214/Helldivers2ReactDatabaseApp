@@ -66,7 +66,7 @@ const LanguagesController = ({ fetchLanguages }) => {
 
     // create new language object
     const newLang = {
-      langID: langData.langID,
+      langID: langData.langID.toUpperCase(),
       langName: langData.langName,
     };
 
@@ -129,6 +129,7 @@ const LanguagesController = ({ fetchLanguages }) => {
                     name="langID"
                     variant="filled"
                     placeholder="ID..."
+                    minLength={4}
                     maxLength={4}
                     onChange={handleDataChange}
                     isRequired
