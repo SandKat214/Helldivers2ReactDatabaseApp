@@ -245,7 +245,14 @@ const PlayerController = ({
             </Heading>
             <ModalCloseButton color="red.500" />
           </ModalHeader>
-          <form>
+          <form
+            onSubmit={() => {
+              if (selectedRow) {
+                setIsEdited(false);
+              }
+              mutateAsync();
+            }}
+          >
             <ModalBody>
               <VStack gap={4}>
                 <FormControl color="white">
@@ -319,6 +326,7 @@ const PlayerController = ({
                     variant="filled"
                     value={formik.values.name}
                     name="name"
+                    isRequired
                     onChange={handleChange}
                     placeholder="Name..."
                   />
@@ -336,6 +344,7 @@ const PlayerController = ({
                     placeholder="Username..."
                     value={formik.values.username}
                     name="username"
+                    isRequired
                     onChange={handleChange}
                   />
                   <FormHelperText
@@ -352,6 +361,7 @@ const PlayerController = ({
                     placeholder="Level..."
                     value={formik.values.level}
                     name="level"
+                    isRequired
                     onChange={handleChange}
                     min={1}
                     max={150}
@@ -370,6 +380,7 @@ const PlayerController = ({
                     placeholder="Age..."
                     value={formik.values.age}
                     name="age"
+                    isRequired
                     onChange={handleChange}
                     min={12}
                   />
@@ -398,14 +409,9 @@ const PlayerController = ({
             </ModalBody>
             <ModalFooter>
               <Button
+                type="submit"
                 colorScheme="red"
                 rightIcon={selectedRow ? <MdEdit /> : <IoSave />}
-                onClick={() => {
-                  if (selectedRow) {
-                    setIsEdited(false);
-                  }
-                  mutateAsync();
-                }}
                 isLoading={isPending}
                 loadingText="Saving"
               >
