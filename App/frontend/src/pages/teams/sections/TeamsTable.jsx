@@ -17,6 +17,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { MdJoinFull, MdEdit, MdAlarmOn } from "react-icons/md";
+import { GrView } from "react-icons/gr";
 import { FaCalendar, FaClock } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 
@@ -170,9 +171,9 @@ const TeamsTable = ({ teams, setUpdateTeam, setPrevTeam, setIsChat }) => {
                             <Icon as={MdAlarmOn} 
                               colorScheme="red" 
                               color="red.500"
-                              boxSize="2em"
+                              boxSize="1.95em"
                               onClick={() => toast({ 
-                                description: "Campaign has ended. Click manage to see who participated.", 
+                                description: "Campaign has ended. Click view to see who participated.", 
                                 status: "error" 
                               })}
                             />
@@ -189,16 +190,28 @@ const TeamsTable = ({ teams, setUpdateTeam, setPrevTeam, setIsChat }) => {
                           />
                         </Tooltip>
                       }
-                      <Tooltip label="Manage team" placement="top">
-                        <IconButton
-                          icon={<MdJoinFull />}
-                          colorScheme="red"
-                          backgroundColor="red.500"
-                          color="white"
-                          size="sm"
-                          onClick={() => handleJoin(team)}
-                        />
-                      </Tooltip>
+                      {new Date(team.teamMeet) < new Date() ?
+                        <Tooltip label="View team" placement="top">
+                          <IconButton
+                            icon={<GrView />}
+                            colorScheme="red"
+                            backgroundColor="red.500"
+                            color="white"
+                            size="sm"
+                            onClick={() => handleJoin(team)}
+                          />
+                        </Tooltip> :
+                        <Tooltip label="Manage team" placement="top">
+                          <IconButton
+                            icon={<MdJoinFull />}
+                            colorScheme="red"
+                            backgroundColor="red.500"
+                            color="white"
+                            size="sm"
+                            onClick={() => handleJoin(team)}
+                          />
+                        </Tooltip>
+                      }
                     </HStack>
                   </Td>
                 </Tr>

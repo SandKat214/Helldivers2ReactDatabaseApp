@@ -246,7 +246,8 @@ const PlayerController = ({
             <ModalCloseButton color="red.500" />
           </ModalHeader>
           <form
-            onSubmit={() => {
+            onSubmit={(e) => {
+              e.preventDefault();
               if (selectedRow) {
                 setIsEdited(false);
               }
