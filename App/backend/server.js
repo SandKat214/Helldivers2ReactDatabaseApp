@@ -19,6 +19,9 @@ app.use("/api/player", require("./routes/playerRoutes"));
 // planets
 app.use("/api/planets", require("./routes/planetRoutes"));
 
+// planets
+app.use("/api/mission-types", require("./routes/missionTypesRoutes"));
+
 // API Routes for backend CRUD:
 app.use("/api/languages", require("./routes/languageRoutes"));
 app.use("/api/teams", require("./routes/teamRoutes"));

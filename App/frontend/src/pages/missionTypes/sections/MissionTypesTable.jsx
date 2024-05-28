@@ -1,20 +1,25 @@
 import {
   Box,
   HStack,
-  IconButton,
+  Spinner,
   Table,
   TableContainer,
   Tbody,
   Td,
   Th,
   Thead,
-  Tooltip,
   Tr,
 } from "@chakra-ui/react";
-import { missionTypes } from "../../../utils/mockup";
-import { MdJoinFull } from "react-icons/md";
 
-const MissionTypesTable = () => {
+const MissionTypesTable = ({ data, isLoading }) => {
+  if (isLoading) {
+    return (
+      <HStack justifyContent="center">
+        <Spinner color="red.500" size="xl" />
+      </HStack>
+    );
+  }
+
   return (
     <Box
       backgroundColor="background.200"
@@ -41,10 +46,10 @@ const MissionTypesTable = () => {
             </Tr>
           </Thead>
           <Tbody>
-            {missionTypes.map((missionType, index) => {
+            {data.map((missionType, index) => {
               return (
                 <Tr
-                  key={missionType.missionName}
+                  key={index}
                   color="white"
                   backgroundColor={
                     index % 2 === 0 ? "background.600" : "transparent"

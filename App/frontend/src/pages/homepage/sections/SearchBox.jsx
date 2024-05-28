@@ -6,7 +6,6 @@ import { MdSearch } from "react-icons/md";
 const SearchBox = ({ queryType, setQueryType }) => {
   const searchRef = useRef(null);
   const MotionVStack = motion(VStack);
-  // add post
 
   useEffect(() => {
     const handleKeyDown = (e) => {

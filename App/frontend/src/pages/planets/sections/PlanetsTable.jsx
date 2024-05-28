@@ -20,6 +20,24 @@ const PlanetsTable = ({ data, isLoading }) => {
     );
   }
 
+  const elementArr = data.map((planet, index) => {
+    return (
+      <Tr
+        key={index}
+        color="white"
+        backgroundColor={index % 2 === 0 ? "background.600" : "transparent"}
+        transition="all 0.3s"
+        _hover={{
+          backgroundColor: "#0B111D",
+        }}
+        h={24}
+      >
+        <Td textAlign="center">{planet.planetName}</Td>
+        <Td textAlign="center">{planet.planetTerrain}</Td>
+      </Tr>
+    );
+  });
+
   return (
     <Box
       backgroundColor="background.200"
@@ -42,27 +60,7 @@ const PlanetsTable = ({ data, isLoading }) => {
               </Th>
             </Tr>
           </Thead>
-          <Tbody>
-            {data.map((planet, index) => {
-              return (
-                <Tr
-                  key={planet.planetID}
-                  color="white"
-                  backgroundColor={
-                    index % 2 === 0 ? "background.600" : "transparent"
-                  }
-                  transition="all 0.3s"
-                  _hover={{
-                    backgroundColor: "#0B111D",
-                  }}
-                  h={24}
-                >
-                  <Td textAlign="center">{planet.planetName}</Td>
-                  <Td textAlign="center">{planet.planetTerrain}</Td>
-                </Tr>
-              );
-            })}
-          </Tbody>
+          <Tbody>{elementArr}</Tbody>
         </Table>
       </TableContainer>
     </Box>

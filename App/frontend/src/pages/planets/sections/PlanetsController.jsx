@@ -125,6 +125,7 @@ const PlanetsController = ({ refetch }) => {
                     placeholder="Planet Name..."
                     _focus={{ backgroundColor: "white" }}
                     onChange={handleChange}
+                    value={formik.values.planetName}
                     name="planetName"
                   />
                   <FormHelperText
@@ -142,6 +143,7 @@ const PlanetsController = ({ refetch }) => {
                     _focus={{ backgroundColor: "white" }}
                     onChange={handleChange}
                     name="planetTerrain"
+                    value={formik.values.planetTerrain}
                   >
                     <option value="Icy">Icy</option>
                     <option value="Desert">Desert</option>

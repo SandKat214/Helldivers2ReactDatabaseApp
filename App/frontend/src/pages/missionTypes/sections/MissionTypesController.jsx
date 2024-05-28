@@ -18,22 +18,70 @@ import {
   ModalFooter,
   Button,
   Select,
+  Textarea,
+  useToast,
 } from "@chakra-ui/react";
-import { useRef } from "react";
-import { FaPlus, FaTrash } from "react-icons/fa6";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import { useFormik } from "formik";
+import { FaPlus } from "react-icons/fa6";
 import { IoSave } from "react-icons/io5";
+import * as Yup from "yup";
 
 const ControllerButton = ({ icon, label, onClick }) => {
   return (
-    <VStack color="white" cursor="pointer">
-      <Icon as={icon} onClick={onClick} />
+    <VStack color="white" cursor="pointer" onClick={onClick}>
+      <Icon as={icon} />
       <Text fontSize="xs">{label}</Text>
     </VStack>
   );
 };
 
-const MissionTypesController = () => {
+const MissionTypesController = ({ refetch }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const toast = useToast();
+
+  const formik = useFormik({
+    initialValues: {
+      missionName: "",
+      missionDesc: "",
+      missionDuration: 0,
+    },
+    validationSchema: Yup.object({
+      missionName: Yup.string("Planet Name must be a string").required(
+        "Planet name is required"
+      ),
+      missionDesc: Yup.string("Terrain must be a string").required(
+        "Terrain must be specified"
+      ),
+      missionDuration: Yup.number("Duration must be a number").required(
+        "Duration must be specified"
+      ),
+    }),
+  });
+
+  const { isPending, mutateAsync } = useMutation({
+    mutationFn: async () => {
+      const body = formik.values;
+
+      await axios.post(`${import.meta.env.VITE_API_URL}mission-types/`, body);
+    },
+    onSuccess: async () => {
+      toast({ description: "Submission saved", status: "success" });
+      onClose();
+      formik.resetForm();
+      refetch();
+    },
+    onError: () => {
+      toast({ description: "Error saving submission", status: "error" });
+    },
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    formik.setFieldValue(name, value);
+  };
 
   return (
     <HStack justifyContent="center">
@@ -46,9 +94,14 @@ const MissionTypesController = () => {
         boxShadow="red"
       >
         <ControllerButton icon={FaPlus} label="Add" onClick={() => onOpen()} />
-        {/* <ControllerButton icon={FaTrash} label="Delete" onClick={() => {}} /> */}
       </HStack>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal
+        isOpen={isOpen}
+        onClose={() => {
+          onClose();
+          formik.resetForm();
+        }}
+      >
         <ModalOverlay />
         <ModalContent backgroundColor="background.300" w="1000px">
           <ModalHeader>
@@ -67,20 +120,11 @@ const MissionTypesController = () => {
                   <Input
                     type="text"
                     variant="filled"
+                    value={formik.values.missionName}
                     placeholder="Mission Name..."
                     _focus={{ backgroundColor: "white" }}
-                  />
-                  <FormHelperText color="gray.400">
-                    Must be unique.
-                  </FormHelperText>
-                </FormControl>
-                <FormControl color="white">
-                  <FormLabel>Mission Description</FormLabel>
-                  <Input
-                    type="text"
-                    variant="filled"
-                    placeholder="Mission Description..."
-                    _focus={{ backgroundColor: "white" }}
+                    onChange={handleChange}
+                    name="missionName"
                   />
                   <FormHelperText color="gray.400">
                     Must be unique.
@@ -91,18 +135,43 @@ const MissionTypesController = () => {
                   <Input
                     type="number"
                     variant="filled"
+                    value={formik.values.missionDuration}
                     placeholder="0"
                     min="0"
+                    onChange={handleChange}
+                    name="missionDuration"
                     _focus={{ backgroundColor: "white" }}
                   />
                   <FormHelperText color="gray.400">
                     Enter the duration in minutes.
                   </FormHelperText>
                 </FormControl>
+                <FormControl color="white">
+                  <FormLabel>Mission Description</FormLabel>
+                  <Textarea
+                    type="text"
+                    variant="filled"
+                    color="black"
+                    placeholder="Mission Description..."
+                    value={formik.values.missionDesc}
+                    onChange={handleChange}
+                    name="missionDesc"
+                    _focus={{ backgroundColor: "white" }}
+                  />
+                  <FormHelperText color="gray.400">
+                    Mission description must be unique.
+                  </FormHelperText>
+                </FormControl>
               </VStack>
             </ModalBody>
             <ModalFooter>
-              <Button colorScheme="red" rightIcon={<IoSave />}>
+              <Button
+                colorScheme="red"
+                rightIcon={<IoSave />}
+                onClick={mutateAsync}
+                isLoading={isPending}
+                loadingText="Saving"
+              >
                 Save
               </Button>
             </ModalFooter>

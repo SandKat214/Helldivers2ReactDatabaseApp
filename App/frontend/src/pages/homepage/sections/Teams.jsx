@@ -31,7 +31,7 @@ const Teams = ({ queryType }) => {
   const MotionGrid = motion(Grid);
   const MotionGridItem = motion(GridItem);
 
-  const { data, isLoading, refetch } = useQuery({
+  const { data: teamsData, isLoading } = useQuery({
     queryKey: [queryType],
     queryFn: async () => {
       const resp = await axios.get(import.meta.env.VITE_API_URL + "teams");
@@ -42,28 +42,9 @@ const Teams = ({ queryType }) => {
     },
   });
 
-  if(isLoading){
-    return(
-      <Spinner color="red.500" size="xl"/>
-    )
+  if (isLoading) {
+    return <Spinner color="red.500" size="xl" />;
   }
-
-//   {
-//     "teamID": 5,
-//     "teamTitle": "Freedom Fight",
-//     "teamMeet": "2024-06-01T19:00:00.000Z",
-//     "teamDifficulty": 4,
-//     "team18Up": 1,
-//     "teamChat": 1,
-//     "teamCount": 1,
-//     "teamImage": null,
-//     "missionID": 5,
-//     "missionName": "Eradicate Terminid Swarm",
-//     "planetID": 4,
-//     "planetName": "Electra Bay",
-//     "langID": "ENGL",
-//     "langName": "English"
-// },
 
   return (
     <MotionGrid
@@ -73,10 +54,10 @@ const Teams = ({ queryType }) => {
       initial="hidden"
       animate="show"
     >
-      {data.map((team, index) => {
+      {teamsData.map((team) => {
         return (
-          <MotionGridItem key={index} variants={item}>
-            <TeamCard data={team} />
+          <MotionGridItem key={team.teamMeet + team.teamName} variants={item}>
+            <TeamCard team={team} />
           </MotionGridItem>
         );
       })}

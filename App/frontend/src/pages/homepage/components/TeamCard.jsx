@@ -20,7 +20,7 @@ import { IoSpeedometer } from "react-icons/io5";
 import { SiApplearcade } from "react-icons/si";
 import { IoChatbubbleEllipses } from "react-icons/io5";
 import { IoIosHelpCircleOutline } from "react-icons/io";
-import { format } from 'date-fns';
+import { format } from "date-fns";
 
 const DetailField = ({ icon, label, value }) => {
   return (
@@ -31,17 +31,26 @@ const DetailField = ({ icon, label, value }) => {
           {label}
         </Text>
       </HStack>
-      <Text fontSize="xs" textAlign="center">{value}</Text>
+      <Text fontSize="xs" textAlign="center">
+        {value}
+      </Text>
     </VStack>
   );
 };
 
-const TeamCard = ({ data }) => {
+const TeamCard = ({ team }) => {
+  if (team.teamMeet == undefined) {
+    // handle edge case where react batching is being weird
+    return <></>;
+  }
   return (
     <Card backgroundColor="background.600">
       <CardHeader p={0}>
         <Image
-          src={data.teamImage??"https://assetsio.gnwcdn.com/helldivers-2-trailer-screenshot-header.png?width=1600&height=900&fit=crop&quality=100&format=png&enable=upscale&auto=webp"}
+          src={
+            team.teamImage ??
+            "https://assetsio.gnwcdn.com/helldivers-2-trailer-screenshot-header.png?width=1600&height=900&fit=crop&quality=100&format=png&enable=upscale&auto=webp"
+          }
           h="150px"
           w="100%"
           objectFit="cover"
@@ -52,7 +61,7 @@ const TeamCard = ({ data }) => {
       <CardBody>
         <VStack alignItems="stretch" gap={10}>
           <HStack justifyContent="space-between" color="white">
-            <Heading fontSize="lg">{data.teamTitle}</Heading>
+            <Heading fontSize="lg">{team.teamTitle}</Heading>
             <Popover trigger="hover" placement="right" size="large">
               <PopoverTrigger>
                 <span>
@@ -66,33 +75,37 @@ const TeamCard = ({ data }) => {
               >
                 <PopoverBody>
                   <VStack alignItems="stretch">
-                    <HStack justifyContent="stretch" h="100%" alignItems="stretch">
+                    <HStack
+                      justifyContent="stretch"
+                      h="100%"
+                      alignItems="stretch"
+                    >
                       <DetailField
                         icon={IoPlanet}
                         label="Planet"
-                        value={data.planetName}
+                        value={team.planetName}
                       />
                       <DetailField
                         icon={SiApplearcade}
                         label="Mission"
-                        value={data.missionName}
+                        value={team.missionName}
                       />
                       <DetailField
                         icon={MdAccessTimeFilled}
                         label="Meeting Time"
-                        value={format(data.teamMeet, 'MM/dd/yyyy HH:mm')}
+                        value={format(team.teamMeet, "MM/dd/yyyy HH:mm")}
                       />
                     </HStack>
                     <HStack justifyContent="center" gap={10}>
                       <DetailField
                         icon={IoSpeedometer}
                         label="Difficulty"
-                        value={data.teamDifficulty}
+                        value={team.teamDifficulty}
                       />
                       <DetailField
                         icon={IoChatbubbleEllipses}
                         label="Chat Enabled"
-                        value={data.teamChat ? "True" : "False"}
+                        value={team.teamChat ? "True" : "False"}
                       />
                     </HStack>
                   </VStack>
@@ -109,7 +122,7 @@ const TeamCard = ({ data }) => {
               alignItems="center"
               gap={1}
             >
-              Member Count: {data.teamCount} <Icon as={IoPerson} />
+              Member Count: {team.teamCount} <Icon as={IoPerson} />
             </Badge>
           </HStack>
         </VStack>
