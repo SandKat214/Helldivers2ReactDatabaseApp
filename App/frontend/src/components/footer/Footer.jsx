@@ -24,7 +24,7 @@ const Footer = () => {
           </Heading>
         </HStack>
         <Text color="white" flex={1}>
-          This is our submission for project step 4. The UI is built using React
+          This is our submission for project step 5. The UI is built using React
           and Chakra UI. We will continue to iterate over the design as the
           class progresses.
         </Text>
