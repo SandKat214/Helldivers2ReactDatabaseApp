@@ -16,6 +16,9 @@ app.use(express.json());
 // player
 app.use("/api/player", require("./routes/playerRoutes"));
 
+// planets
+app.use("/api/planets", require("./routes/planetRoutes"));
+
 // API Routes for backend CRUD:
 app.use("/api/languages", require("./routes/languageRoutes"));
 app.use("/api/teams", require("./routes/teamRoutes"));

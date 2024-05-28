@@ -1,20 +1,25 @@
 import {
   Box,
   HStack,
-  IconButton,
+  Spinner,
   Table,
   TableContainer,
   Tbody,
   Td,
   Th,
   Thead,
-  Tooltip,
   Tr,
 } from "@chakra-ui/react";
-import { planets } from "../../../utils/mockup";
-import { MdJoinFull } from "react-icons/md";
 
-const PlanetsTable = () => {
+const PlanetsTable = ({ data, isLoading }) => {
+  if (isLoading) {
+    return (
+      <HStack justifyContent="center">
+        <Spinner color="red.500" size="xl" />
+      </HStack>
+    );
+  }
+
   return (
     <Box
       backgroundColor="background.200"
@@ -38,10 +43,10 @@ const PlanetsTable = () => {
             </Tr>
           </Thead>
           <Tbody>
-            {planets.map((planet, index) => {
+            {data.map((planet, index) => {
               return (
                 <Tr
-                  key={planet.planetName}
+                  key={planet.planetID}
                   color="white"
                   backgroundColor={
                     index % 2 === 0 ? "background.600" : "transparent"
@@ -53,7 +58,7 @@ const PlanetsTable = () => {
                   h={24}
                 >
                   <Td textAlign="center">{planet.planetName}</Td>
-                  <Td textAlign="center">{planet.terrain}</Td>
+                  <Td textAlign="center">{planet.planetTerrain}</Td>
                 </Tr>
               );
             })}

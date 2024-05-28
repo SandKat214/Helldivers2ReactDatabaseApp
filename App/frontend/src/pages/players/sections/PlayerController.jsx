@@ -62,6 +62,7 @@ const PlayerController = ({
       image: Yup.string(),
       name: Yup.string("Name must be a string")
         .required("Name must be specified")
+        .matches(/^[^0-9]*$/, "Field must not contain numbers")
         .test(
           "len",
           "Must be between 5 and 50 characters",
