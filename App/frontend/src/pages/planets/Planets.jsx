@@ -1,13 +1,11 @@
 import { VStack, useToast } from "@chakra-ui/react";
 import PlanetsTable from "./sections/PlanetsTable";
 import PlanetsController from "./sections/PlanetsController";
-import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 const Planets = () => {
   const toast = useToast();
-  const [selectedRow, setSelectedRow] = useState(undefined);
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["planets"],
     queryFn: async () => {
@@ -21,7 +19,7 @@ const Planets = () => {
 
   return (
     <VStack gap={20} alignItems="center" w="100%">
-      <PlanetsController />
+      <PlanetsController refetch={refetch} />
       <PlanetsTable data={data} isLoading={isLoading} />
     </VStack>
   );

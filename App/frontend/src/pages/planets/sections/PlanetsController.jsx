@@ -18,10 +18,15 @@ import {
   ModalFooter,
   Button,
   Select,
+  useToast,
+  ModalCloseButton,
 } from "@chakra-ui/react";
-import { useRef } from "react";
-import { FaPlus, FaTrash } from "react-icons/fa6";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import { useFormik } from "formik";
+import { FaPlus } from "react-icons/fa6";
 import { IoSave } from "react-icons/io5";
+import * as Yup from "yup";
 
 const ControllerButton = ({ icon, label, onClick }) => {
   return (
@@ -32,8 +37,51 @@ const ControllerButton = ({ icon, label, onClick }) => {
   );
 };
 
-const PlanetsController = () => {
+const PlanetsController = ({ refetch }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
+
+  const formik = useFormik({
+    initialValues: {
+      planetName: "",
+      planetTerrain: "Icy",
+    },
+    validationSchema: Yup.object({
+      planetName: Yup.string("Planet Name must be a string").required(
+        "Planet name is required"
+      ),
+      planetTerrain: Yup.string("Terrain must be a string").required(
+        "Terrain must be specified"
+      ),
+    }),
+  });
+
+  const { isPending, mutateAsync } = useMutation({
+    mutationFn: async () => {
+      const body = formik.values;
+
+      await axios.post(`${import.meta.env.VITE_API_URL}planets/`, body);
+    },
+    onSuccess: async () => {
+      toast({ description: "Submission saved", status: "success" });
+      onClose();
+      formik.resetForm({
+        values: {
+          planetName: "",
+          planetTerrain: "",
+        },
+      });
+      refetch();
+    },
+    onError: () => {
+      toast({ description: "Error saving submission", status: "error" });
+    },
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    formik.setFieldValue(name, value);
+  };
 
   return (
     <HStack justifyContent="center">
@@ -48,10 +96,17 @@ const PlanetsController = () => {
         <ControllerButton icon={FaPlus} label="Add" onClick={() => onOpen()} />
         {/* <ControllerButton icon={FaTrash} label="Delete" onClick={() => {}} /> */}
       </HStack>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal
+        isOpen={isOpen}
+        onClose={() => {
+          onClose();
+          formik.resetForm();
+        }}
+      >
         <ModalOverlay />
         <ModalContent backgroundColor="background.300" w="1000px">
           <ModalHeader>
+            <ModalCloseButton color="red.500" />
             <Heading as="h3" color="white" fontSize="2xl">
               Add{" "}
               <Text as="span" color="red.500">
@@ -69,9 +124,13 @@ const PlanetsController = () => {
                     variant="filled"
                     placeholder="Planet Name..."
                     _focus={{ backgroundColor: "white" }}
+                    onChange={handleChange}
+                    name="planetName"
                   />
-                  <FormHelperText color="gray.400">
-                    Must be unique.
+                  <FormHelperText
+                    color={formik.errors.planetName ? "red.500" : "gray.400"}
+                  >
+                    {formik.errors.planetName ?? "Must be unique."}
                   </FormHelperText>
                 </FormControl>
                 <FormControl color="white">
@@ -81,20 +140,28 @@ const PlanetsController = () => {
                     variant="filled"
                     color="background.700"
                     _focus={{ backgroundColor: "white" }}
+                    onChange={handleChange}
+                    name="planetTerrain"
                   >
-                    <option value="">Icy</option>
-                    <option value="">Desert</option>
-                    <option value="">Mountains</option>
-                    <option value="">Ocean</option>
-                    <option value="">Swamp</option>
-                    <option value="">Forest</option>
+                    <option value="Icy">Icy</option>
+                    <option value="Desert">Desert</option>
+                    <option value="Mountains">Mountains</option>
+                    <option value="Ocean">Ocean</option>
+                    <option value="Swamp">Swamp</option>
+                    <option value="Forest">Forest</option>
                   </Select>
                   <FormHelperText color="gray.400"></FormHelperText>
                 </FormControl>
               </VStack>
             </ModalBody>
             <ModalFooter>
-              <Button colorScheme="red" rightIcon={<IoSave />}>
+              <Button
+                colorScheme="red"
+                rightIcon={<IoSave />}
+                isLoading={isPending}
+                loadingText="Saving"
+                onClick={mutateAsync}
+              >
                 Save
               </Button>
             </ModalFooter>
