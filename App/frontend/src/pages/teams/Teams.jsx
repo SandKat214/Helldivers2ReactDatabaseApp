@@ -9,7 +9,7 @@ import { useState, useEffect } from "react";
 import { useToast, VStack, useDisclosure } from "@chakra-ui/react";
 import axios from "axios";
 import TeamsTable from "./sections/TeamsTable";
-import TeamsController from "./sections/TeamsAddController";
+import TeamsController from "./sections/TeamsController";
 
 const Teams = () => {
   const toast = useToast();
