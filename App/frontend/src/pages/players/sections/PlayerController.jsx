@@ -217,7 +217,6 @@ const PlayerController = ({
         boxShadow="red"
       >
         <ControllerButton icon={FaPlus} label="Add" onClick={() => onOpen()} />
-        {/* <ControllerButton icon={FaTrash} label="Delete" onClick={() => {}} /> */}
       </HStack>
       <Modal
         isOpen={isOpen}
@@ -241,7 +240,7 @@ const PlayerController = ({
             <Heading as="h3" color="white" fontSize="2xl">
               {selectedRow ? "Edit" : "Add"}{" "}
               <Text as="span" color="red.500">
-                Players
+                Player
               </Text>
             </Heading>
             <ModalCloseButton color="red.500" />

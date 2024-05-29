@@ -21,7 +21,7 @@ import { GrView } from "react-icons/gr";
 import { FaCalendar, FaClock } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 
-const TeamsTable = ({ teams, setUpdateTeam, setPrevTeam, setIsChat }) => {
+const TeamsTable = ({ teams, onOpen, setPrevTeam, setIsChat }) => {
   const navigate = useNavigate();
   const toast = useToast();
   
@@ -42,7 +42,7 @@ const TeamsTable = ({ teams, setUpdateTeam, setPrevTeam, setIsChat }) => {
     // open/close language input based on chat boolean
     setIsChat(teamToEdit.teamChat === 1 ? true : false);
     // Open update form
-    setUpdateTeam(true);
+    onOpen();
   };
 
   const handleJoin = (teamToManage) => {

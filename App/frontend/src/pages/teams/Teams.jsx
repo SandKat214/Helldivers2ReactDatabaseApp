@@ -6,23 +6,21 @@
 
 
 import { useState, useEffect } from "react";
-import { useToast, VStack } from "@chakra-ui/react";
+import { useToast, VStack, useDisclosure } from "@chakra-ui/react";
 import axios from "axios";
 import TeamsTable from "./sections/TeamsTable";
-import TeamsAddController from "./sections/TeamsAddController";
-import TeamsEditController from "./sections/TeamsEditController";
+import TeamsController from "./sections/TeamsAddController";
 
 const Teams = () => {
   const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [teams, setTeams] = useState([]);
   const [missions, setMissions] = useState([]);
   const [planets, setPlanets] = useState([]);
   const [languages, setLanguages] = useState([]);
-  const [updateTeam, setUpdateTeam] = useState(false);
-  const [addTeam, setAddTeam] = useState(false);
   const [isChat, setIsChat] = useState(true);
-  const [teamData, setTeamData] = useState({
+  const [formData, setFormData] = useState({
     id: null,
     title: "",
     meet: "",
@@ -90,111 +88,6 @@ const Teams = () => {
     }
   };
 
-  // keep track of new form data
-  const handleDataChange = (e) => {
-    let { name, value } = e.target;
-    // date type to correct format
-    if (name === "meet") {
-      const tzoffset = (new Date()).getTimezoneOffset() * 60000;     //offset in milliseconds
-      const valDate = new Date(value);
-      value = new Date(valDate - tzoffset).toISOString().slice(0, 19);
-    };
-    setTeamData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  // close/open language input based on chat boolean
-  const handleChatChange = (e) => {
-    setIsChat(e.target.value === "0" ? false : true);
-    handleDataChange(e);
-  };
-
-  // Add team to database
-  const handleAdd = async (e) => {
-    // Prevent page reload & close modal
-    e.preventDefault();
-    setAddTeam(false);
-    // Create a new team object from the teamData
-    const newTeam = {
-      teamTitle: teamData.title,
-      teamMeet: teamData.meet,
-      teamDifficulty: teamData.difficulty,
-      team18Up: teamData.team18Up,
-      teamChat: teamData.chat,
-      teamImage: teamData.image,
-      missionID: teamData.mission,
-      planetID: teamData.planet,
-      langID: teamData.language,
-      teamID: teamData.id
-    };
-    try {
-      const URL = import.meta.env.VITE_API_URL + "teams";
-      const response = await axios.post(URL, newTeam);
-      if (response.status === 201) {
-        toast({ description: "Submission saved", status: "success" });
-        fetchTeams();
-      } else {
-        toast({ description: "Error saving submission", status: "error" });
-      };
-    } catch (error) {
-      toast({ description: "Error creating team", status: "error" });
-      console.error("Error creating team:", error);
-    };
-    // Reset the form fields
-    resetFormFields();
-  };
-
-  // update team in database
-  const handleUpdate = async (e) => {
-    // Prevent page reload & close modal
-    e.preventDefault();
-    setUpdateTeam(false);
-    // Create a revised team object from the teamData
-    const revisedTeam = {
-      teamTitle: teamData.title,
-      teamMeet: teamData.meet,
-      teamDifficulty: teamData.difficulty,
-      team18Up: teamData.team18Up,
-      teamChat: teamData.chat,
-      teamImage: teamData.image,
-      missionID: teamData.mission,
-      planetID: teamData.planet,
-      langID: teamData.language
-    };
-    try {
-      const URL = import.meta.env.VITE_API_URL + "teams/" + teamData.id;
-      const response = await axios.put(URL, revisedTeam);
-      if (response.status !== 200) {
-        toast({ description: "Error saving submission", status: "error" });
-      } else {
-        toast({ description: "Submission saved", status: "success" });
-        fetchTeams();
-      };
-    } catch (err) {
-      toast({ description: err.response.data.error.message || "Error updating team", status: "error" });
-      console.log("Error updating team:", err);
-    };
-    // Reset the form fields
-    resetFormFields();
-  };
-
-  // reset teamData to empty fields
-  const resetFormFields = () => {
-    setTeamData({
-      id: null,
-      title: "",
-      meet: "",
-      difficulty: "",
-      team18Up: "",
-      chat: "",
-      mission: "",
-      planet: "",
-      language: null
-    });
-  };
-
   // automatic load on first render
   useEffect(() => {
     fetchTeams();
@@ -205,34 +98,24 @@ const Teams = () => {
 
   return (
     <VStack gap={20} alignItems="stretch" w="100%">
-      <TeamsAddController
-        addTeam={addTeam}
-        setAddTeam={setAddTeam}
+      <TeamsController
+        formData={formData}
+        setFormData={setFormData}
+        isOpen={isOpen}
+        onOpen={onOpen}
+        onClose={onClose}
         isChat={isChat}
-        handleChatChange={handleChatChange}
-        handleChange={handleDataChange}
-        handleSubmit={handleAdd}
+        setIsChat={setIsChat}
         missions={missions}
         planets={planets}
         languages={languages}
+        fetchTeams={fetchTeams}
       />
       <TeamsTable
         teams={teams}
-        setUpdateTeam={setUpdateTeam}
-        setPrevTeam={setTeamData}
+        onOpen={onOpen}
+        setPrevTeam={setFormData}
         setIsChat={setIsChat}
-      />
-      <TeamsEditController
-        prevTeam={teamData}
-        updateTeam={updateTeam}
-        setUpdateTeam={setUpdateTeam}
-        isChat={isChat}
-        handleChatChange={handleChatChange}
-        handleChange={handleDataChange}
-        handleSubmit={handleUpdate}
-        missions={missions}
-        planets={planets}
-        languages={languages}
       />
     </VStack>
   );
