@@ -25,7 +25,7 @@ const TeamsTable = ({ teams, onOpen, setPrevTeam, setIsChat }) => {
   const navigate = useNavigate();
   const toast = useToast();
   
-  // sets formData to team's that is being edited
+  // sets teamData to team's that is being edited
   const triggerEdit = (teamToEdit) => {
     setPrevTeam({
       id: teamToEdit.teamID,

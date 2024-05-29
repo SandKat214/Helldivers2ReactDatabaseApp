@@ -35,14 +35,14 @@ const ControllerButton = ({ icon, label, onClick }) => {
   );
 };
 
-const TeamsController = ({ 
-  formData,
-  setFormData,
+const TeamsController = ({
+  teamData,
+  setTeamData,
   isOpen,
   onOpen,
   onClose,
   isChat,
-  setIsChat, 
+  setIsChat,
   missions,
   planets,
   languages,
@@ -63,7 +63,7 @@ const TeamsController = ({
       const valDate = new Date(value);
       value = new Date(valDate - tzoffset).toISOString().slice(0, 19);
     };
-    setFormData((prevData) => ({
+    setTeamData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -80,19 +80,19 @@ const TeamsController = ({
     // Prevent page reload & close modal
     e.preventDefault();
     onClose();
-    // Create a new team object from the formData
+    // Create a new team object from the teamData
     const newTeam = {
-      teamTitle: formData.title,
-      teamMeet: formData.meet,
-      teamDifficulty: formData.difficulty,
-      team18Up: formData.team18Up,
-      teamChat: formData.chat,
-      teamImage: formData.image,
-      missionID: formData.mission,
-      planetID: formData.planet,
-      langID: formData.language,
+      teamTitle: teamData.title,
+      teamMeet: teamData.meet,
+      teamDifficulty: teamData.difficulty,
+      team18Up: teamData.team18Up,
+      teamChat: teamData.chat,
+      teamImage: teamData.image,
+      missionID: teamData.mission,
+      planetID: teamData.planet,
+      langID: teamData.language,
     };
-    if (!formData.id) {
+    if (!teamData.id) {
       // create team
       try {
         const URL = import.meta.env.VITE_API_URL + "teams";
@@ -110,7 +110,7 @@ const TeamsController = ({
     } else {
       // update team
       try {
-        const URL = import.meta.env.VITE_API_URL + "teams/" + formData.id;
+        const URL = import.meta.env.VITE_API_URL + "teams/" + teamData.id;
         const response = await axios.put(URL, newTeam);
         if (response.status !== 200) {
           toast({ description: "Error saving submission", status: "error" });
@@ -127,9 +127,9 @@ const TeamsController = ({
     resetFormFields();
   };
 
-  // reset formData to empty fields
+  // reset teamData to empty fields
   const resetFormFields = () => {
-    setFormData({
+    setTeamData({
       id: null,
       title: "",
       meet: "",
@@ -154,8 +154,8 @@ const TeamsController = ({
       >
         <ControllerButton icon={FaPlus} label="Add" onClick={() => onOpen()} />
       </HStack>
-      <Modal 
-        isOpen={isOpen} 
+      <Modal
+        isOpen={isOpen}
         onClose={() => {
           if (isEdited) {
             if (
@@ -178,7 +178,7 @@ const TeamsController = ({
         <ModalContent backgroundColor="background.300" w="1000px">
           <ModalHeader>
             <Heading as="h3" color="white" fontSize="2xl">
-              {formData.id ? "Edit" : "Add"}{" "}
+              {teamData.id ? "Edit" : "Add"}{" "}
               <Text as="span" color="red.500">
                 Team
               </Text>
@@ -197,7 +197,7 @@ const TeamsController = ({
                     placeholder="Title..."
                     minLength="3"
                     maxLength="70"
-                    defaultValue={formData.title}
+                    defaultValue={teamData.title}
                     onChange={handleChange}
                     isRequired
                   />
@@ -207,13 +207,13 @@ const TeamsController = ({
                 </FormControl>
                 <FormControl color="white">
                   <FormLabel>Time</FormLabel>
-                  <Input 
-                    name="meet"  
-                    type="datetime-local" 
+                  <Input
+                    name="meet"
+                    type="datetime-local"
                     variant="filled"
-                    min={new Date().toISOString().slice(0,16)} 
+                    min={new Date().toISOString().slice(0, 16)}
                     placeholder="Meet Time..."
-                    defaultValue={formData.meet}
+                    defaultValue={teamData.meet}
                     onChange={handleChange}
                     isRequired
                   />
@@ -230,7 +230,7 @@ const TeamsController = ({
                     placeholder="Difficulty..."
                     min="1"
                     max="9"
-                    defaultValue={formData.difficulty}
+                    defaultValue={teamData.difficulty}
                     onChange={handleChange}
                     isRequired
                   />
@@ -245,7 +245,7 @@ const TeamsController = ({
                     variant="filled"
                     color="background.700"
                     placeholder="Choose..."
-                    defaultValue={formData.team18Up}
+                    defaultValue={teamData.team18Up}
                     onChange={handleChange}
                     isRequired
                   >
@@ -262,7 +262,7 @@ const TeamsController = ({
                     name="chat"
                     variant="filled"
                     color="background.700"
-                    defaultValue={formData.chat}
+                    defaultValue={teamData.chat}
                     onChange={handleChatChange}
                     isRequired
                     placeholder="Choose..."
@@ -281,7 +281,7 @@ const TeamsController = ({
                     variant="filled"
                     color="background.700"
                     placeholder="Choose..."
-                    defaultValue={formData.planet}
+                    defaultValue={teamData.planet}
                     onChange={handleChange}
                     isRequired
                   >
@@ -305,7 +305,7 @@ const TeamsController = ({
                     variant="filled"
                     color="background.700"
                     placeholder="Choose..."
-                    defaultValue={formData.mission}
+                    defaultValue={teamData.mission}
                     onChange={handleChange}
                     isRequired
                   >
@@ -333,7 +333,7 @@ const TeamsController = ({
                       variant="filled"
                       color="background.700"
                       placeholder="Choose..."
-                      defaultValue={formData.language}
+                      defaultValue={teamData.language}
                       onChange={handleChange}
                       isRequired
                     >
@@ -354,12 +354,12 @@ const TeamsController = ({
               </VStack>
             </ModalBody>
             <ModalFooter>
-              <Button 
-                type="submit" 
-                colorScheme="red" 
-                rightIcon={formData.id ? <MdEdit /> : <IoSave />}
+              <Button
+                type="submit"
+                colorScheme="red"
+                rightIcon={teamData.id ? <MdEdit /> : <IoSave />}
               >
-                {formData.id ? "Edit" : "Add"}{" "}
+                {teamData.id ? "Edit" : "Add"}{" "}
               </Button>
             </ModalFooter>
           </form>

@@ -20,7 +20,7 @@ const Teams = () => {
   const [planets, setPlanets] = useState([]);
   const [languages, setLanguages] = useState([]);
   const [isChat, setIsChat] = useState(true);
-  const [formData, setFormData] = useState({
+  const [teamData, setTeamData] = useState({
     id: null,
     title: "",
     meet: "",
@@ -99,8 +99,8 @@ const Teams = () => {
   return (
     <VStack gap={20} alignItems="stretch" w="100%">
       <TeamsController
-        formData={formData}
-        setFormData={setFormData}
+        teamData={teamData}
+        setTeamData={setTeamData}
         isOpen={isOpen}
         onOpen={onOpen}
         onClose={onClose}
@@ -114,7 +114,7 @@ const Teams = () => {
       <TeamsTable
         teams={teams}
         onOpen={onOpen}
-        setPrevTeam={setFormData}
+        setPrevTeam={setTeamData}
         setIsChat={setIsChat}
       />
     </VStack>
