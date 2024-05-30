@@ -82,7 +82,7 @@ const PlayerTable = ({ setSelectedRow, onOpen, data, isLoading, refetch }) => {
             <IconButton
               colorScheme="red"
               color="white"
-              aria-label="Delete button"
+              aria-label="Edit button"
               icon={<MdEdit />}
               size="sm"
               onClick={() => {
@@ -93,7 +93,7 @@ const PlayerTable = ({ setSelectedRow, onOpen, data, isLoading, refetch }) => {
             <IconButton
               colorScheme="red"
               color="white"
-              aria-label="Edit button"
+              aria-label="Delete button"
               icon={<FaTrash />}
               size="sm"
               onClick={() => {
