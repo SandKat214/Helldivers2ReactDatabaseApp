@@ -1,5 +1,6 @@
 import {
   HStack,
+  Center,
   Icon,
   Text,
   VStack,
@@ -18,11 +19,12 @@ import {
   ModalFooter,
   Button,
   Select,
+  Tooltip,
 } from "@chakra-ui/react";
 import { FaPlus } from "react-icons/fa6";
-import { IoSave } from "react-icons/io5";
-import { MdEdit } from "react-icons/md";
-import { useState } from "react";
+import { IoCloudUpload, IoImage, IoSave } from "react-icons/io5";
+import { MdDelete, MdEdit } from "react-icons/md";
+import { useRef, useState } from "react";
 import axios from "axios";
 
 
@@ -35,27 +37,56 @@ const ControllerButton = ({ icon, label, onClick }) => {
   );
 };
 
-const TeamsController = ({ 
-  formData,
-  setFormData,
-  isOpen,
-  onOpen,
-  onClose,
-  isChat,
-  setIsChat, 
-  missions,
-  planets,
-  languages,
+const TeamsController = ({
   fetchTeams,
+  isChat,
+  isOpen,
+  languages,
+  missions,
+  onClose,
+  onOpen,
+  planets,
+  prevImage,
+  setIsChat,
+  setTeamData,
+  teamData,
 }) => {
   const toast = useToast();
+  const imageUploaderRef = useRef(null);
   const [isEdited, setIsEdited] = useState(false);
 
-  // keep track of new form data
-  const handleChange = (e) => {
+  // image upload and url return
+  const uploadFile = async () => {
+    const formData = new FormData();
+    formData.append("file", teamData.image);
+    formData.append(
+      "upload_preset",
+      import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+    );
+    const req = await axios.post(
+      `https://api.cloudinary.com/v1_1/${
+        import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+      }/image/upload`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return req.data.secure_url;
+  };
+
+  // change status to edited
+  const handleEdit = () => {
     if (!isEdited) {
       setIsEdited(true);
     };
+  };
+
+  // keep track of new form data
+  const handleChange = (e) => {
+    handleEdit();
     let { name, value } = e.target;
     // date type to correct format
     if (name === "meet") {
@@ -63,7 +94,7 @@ const TeamsController = ({
       const valDate = new Date(value);
       value = new Date(valDate - tzoffset).toISOString().slice(0, 19);
     };
-    setFormData((prevData) => ({
+    setTeamData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -80,19 +111,32 @@ const TeamsController = ({
     // Prevent page reload & close modal
     e.preventDefault();
     onClose();
-    // Create a new team object from the formData
-    const newTeam = {
-      teamTitle: formData.title,
-      teamMeet: formData.meet,
-      teamDifficulty: formData.difficulty,
-      team18Up: formData.team18Up,
-      teamChat: formData.chat,
-      teamImage: formData.image,
-      missionID: formData.mission,
-      planetID: formData.planet,
-      langID: formData.language,
+
+    // get image api url
+    let imageUrl = null;
+    if (teamData.image) {
+      if (prevImage) {
+        if (prevImage !== teamData.image) {
+          imageUrl = await uploadFile();
+        };
+      } else {
+        imageUrl = await uploadFile();
+      };
     };
-    if (!formData.id) {
+
+    // Create a new team object from the teamData
+    const newTeam = {
+      teamTitle: teamData.title,
+      teamMeet: teamData.meet,
+      teamDifficulty: teamData.difficulty,
+      team18Up: teamData.team18Up,
+      teamChat: teamData.chat,
+      teamImage: imageUrl,
+      missionID: teamData.mission,
+      planetID: teamData.planet,
+      langID: teamData.language,
+    };
+    if (!teamData.id) {
       // create team
       try {
         const URL = import.meta.env.VITE_API_URL + "teams";
@@ -110,7 +154,7 @@ const TeamsController = ({
     } else {
       // update team
       try {
-        const URL = import.meta.env.VITE_API_URL + "teams/" + formData.id;
+        const URL = import.meta.env.VITE_API_URL + "teams/" + teamData.id;
         const response = await axios.put(URL, newTeam);
         if (response.status !== 200) {
           toast({ description: "Error saving submission", status: "error" });
@@ -127,9 +171,9 @@ const TeamsController = ({
     resetFormFields();
   };
 
-  // reset formData to empty fields
+  // reset teamData to empty fields
   const resetFormFields = () => {
-    setFormData({
+    setTeamData({
       id: null,
       title: "",
       meet: "",
@@ -178,7 +222,7 @@ const TeamsController = ({
         <ModalContent backgroundColor="background.300" w="1000px">
           <ModalHeader>
             <Heading as="h3" color="white" fontSize="2xl">
-              {formData.id ? "Edit" : "Add"}{" "}
+              {teamData.id ? "Edit" : "Add"}{" "}
               <Text as="span" color="red.500">
                 Team
               </Text>
@@ -189,6 +233,79 @@ const TeamsController = ({
             <ModalBody>
               <VStack gap={4}>
                 <FormControl color="white">
+                  <FormLabel>Team Photo</FormLabel>
+                  <Center
+                    borderWidth="1px"
+                    borderStyle="dashed"
+                    borderColor="gray.400"
+                    borderRadius="md"
+                    py={3}
+                    cursor="pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      imageUploaderRef.current?.click();
+                    }}
+                    _hover={{ borderColor: "red.500", color: "red.500" }}
+                    transition="all 0.3s"
+                  >
+                    <HStack>
+                      <IoCloudUpload />
+                      <Text>Upload</Text>
+                    </HStack>
+                  </Center>
+                  <Input
+                    type="file"
+                    variant="filled"
+                    display="none"
+                    onChange={(e) => {
+                      setTeamData((prevData) => ({
+                        ...prevData,
+                        image: e.target.files[0],
+                      }));
+                      handleEdit();
+                    }}
+                    ref={imageUploaderRef}
+                  />
+                  <FormHelperText color="gray.400">
+                    {teamData.id ? "Change" : "Upload"} your profile photo
+                  </FormHelperText>
+                  {teamData.image && (
+                    <HStack
+                      my={2}
+                      color="gray.200"
+                      justifyContent="space-between"
+                    >
+                      <Icon as={IoImage} color="red.500" />
+                      <Text fontSize="xs">
+                        {teamData.image.name ? (teamData.image.name.length > 44
+                          ? `${teamData.image.name.slice(
+                              0,
+                              40
+                            )}...${teamData.image.name.slice(
+                              teamData.image.name.length - 3
+                            )}`
+                          : teamData.image.name) : `${teamData.title} photo`}
+                      </Text>
+                      <Tooltip label="Remove Image" placement="right" size="sm">
+                        <span>
+                          <Icon
+                            as={MdDelete}
+                            onClick={() => {
+                              setTeamData((prevData) => ({
+                                ...prevData,
+                                image: null,
+                              }));
+                              handleEdit();
+                            }}
+                            color="red.500"
+                            cursor="pointer"
+                          />
+                        </span>
+                      </Tooltip>
+                    </HStack>
+                  )}
+                </FormControl>
+                <FormControl color="white">
                   <FormLabel>Team Title</FormLabel>
                   <Input
                     name="title"
@@ -197,7 +314,7 @@ const TeamsController = ({
                     placeholder="Title..."
                     minLength="3"
                     maxLength="70"
-                    defaultValue={formData.title}
+                    defaultValue={teamData.title}
                     onChange={handleChange}
                     isRequired
                   />
@@ -213,7 +330,7 @@ const TeamsController = ({
                     variant="filled"
                     min={new Date().toISOString().slice(0,16)} 
                     placeholder="Meet Time..."
-                    defaultValue={formData.meet}
+                    defaultValue={teamData.meet}
                     onChange={handleChange}
                     isRequired
                   />
@@ -230,7 +347,7 @@ const TeamsController = ({
                     placeholder="Difficulty..."
                     min="1"
                     max="9"
-                    defaultValue={formData.difficulty}
+                    defaultValue={teamData.difficulty}
                     onChange={handleChange}
                     isRequired
                   />
@@ -245,7 +362,7 @@ const TeamsController = ({
                     variant="filled"
                     color="background.700"
                     placeholder="Choose..."
-                    defaultValue={formData.team18Up}
+                    defaultValue={teamData.team18Up}
                     onChange={handleChange}
                     isRequired
                   >
@@ -262,7 +379,7 @@ const TeamsController = ({
                     name="chat"
                     variant="filled"
                     color="background.700"
-                    defaultValue={formData.chat}
+                    defaultValue={teamData.chat}
                     onChange={handleChatChange}
                     isRequired
                     placeholder="Choose..."
@@ -281,7 +398,7 @@ const TeamsController = ({
                     variant="filled"
                     color="background.700"
                     placeholder="Choose..."
-                    defaultValue={formData.planet}
+                    defaultValue={teamData.planet}
                     onChange={handleChange}
                     isRequired
                   >
@@ -305,7 +422,7 @@ const TeamsController = ({
                     variant="filled"
                     color="background.700"
                     placeholder="Choose..."
-                    defaultValue={formData.mission}
+                    defaultValue={teamData.mission}
                     onChange={handleChange}
                     isRequired
                   >
@@ -333,7 +450,7 @@ const TeamsController = ({
                       variant="filled"
                       color="background.700"
                       placeholder="Choose..."
-                      defaultValue={formData.language}
+                      defaultValue={teamData.language}
                       onChange={handleChange}
                       isRequired
                     >
@@ -357,9 +474,9 @@ const TeamsController = ({
               <Button 
                 type="submit" 
                 colorScheme="red" 
-                rightIcon={formData.id ? <MdEdit /> : <IoSave />}
+                rightIcon={teamData.id ? <MdEdit /> : <IoSave />}
               >
-                {formData.id ? "Edit" : "Add"}{" "}
+                {teamData.id ? "Edit" : "Add"}{" "}
               </Button>
             </ModalFooter>
           </form>

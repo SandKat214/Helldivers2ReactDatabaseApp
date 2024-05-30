@@ -14,13 +14,13 @@ import TeamsController from "./sections/TeamsController";
 const Teams = () => {
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
-
+  const [prevImage, setPrevImage] = useState(null);
   const [teams, setTeams] = useState([]);
   const [missions, setMissions] = useState([]);
   const [planets, setPlanets] = useState([]);
   const [languages, setLanguages] = useState([]);
   const [isChat, setIsChat] = useState(true);
-  const [formData, setFormData] = useState({
+  const [teamData, setTeamData] = useState({
     id: null,
     title: "",
     meet: "",
@@ -99,23 +99,25 @@ const Teams = () => {
   return (
     <VStack gap={20} alignItems="stretch" w="100%">
       <TeamsController
-        formData={formData}
-        setFormData={setFormData}
-        isOpen={isOpen}
-        onOpen={onOpen}
-        onClose={onClose}
-        isChat={isChat}
-        setIsChat={setIsChat}
-        missions={missions}
-        planets={planets}
-        languages={languages}
         fetchTeams={fetchTeams}
-      />
-      <TeamsTable
-        teams={teams}
+        isChat={isChat}
+        isOpen={isOpen}
+        languages={languages}
+        missions={missions}
+        onClose={onClose}
         onOpen={onOpen}
-        setPrevTeam={setFormData}
+        planets={planets}
+        prevImage={prevImage}
         setIsChat={setIsChat}
+        setTeamData={setTeamData}
+        teamData={teamData}
+      />
+      <TeamsTable 
+        onOpen={onOpen}
+        setIsChat={setIsChat}
+        setPrevImage={setPrevImage}
+        setPrevTeam={setTeamData}
+        teams={teams}
       />
     </VStack>
   );
