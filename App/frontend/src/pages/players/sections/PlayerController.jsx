@@ -298,14 +298,14 @@ const PlayerController = ({
                     >
                       <Icon as={IoImage} color="red.500" />
                       <Text fontSize="xs">
-                        {formik.values.image.name.length > 44
+                        {formik.values.image.name ? (formik.values.image.name.length > 44
                           ? `${formik.values.image.name.slice(
                               0,
                               40
                             )}...${formik.values.image.name.slice(
                               formik.values.image.name.length - 3
                             )}`
-                          : formik.values.image.name}
+                          : formik.values.image.name) : `${formik.values.username} photo`}
                       </Text>
                       <Tooltip label="Remove Image" placement="right" size="sm">
                         <span>

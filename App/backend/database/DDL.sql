@@ -1,7 +1,7 @@
 -- ---------------------------------------------------------
 -- DATA DEFINITION QUERIES & SAMPLE DATA INSERT STATEMENTS
 -- ---------------------------------------------------------
--- Project Step 4 DDL
+-- Project Step 5 DDL
 -- Group 77, Guy Cohen and Katherine Sandeen
 
 
@@ -342,7 +342,7 @@ INSERT INTO Teams
 VALUES
 (
     'Shield of Democracy',
-    '2024-05-02 14:30:00',
+    '2024-05-31 14:30:00',
     3,
     1,
     1,
@@ -352,7 +352,7 @@ VALUES
 ),
 (
     'Indominus Legion',
-    '2024-05-07 11:15:00',
+    '2024-06-01 11:15:00',
     5,
     0,
     0,
@@ -362,7 +362,7 @@ VALUES
 ),
 (
     'FHC',
-    '2024-05-08 13:00:00',
+    '2024-06-08 13:00:00',
     5,
     0,
     1,
@@ -372,7 +372,7 @@ VALUES
 ),
 (
     'Holy Divers',
-    '2024-05-08 15:30:00',
+    '2024-06-08 15:30:00',
     2,
     0,
     1,

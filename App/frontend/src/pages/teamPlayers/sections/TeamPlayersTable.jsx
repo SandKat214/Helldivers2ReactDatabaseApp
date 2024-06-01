@@ -124,7 +124,13 @@ const TeamPlayersTable = ({ team, setStatus, archived, fetchTeam }) => {
                     h={24}
                   >
                     <Td borderColor="transparent">
-                      <Avatar src="https://www.nikkoindustries.com/cdn/shop/files/Image-Render.000_e98f6660-9faa-47ff-8d91-8df35964c70e_946x946.png?v=1708613784" />
+                      <Avatar
+                        src={
+                          teamPlayer.playerImage
+                            ? teamPlayer.playerImage
+                            : "https://www.nikkoindustries.com/cdn/shop/files/Image-Render.000_e98f6660-9faa-47ff-8d91-8df35964c70e_946x946.png?v=1708613784"
+                        }
+                      />
                     </Td>
                     <Td borderColor="transparent">{teamPlayer.playerName}</Td>
                     <Td borderColor="transparent">{teamPlayer.playerAlias}</Td>

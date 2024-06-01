@@ -1,5 +1,6 @@
 import {
   HStack,
+  Center,
   Icon,
   Text,
   VStack,
@@ -18,11 +19,12 @@ import {
   ModalFooter,
   Button,
   Select,
+  Tooltip,
 } from "@chakra-ui/react";
 import { FaPlus } from "react-icons/fa6";
-import { IoSave } from "react-icons/io5";
-import { MdEdit } from "react-icons/md";
-import { useState } from "react";
+import { IoCloudUpload, IoImage, IoSave } from "react-icons/io5";
+import { MdDelete, MdEdit } from "react-icons/md";
+import { useRef, useState } from "react";
 import axios from "axios";
 
 
@@ -36,26 +38,56 @@ const ControllerButton = ({ icon, label, onClick }) => {
 };
 
 const TeamsController = ({
-  teamData,
-  setTeamData,
-  isOpen,
-  onOpen,
-  onClose,
-  isChat,
-  setIsChat,
-  missions,
-  planets,
-  languages,
   fetchTeams,
+  isChat,
+  isOpen,
+  languages,
+  missions,
+  onClose,
+  onOpen,
+  planets,
+  prevImage,
+  setIsChat,
+  setTeamData,
+  teamData,
 }) => {
   const toast = useToast();
+  const imageUploaderRef = useRef(null);
   const [isEdited, setIsEdited] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // keep track of new form data
-  const handleChange = (e) => {
+  // image upload and url return
+  const uploadFile = async () => {
+    const formData = new FormData();
+    formData.append("file", teamData.image);
+    formData.append(
+      "upload_preset",
+      import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+    );
+    const req = await axios.post(
+      `https://api.cloudinary.com/v1_1/${
+        import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+      }/image/upload`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return req.data.secure_url;
+  };
+
+  // change status to edited
+  const handleEdit = () => {
     if (!isEdited) {
       setIsEdited(true);
     };
+  };
+
+  // keep track of new form data
+  const handleChange = (e) => {
+    handleEdit();
     let { name, value } = e.target;
     // date type to correct format
     if (name === "meet") {
@@ -77,9 +109,22 @@ const TeamsController = ({
 
   // Add team to database
   const handleSubmit = async (e) => {
-    // Prevent page reload & close modal
+    // Prevent page reload & signal loading
     e.preventDefault();
-    onClose();
+    setIsLoading(true);
+
+    // get image api url
+    let imageUrl = null;
+    if (teamData.image) {
+      if (prevImage) {
+        if (prevImage !== teamData.image) {
+          imageUrl = await uploadFile();
+        };
+      } else {
+        imageUrl = await uploadFile();
+      };
+    };
+
     // Create a new team object from the teamData
     const newTeam = {
       teamTitle: teamData.title,
@@ -87,7 +132,7 @@ const TeamsController = ({
       teamDifficulty: teamData.difficulty,
       team18Up: teamData.team18Up,
       teamChat: teamData.chat,
-      teamImage: teamData.image,
+      teamImage: imageUrl,
       missionID: teamData.mission,
       planetID: teamData.planet,
       langID: teamData.language,
@@ -106,6 +151,9 @@ const TeamsController = ({
       } catch (error) {
         toast({ description: "Error creating team", status: "error" });
         console.error("Error creating team:", error);
+      } finally {
+        onClose();
+        setIsLoading(false);
       };
     } else {
       // update team
@@ -120,10 +168,14 @@ const TeamsController = ({
         };
       } catch (err) {
         toast({ description: err.response.data.error.message || "Error updating team", status: "error" });
-        console.log("Error updating team:", err);
+        console.error("Error updating team:", err);
+      } finally {
+        onClose();
+        setIsLoading(false);
       };
     };
     // Reset the form fields
+    setIsEdited(false);
     resetFormFields();
   };
 
@@ -189,6 +241,79 @@ const TeamsController = ({
             <ModalBody>
               <VStack gap={4}>
                 <FormControl color="white">
+                  <FormLabel>Team Photo</FormLabel>
+                  <Center
+                    borderWidth="1px"
+                    borderStyle="dashed"
+                    borderColor="gray.400"
+                    borderRadius="md"
+                    py={3}
+                    cursor="pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      imageUploaderRef.current?.click();
+                    }}
+                    _hover={{ borderColor: "red.500", color: "red.500" }}
+                    transition="all 0.3s"
+                  >
+                    <HStack>
+                      <IoCloudUpload />
+                      <Text>Upload</Text>
+                    </HStack>
+                  </Center>
+                  <Input
+                    type="file"
+                    variant="filled"
+                    display="none"
+                    onChange={(e) => {
+                      setTeamData((prevData) => ({
+                        ...prevData,
+                        image: e.target.files[0],
+                      }));
+                      handleEdit();
+                    }}
+                    ref={imageUploaderRef}
+                  />
+                  <FormHelperText color="gray.400">
+                    {teamData.id ? "Change" : "Upload"} your profile photo
+                  </FormHelperText>
+                  {teamData.image && (
+                    <HStack
+                      my={2}
+                      color="gray.200"
+                      justifyContent="space-between"
+                    >
+                      <Icon as={IoImage} color="red.500" />
+                      <Text fontSize="xs">
+                        {teamData.image.name ? (teamData.image.name.length > 44
+                          ? `${teamData.image.name.slice(
+                              0,
+                              40
+                            )}...${teamData.image.name.slice(
+                              teamData.image.name.length - 3
+                            )}`
+                          : teamData.image.name) : `${teamData.title} photo`}
+                      </Text>
+                      <Tooltip label="Remove Image" placement="right" size="sm">
+                        <span>
+                          <Icon
+                            as={MdDelete}
+                            onClick={() => {
+                              setTeamData((prevData) => ({
+                                ...prevData,
+                                image: null,
+                              }));
+                              handleEdit();
+                            }}
+                            color="red.500"
+                            cursor="pointer"
+                          />
+                        </span>
+                      </Tooltip>
+                    </HStack>
+                  )}
+                </FormControl>
+                <FormControl color="white">
                   <FormLabel>Team Title</FormLabel>
                   <Input
                     name="title"
@@ -211,7 +336,7 @@ const TeamsController = ({
                     name="meet"
                     type="datetime-local"
                     variant="filled"
-                    min={new Date().toISOString().slice(0, 16)}
+                    min={new Date(new Date() - ((new Date()).getTimezoneOffset() * 60000)).toISOString().slice(0,16)}
                     placeholder="Meet Time..."
                     defaultValue={teamData.meet}
                     onChange={handleChange}
@@ -354,9 +479,10 @@ const TeamsController = ({
               </VStack>
             </ModalBody>
             <ModalFooter>
-              <Button
-                type="submit"
+              <Button 
+                type="submit" 
                 colorScheme="red"
+                isLoading={isLoading} 
                 rightIcon={teamData.id ? <MdEdit /> : <IoSave />}
               >
                 {teamData.id ? "Edit" : "Add"}{" "}
