@@ -15,6 +15,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalBody,
+  ModalCloseButton,
   useDisclosure,
   Heading,
   FormControl,
@@ -44,13 +45,23 @@ const LanguagesController = ({ fetchLanguages }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
+  const [isEdited, setIsEdited] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [langData, setLangData] = useState({
     langID: "",
     langName: "",
   });
 
+  // change status to edited
+  const handleEdit = () => {
+    if (!isEdited) {
+      setIsEdited(true);
+    };
+  };
+
   // keep track of new form data
-  const handleDataChange = (e) => {
+  const handleChange = (e) => {
+    handleEdit();
     const { name, value } = e.target;
     setLangData((prevData) => ({
       ...prevData,
@@ -62,7 +73,7 @@ const LanguagesController = ({ fetchLanguages }) => {
   const handleSubmit = async (e) => {
     // prevent reload & close modal
     e.preventDefault();
-    onClose();
+    setIsLoading(true);
 
     // create new language object
     const newLang = {
@@ -78,12 +89,16 @@ const LanguagesController = ({ fetchLanguages }) => {
         fetchLanguages();
       } else {
         toast({ description: "Error saving submission", status: "error" });
-      }
+      };
     } catch (error) {
       toast({ description: "Error creating language", status: "error" });
       console.error("Error creating language:", error);
-    }
-    // Reset the form fields
+    } finally {
+      onClose();
+    };
+    // Reset states
+    setIsLoading(false);
+    setIsEdited(false);
     resetFormFields();
   };
 
@@ -107,7 +122,26 @@ const LanguagesController = ({ fetchLanguages }) => {
       >
         <ControllerButton icon={FaPlus} label="Add" onClick={() => onOpen()} />
       </HStack>
-      <Modal isOpen={isOpen} onClose={() => onClose()}>
+      <Modal 
+        isOpen={isOpen} 
+        onClose={() => {
+          if (isEdited) {
+            if (
+              window.confirm(
+                "You have unsaved changes, are you sure you want to leave?"
+              )
+            ) {
+              resetFormFields();
+              setIsEdited(false);
+              onClose();
+            }
+          } else {
+            resetFormFields();
+            setIsEdited(false);
+            onClose();
+          }
+        }}
+      >
         <ModalOverlay />
         <ModalContent backgroundColor="background.300" w="1000px">
           <ModalHeader>
@@ -117,6 +151,7 @@ const LanguagesController = ({ fetchLanguages }) => {
                 Language
               </Text>
             </Heading>
+            <ModalCloseButton color="red.500" />
           </ModalHeader>
           <form onSubmit={handleSubmit}>
             <ModalBody>
@@ -131,7 +166,7 @@ const LanguagesController = ({ fetchLanguages }) => {
                     minLength={4}
                     maxLength={4}
                     pattern="[^0-9]{4}"
-                    onChange={handleDataChange}
+                    onChange={handleChange}
                     isRequired
                     _focus={{ backgroundColor: "white" }}
                   />
@@ -149,7 +184,7 @@ const LanguagesController = ({ fetchLanguages }) => {
                     maxLength={45}
                     pattern="[^0-9]{1,45}"
                     placeholder="Language Name..."
-                    onChange={handleDataChange}
+                    onChange={handleChange}
                     isRequired
                     _focus={{ backgroundColor: "white" }}
                   />
@@ -160,7 +195,13 @@ const LanguagesController = ({ fetchLanguages }) => {
               </VStack>
             </ModalBody>
             <ModalFooter>
-              <Button type="submit" colorScheme="red" rightIcon={<IoSave />}>
+              <Button 
+                type="submit" 
+                colorScheme="red"
+                isLoading={isLoading}
+                loadingText="Saving" 
+                rightIcon={<IoSave />}
+              >
                 Save
               </Button>
             </ModalFooter>
