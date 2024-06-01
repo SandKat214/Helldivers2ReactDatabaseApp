@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Box,
   HStack,
   Icon,
@@ -116,13 +117,11 @@ const TeamsTable = ({ onOpen, setIsChat, setPrevImage, setPrevTeam, teams }) => 
                   h={24}
                 >
                   <Td borderColor="transparent">
-                    <Image
-                      w={10}
-                      h={10}
-                      borderRadius="md"
+                    <Avatar
                       src={
-                        team.teamImage ??
-                        "https://avatars.githubusercontent.com/u/424443?v=4"
+                        team.teamImage
+                          ? team.teamImage
+                          : "https://avatars.githubusercontent.com/u/424443?v=4"
                       }
                     />
                   </Td>
