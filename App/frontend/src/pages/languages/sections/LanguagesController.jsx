@@ -131,6 +131,7 @@ const LanguagesController = ({ fetchLanguages }) => {
                     placeholder="ID..."
                     minLength={4}
                     maxLength={4}
+                    pattern="[^0-9]{4}"
                     onChange={handleDataChange}
                     isRequired
                     _focus={{ backgroundColor: "white" }}
@@ -145,6 +146,9 @@ const LanguagesController = ({ fetchLanguages }) => {
                     type="text"
                     name="langName"
                     variant="filled"
+                    minLength={3}
+                    maxLength={45}
+                    pattern="[^0-9]{1,45}"
                     placeholder="Language Name..."
                     onChange={handleDataChange}
                     isRequired
