@@ -114,7 +114,7 @@ const TeamsController = ({
     setIsLoading(true);
 
     // get image api url
-    let imageUrl = null;
+    let imageUrl = teamData.image;
     if (teamData.image) {
       if (prevImage) {
         if (prevImage !== teamData.image) {
@@ -153,7 +153,6 @@ const TeamsController = ({
         console.error("Error creating team:", error);
       } finally {
         onClose();
-        setIsLoading(false);
       };
     } else {
       // update team
@@ -171,10 +170,10 @@ const TeamsController = ({
         console.error("Error updating team:", err);
       } finally {
         onClose();
-        setIsLoading(false);
       };
     };
-    // Reset the form fields
+    // Reset states
+    setIsLoading(false);
     setIsEdited(false);
     resetFormFields();
   };
@@ -188,6 +187,7 @@ const TeamsController = ({
       difficulty: "",
       team18Up: "",
       chat: "",
+      image: null,
       mission: "",
       planet: "",
       language: null
@@ -292,7 +292,7 @@ const TeamsController = ({
                             )}...${teamData.image.name.slice(
                               teamData.image.name.length - 3
                             )}`
-                          : teamData.image.name) : `${teamData.title} photo`}
+                          : teamData.image.name) : `${teamData.title}.img`}
                       </Text>
                       <Tooltip label="Remove Image" placement="right" size="sm">
                         <span>
@@ -482,7 +482,8 @@ const TeamsController = ({
               <Button 
                 type="submit" 
                 colorScheme="red"
-                isLoading={isLoading} 
+                isLoading={isLoading}
+                loadingText="Saving" 
                 rightIcon={teamData.id ? <MdEdit /> : <IoSave />}
               >
                 {teamData.id ? "Edit" : "Add"}{" "}

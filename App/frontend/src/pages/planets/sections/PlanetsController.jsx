@@ -30,8 +30,8 @@ import * as Yup from "yup";
 
 const ControllerButton = ({ icon, label, onClick }) => {
   return (
-    <VStack color="white" cursor="pointer">
-      <Icon as={icon} onClick={onClick} />
+    <VStack color="white" cursor="pointer" onClick={onClick} >
+      <Icon as={icon} />
       <Text fontSize="xs">{label}</Text>
     </VStack>
   );
@@ -94,7 +94,6 @@ const PlanetsController = ({ refetch }) => {
         boxShadow="red"
       >
         <ControllerButton icon={FaPlus} label="Add" onClick={() => onOpen()} />
-        {/* <ControllerButton icon={FaTrash} label="Delete" onClick={() => {}} /> */}
       </HStack>
       <Modal
         isOpen={isOpen}
@@ -114,7 +113,12 @@ const PlanetsController = ({ refetch }) => {
               </Text>
             </Heading>
           </ModalHeader>
-          <form>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              mutateAsync();
+            }}
+          >
             <ModalBody>
               <VStack gap={4}>
                 <FormControl color="white">
@@ -127,6 +131,7 @@ const PlanetsController = ({ refetch }) => {
                     onChange={handleChange}
                     value={formik.values.planetName}
                     name="planetName"
+                    isRequired
                   />
                   <FormHelperText
                     color={formik.errors.planetName ? "red.500" : "gray.400"}
@@ -143,7 +148,9 @@ const PlanetsController = ({ refetch }) => {
                     _focus={{ backgroundColor: "white" }}
                     onChange={handleChange}
                     name="planetTerrain"
+                    placeholder="Choose..."
                     value={formik.values.planetTerrain}
+                    isRequired
                   >
                     <option value="Icy">Icy</option>
                     <option value="Desert">Desert</option>
@@ -158,11 +165,11 @@ const PlanetsController = ({ refetch }) => {
             </ModalBody>
             <ModalFooter>
               <Button
+                type="submit"
                 colorScheme="red"
                 rightIcon={<IoSave />}
                 isLoading={isPending}
                 loadingText="Saving"
-                onClick={mutateAsync}
               >
                 Save
               </Button>

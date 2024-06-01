@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 8500;
 
 // Middleware:
 
-// If on FLIP, use cors() middleware to allow cross-origin requests from the frontend with your port number:
+// Cors() middleware to allow cross-origin requests from the frontend with your port number:
 // EX (local): http://localhost:5173
 // EX (FLIP/classwork) http://flip3.engr.oregonstate.edu:5173
 app.use(cors({ credentials: true, origin: "*" }));
@@ -22,16 +22,15 @@ app.use("/api/planets", require("./routes/planetRoutes"));
 // planets
 app.use("/api/mission-types", require("./routes/missionTypesRoutes"));
 
-// API Routes for backend CRUD:
+// languages
 app.use("/api/languages", require("./routes/languageRoutes"));
+
+// teams
 app.use("/api/teams", require("./routes/teamRoutes"));
+
+// teamPlayers
 app.use("/api/teamPlayers", require("./routes/teamPlayerRoutes"));
 
-// Add your Connect DB Activitiy Code Below:
-// ...
-
-// ...
-// End Connect DB Activity Code.
 
 app.listen(PORT, () => {
   console.log(

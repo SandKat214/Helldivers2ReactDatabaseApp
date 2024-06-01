@@ -55,7 +55,7 @@ const Teams = () => {
   // retrieve missions from database for drop-downs
   const fetchMissions = async () => {
     try {
-      const URL = import.meta.env.VITE_API_URL + "teams/data/missions";
+      const URL = import.meta.env.VITE_API_URL + "mission-types";
       const response = await axios.get(URL);
       setMissions(response.data);
     } catch (error) {
@@ -67,7 +67,7 @@ const Teams = () => {
   // retrieve planets from database for drop-downs
   const fetchPlanets = async () => {
     try {
-      const URL = import.meta.env.VITE_API_URL + "teams/data/planets";
+      const URL = import.meta.env.VITE_API_URL + "planets";
       const response = await axios.get(URL);
       setPlanets(response.data);
     } catch (error) {
