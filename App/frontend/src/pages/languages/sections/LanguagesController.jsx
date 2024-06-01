@@ -80,7 +80,7 @@ const LanguagesController = ({ fetchLanguages }) => {
         toast({ description: "Error saving submission", status: "error" });
       }
     } catch (error) {
-      alert("Error creating language");
+      toast({ description: "Error creating language", status: "error" });
       console.error("Error creating language:", error);
     }
     // Reset the form fields
@@ -106,7 +106,6 @@ const LanguagesController = ({ fetchLanguages }) => {
         boxShadow="red"
       >
         <ControllerButton icon={FaPlus} label="Add" onClick={() => onOpen()} />
-        {/* <ControllerButton icon={FaTrash} label="Delete" onClick={() => {}} /> */}
       </HStack>
       <Modal isOpen={isOpen} onClose={() => onClose()}>
         <ModalOverlay />
