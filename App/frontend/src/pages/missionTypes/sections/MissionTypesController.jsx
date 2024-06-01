@@ -112,7 +112,12 @@ const MissionTypesController = ({ refetch }) => {
               </Text>
             </Heading>
           </ModalHeader>
-          <form>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              mutateAsync();
+            }}
+          >
             <ModalBody>
               <VStack gap={4}>
                 <FormControl color="white">
@@ -125,6 +130,7 @@ const MissionTypesController = ({ refetch }) => {
                     _focus={{ backgroundColor: "white" }}
                     onChange={handleChange}
                     name="missionName"
+                    isRequired
                   />
                   <FormHelperText color="gray.400">
                     Must be unique.
@@ -141,6 +147,7 @@ const MissionTypesController = ({ refetch }) => {
                     onChange={handleChange}
                     name="missionDuration"
                     _focus={{ backgroundColor: "white" }}
+                    isRequired
                   />
                   <FormHelperText color="gray.400">
                     Enter the duration in minutes.
@@ -157,6 +164,7 @@ const MissionTypesController = ({ refetch }) => {
                     onChange={handleChange}
                     name="missionDesc"
                     _focus={{ backgroundColor: "white" }}
+                    isRequired
                   />
                   <FormHelperText color="gray.400">
                     Mission description must be unique.
@@ -166,9 +174,9 @@ const MissionTypesController = ({ refetch }) => {
             </ModalBody>
             <ModalFooter>
               <Button
+                type="submit"
                 colorScheme="red"
                 rightIcon={<IoSave />}
-                onClick={mutateAsync}
                 isLoading={isPending}
                 loadingText="Saving"
               >
