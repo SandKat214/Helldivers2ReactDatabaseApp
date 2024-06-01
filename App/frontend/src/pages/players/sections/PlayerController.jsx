@@ -305,7 +305,7 @@ const PlayerController = ({
                             )}...${formik.values.image.name.slice(
                               formik.values.image.name.length - 3
                             )}`
-                          : formik.values.image.name) : `${formik.values.username} photo`}
+                          : formik.values.image.name) : `${formik.values.username}.img`}
                       </Text>
                       <Tooltip label="Remove Image" placement="right" size="sm">
                         <span>

@@ -292,7 +292,7 @@ const TeamsController = ({
                             )}...${teamData.image.name.slice(
                               teamData.image.name.length - 3
                             )}`
-                          : teamData.image.name) : `${teamData.title} photo`}
+                          : teamData.image.name) : `${teamData.title}.img`}
                       </Text>
                       <Tooltip label="Remove Image" placement="right" size="sm">
                         <span>
