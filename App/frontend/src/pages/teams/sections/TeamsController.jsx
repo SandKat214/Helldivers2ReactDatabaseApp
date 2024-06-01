@@ -54,6 +54,7 @@ const TeamsController = ({
   const toast = useToast();
   const imageUploaderRef = useRef(null);
   const [isEdited, setIsEdited] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // image upload and url return
   const uploadFile = async () => {
@@ -108,9 +109,9 @@ const TeamsController = ({
 
   // Add team to database
   const handleSubmit = async (e) => {
-    // Prevent page reload & close modal
+    // Prevent page reload & signal loading
     e.preventDefault();
-    onClose();
+    setIsLoading(true);
 
     // get image api url
     let imageUrl = null;
@@ -150,6 +151,9 @@ const TeamsController = ({
       } catch (error) {
         toast({ description: "Error creating team", status: "error" });
         console.error("Error creating team:", error);
+      } finally {
+        onClose();
+        setIsLoading(false);
       };
     } else {
       // update team
@@ -164,10 +168,14 @@ const TeamsController = ({
         };
       } catch (err) {
         toast({ description: err.response.data.error.message || "Error updating team", status: "error" });
-        console.log("Error updating team:", err);
+        console.error("Error updating team:", err);
+      } finally {
+        onClose();
+        setIsLoading(false);
       };
     };
     // Reset the form fields
+    setIsEdited(false);
     resetFormFields();
   };
 
@@ -328,7 +336,7 @@ const TeamsController = ({
                     name="meet"  
                     type="datetime-local" 
                     variant="filled"
-                    min={new Date().toISOString().slice(0,16)} 
+                    min={new Date(new Date() - ((new Date()).getTimezoneOffset() * 60000)).toISOString().slice(0,16)}
                     placeholder="Meet Time..."
                     defaultValue={teamData.meet}
                     onChange={handleChange}
@@ -473,7 +481,8 @@ const TeamsController = ({
             <ModalFooter>
               <Button 
                 type="submit" 
-                colorScheme="red" 
+                colorScheme="red"
+                isLoading={isLoading} 
                 rightIcon={teamData.id ? <MdEdit /> : <IoSave />}
               >
                 {teamData.id ? "Edit" : "Add"}{" "}
