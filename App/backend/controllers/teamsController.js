@@ -35,36 +35,6 @@ const getTeams = async (req, res) => {
   }
 };
 
-// Returns missionID and missionName from Missions for add & update dropdowns
-const getMissions = async (req, res) => {
-  try {
-    // Select id and name from the "MissionTypes" table
-    const query = "SELECT missionID, missionName FROM MissionTypes";
-    // Execute the query using the "db" object from the configuration file
-    const [rows] = await db.query(query);
-    // Send back the rows to the client
-    res.status(200).json(rows);
-  } catch (error) {
-    console.error("Error fetching mission data from the database:", error);
-    res.status(500).json({ error: "Error fetching mission data" });
-  }
-};
-
-// Returns planetID and planetName from Planets for add & update dropdowns
-const getPlanets = async (req, res) => {
-  try {
-    // Select id and name from the "Planets" table
-    const query = "SELECT planetID, planetName FROM Planets";
-    // Execute the query using the "db" object from the configuration file
-    const [rows] = await db.query(query);
-    // Send back the rows to the client
-    res.status(200).json(rows);
-  } catch (error) {
-    console.error("Error fetching planet data from the database:", error);
-    res.status(500).json({ error: "Error fetching planet data" });
-  }
-};
-
 // Returns a single team by their unique ID from Teams
 const getTeamByID = async (req, res) => {
   try {
@@ -148,8 +118,6 @@ const updateTeam = async (req, res) => {
 // Export the functions as methods of an object
 module.exports = {
   getTeams,
-  getMissions,
-  getPlanets,
   getTeamByID,
   createTeam,
   updateTeam,
