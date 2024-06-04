@@ -5,7 +5,6 @@
 // Authors: Devin Daniels and Zachary Maes
 
 import {
-  Center,
   HStack,
   Icon,
   Text,
@@ -24,11 +23,10 @@ import {
   Input,
   ModalFooter,
   Button,
-  Select,
   useToast
 } from "@chakra-ui/react";
-import { useRef, useState } from "react";
-import { FaPlus, FaTrash } from "react-icons/fa6";
+import { useState } from "react";
+import { FaPlus } from "react-icons/fa6";
 import { IoSave } from "react-icons/io5";
 import axios from "axios";
 

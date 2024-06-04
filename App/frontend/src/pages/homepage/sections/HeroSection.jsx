@@ -66,7 +66,7 @@ const HeroSection = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1, transition: { delay: 1.2, duration: 0.2 } }}
         >
-          Find you liberation squad with a
+          Find your liberation squad with a
           <Text
             as="span"
             display="block"
