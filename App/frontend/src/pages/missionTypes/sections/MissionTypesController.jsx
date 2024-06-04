@@ -9,6 +9,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalBody,
+  ModalCloseButton,
   useDisclosure,
   Heading,
   FormControl,
@@ -111,6 +112,7 @@ const MissionTypesController = ({ refetch }) => {
                 MissionType
               </Text>
             </Heading>
+            <ModalCloseButton color="red.500" />
           </ModalHeader>
           <form
             onSubmit={(e) => {

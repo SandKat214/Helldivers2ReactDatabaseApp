@@ -7,8 +7,8 @@
 
 import axios from "axios";
 import { VStack } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import TeamPlayersTable from "./sections/TeamPlayersTable";
 import TeamPlayersController from "./sections/TeamPlayersController";
 
