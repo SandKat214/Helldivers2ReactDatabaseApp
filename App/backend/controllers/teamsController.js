@@ -4,7 +4,6 @@
 // Source URL: https://github.com/osu-cs340-ecampus/react-starter-app
 // Authors: Devin Daniels and Zachary Maes
 
-
 // Load db config
 const db = require("../database/config");
 // Load .env variables
@@ -16,8 +15,8 @@ const lodash = require("lodash");
 const getTeams = async (req, res) => {
   try {
     // Select all rows from the "Teams" table with mission, planet, and language info
-    const query = 
-    "SELECT Teams.teamID, Teams.teamTitle, Teams.teamMeet, Teams.teamDifficulty, Teams.team18Up,\
+    const query =
+      "SELECT Teams.teamID, Teams.teamTitle, Teams.teamMeet, Teams.teamDifficulty, Teams.team18Up,\
     Teams.teamChat, Teams.teamCount, Teams.teamImage, Teams.missionID, MissionTypes.missionName, Teams.planetID,\
     Planets.planetName, Languages.langID, Languages.langName\
     FROM Teams\
@@ -32,6 +31,48 @@ const getTeams = async (req, res) => {
   } catch (error) {
     console.error("Error fetching teams from the database:", error);
     res.status(500).json({ error: "Error fetching teams" });
+  }
+};
+
+const getTeamsByName = async (req, res) => {
+  try {
+    const { teamTitle } = req.params;
+    const query = "select * from Teams where teamTitle like ?";
+    const [result] = await db.query(query, [`%${teamTitle}%`]);
+    res.status(200).json(result);
+  } catch (err) {
+    console.error("Error fetching teams", err);
+    res.status(500).json({ error: "Error fetching teams" });
+  }
+};
+
+// Returns missionID and missionName from Missions for add & update dropdowns
+const getMissions = async (req, res) => {
+  try {
+    // Select id and name from the "MissionTypes" table
+    const query = "SELECT missionID, missionName FROM MissionTypes";
+    // Execute the query using the "db" object from the configuration file
+    const [rows] = await db.query(query);
+    // Send back the rows to the client
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error("Error fetching mission data from the database:", error);
+    res.status(500).json({ error: "Error fetching mission data" });
+  }
+};
+
+// Returns planetID and planetName from Planets for add & update dropdowns
+const getPlanets = async (req, res) => {
+  try {
+    // Select id and name from the "Planets" table
+    const query = "SELECT planetID, planetName FROM Planets";
+    // Execute the query using the "db" object from the configuration file
+    const [rows] = await db.query(query);
+    // Send back the rows to the client
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error("Error fetching planet data from the database:", error);
+    res.status(500).json({ error: "Error fetching planet data" });
   }
 };
 
@@ -56,20 +97,30 @@ const getTeamByID = async (req, res) => {
 // Returns status of creation of new team in Teams
 const createTeam = async (req, res) => {
   try {
-    const { teamTitle, teamMeet, teamDifficulty, team18Up, teamChat, teamImage, missionID, planetID, langID } = req.body;
+    const {
+      teamTitle,
+      teamMeet,
+      teamDifficulty,
+      team18Up,
+      teamChat,
+      teamImage,
+      missionID,
+      planetID,
+      langID,
+    } = req.body;
     const query =
       "INSERT INTO Teams (teamTitle, teamMeet, teamDifficulty, team18Up, teamChat, teamImage, missionID, planetID, langID)\
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     const response = await db.query(query, [
-      teamTitle, 
-      teamMeet, 
-      teamDifficulty, 
-      team18Up, 
-      teamChat, 
-      teamImage, 
-      missionID, 
-      planetID, 
-      langID
+      teamTitle,
+      teamMeet,
+      teamDifficulty,
+      team18Up,
+      teamChat,
+      teamImage,
+      missionID,
+      planetID,
+      langID,
     ]);
     res.status(201).json(response);
   } catch (error) {
@@ -84,7 +135,17 @@ const updateTeam = async (req, res) => {
   // Get the team ID
   const teamID = req.params.id;
   // Get the team object
-  const { teamTitle, teamMeet, teamDifficulty, team18Up, teamChat, teamImage, missionID, planetID, langID } = req.body;
+  const {
+    teamTitle,
+    teamMeet,
+    teamDifficulty,
+    team18Up,
+    teamChat,
+    teamImage,
+    missionID,
+    planetID,
+    langID,
+  } = req.body;
   try {
     const query =
       "UPDATE Teams\
@@ -94,30 +155,31 @@ const updateTeam = async (req, res) => {
 
     // Perform the update
     await db.query(query, [
-      teamTitle, 
-      teamMeet, 
-      teamDifficulty, 
-      team18Up, 
-      teamChat, 
-      teamImage, 
-      missionID, 
-      planetID, 
+      teamTitle,
+      teamMeet,
+      teamDifficulty,
+      team18Up,
+      teamChat,
+      teamImage,
+      missionID,
+      planetID,
       langID,
       teamID,
     ]);
-    // Inform client of success and return 
+    // Inform client of success and return
     return res.json({ message: "Team updated successfully." });
   } catch (err) {
     console.log("Error updating team", err);
-    res
-      .status(500)
-      .json({ error: err });
-  };
+    res.status(500).json({ error: err });
+  }
 };
 
 // Export the functions as methods of an object
 module.exports = {
   getTeams,
+  getMissions,
+  getPlanets,
+  getTeamsByName,
   getTeamByID,
   createTeam,
   updateTeam,

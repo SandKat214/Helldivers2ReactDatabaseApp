@@ -2,11 +2,10 @@ import { Box, Heading, Text, VStack } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import Typewriter from "typewriter-effect";
 
+const MotionBox = motion(Box);
+const MotionVStack = motion(VStack);
+const MotionText = motion(Text);
 const HeroSection = () => {
-  const MotionBox = motion(Box);
-  const MotionVStack = motion(VStack);
-  const MotionText = motion(Text);
-
   return (
     <VStack gap={16}>
       <MotionBox
