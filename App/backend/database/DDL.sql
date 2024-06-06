@@ -1,7 +1,7 @@
 -- ---------------------------------------------------------
 -- DATA DEFINITION QUERIES & SAMPLE DATA INSERT STATEMENTS
 -- ---------------------------------------------------------
--- Project Step 5 DDL
+-- Portfolio Project DDL
 -- Group 77, Guy Cohen and Katherine Sandeen
 
 
