@@ -17,7 +17,7 @@ const getTeamPlayers = async (req, res) => {
   try {
     // Select all rows from the "TeamPlayers" table by teamID
     const teamID = req.params.id;
-    const query = 
+    const query =
       "SELECT Players.playerID, Players.playerName, Players.playerAlias, Players.playerLevel, Players.playerAge,\
       Players.playerImage, TeamPlayers.teamPlayerID\
       FROM Players\
@@ -39,7 +39,7 @@ const getAvailPlayers = async (req, res) => {
   try {
     // Select all matching rows from the "Players" table
     const teamID = req.params.id;
-    const query = 
+    const query =
       "SELECT * FROM Players WHERE playerID NOT IN (\
         SELECT Spans.playerID FROM (\
             SELECT Players.playerID, Teams.teamMeet AS startTime,\
@@ -75,7 +75,7 @@ const getAdultPlayers = async (req, res) => {
   try {
     // Select all matching rows from the "Players" table
     const teamID = req.params.id;
-    const query = 
+    const query =
       "SELECT * FROM Players WHERE playerID NOT IN (\
         SELECT Spans.playerID FROM (\
             SELECT Players.playerID, Teams.teamMeet AS startTime,\
@@ -106,7 +106,7 @@ const getAdultPlayers = async (req, res) => {
   }
 };
 
-// Returns status of creation of new person in bsg_people
+// Returns status of creation of new team player
 const createTeamPlayer = async (req, res) => {
   try {
     const { teamID, playerID } = req.body;
@@ -124,7 +124,31 @@ const createTeamPlayer = async (req, res) => {
   }
 };
 
-// Endpoint to delete a customer from the database
+// Returns status of team player update
+const updateTeamPlayer = async (req, res) => {
+  // Get the team player ID
+  const teamPlayerID = req.params.id;
+  // Get the team player object
+  const { teamID, playerID } = req.body;
+  try {
+    const query =
+      "UPDATE TeamPlayers\
+      SET teamID = ?, playerID = ?\
+      WHERE teamPlayerID = ?";
+
+    // Perform the update
+    await db.query(query, [teamID, playerID, teamPlayerID,]);
+    // Inform client of success and return 
+    return res.json({ message: "Team player updated successfully." });
+  } catch (err) {
+    console.log("Error updating team player", err);
+    res
+      .status(500)
+      .json({ error: err });
+  };
+};
+
+// Endpoint to delete a team player from the database
 const deleteTeamPlayer = async (req, res) => {
   console.log("Deleting team player with id:", req.params.id);
   const teamPlayerID = req.params.id;
@@ -157,5 +181,6 @@ module.exports = {
   getAvailPlayers,
   getAdultPlayers,
   createTeamPlayer,
+  updateTeamPlayer,
   deleteTeamPlayer,
 };

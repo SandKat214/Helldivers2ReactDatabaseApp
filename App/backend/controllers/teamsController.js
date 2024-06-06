@@ -80,6 +80,7 @@ const createTeam = async (req, res) => {
   }
 };
 
+// Returns status of Team update
 const updateTeam = async (req, res) => {
   // Get the team ID
   const teamID = req.params.id;

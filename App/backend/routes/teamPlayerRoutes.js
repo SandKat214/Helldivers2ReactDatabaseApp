@@ -11,6 +11,7 @@ const {
   getAvailPlayers,
   getAdultPlayers,
   createTeamPlayer,
+  updateTeamPlayer,
   deleteTeamPlayer,
 } = require("../controllers/teamPlayersController");
 
@@ -18,6 +19,7 @@ router.get("/:id", getTeamPlayers);
 router.get("/availPlayers/:id", getAvailPlayers);
 router.get("/adultPlayers/:id", getAdultPlayers);
 router.post("/", createTeamPlayer);
+router.put("/:id", updateTeamPlayer);
 router.delete("/:id", deleteTeamPlayer);
 
 module.exports = router;
