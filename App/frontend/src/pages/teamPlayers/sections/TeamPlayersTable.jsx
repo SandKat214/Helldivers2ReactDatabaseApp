@@ -24,11 +24,18 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { FaTrash } from "react-icons/fa6";
+import { MdEdit } from "react-icons/md";
 import { useEffect, useState } from "react";
 
-const TeamPlayersTable = ({ team, setStatus, archived, fetchTeam }) => {
+const TeamPlayersTable = ({ 
+  archived,
+  fetchTeam,
+  onOpen,
+  setPrevTeamPlayer,
+  setStatus, 
+  team,
+}) => {
   const toast = useToast();
-
   const [teamPlayers, setTeamPlayers] = useState([]);
 
   // retrieve team players from database
@@ -43,6 +50,7 @@ const TeamPlayersTable = ({ team, setStatus, archived, fetchTeam }) => {
     }
   };
 
+  // delete team player from database
   const deleteTeamPlayer = async (id) => {
     try {
       const URL = import.meta.env.VITE_API_URL + "teamPlayers/" + id;
@@ -56,6 +64,16 @@ const TeamPlayersTable = ({ team, setStatus, archived, fetchTeam }) => {
       toast({ description: `Failed to remove player with ID: ${id}`, status: "error" });
       console.log(err);
     }
+  };
+
+  // sets teamPlayer to team's that is being edited
+  const triggerEdit = (teamPlayerToEdit) => {
+    setPrevTeamPlayer({
+      id: teamPlayerToEdit.teamPlayerID,
+      playerID: teamPlayerToEdit.playerID,
+    });
+    // Open update form
+    onOpen();
   };
 
   useEffect(() => {
@@ -138,6 +156,16 @@ const TeamPlayersTable = ({ team, setStatus, archived, fetchTeam }) => {
                     <Td borderColor="transparent">{teamPlayer.playerAge}</Td>
                     {!archived && <Td>
                       <HStack justifyContent="center">
+                        <Tooltip label="Replace player" placement="top">
+                          <IconButton
+                            colorScheme="red"
+                            color="white"
+                            aria-label="Edit button"
+                            icon={<MdEdit />}
+                            size="sm"
+                            onClick={() => triggerEdit(teamPlayer)}
+                          />
+                        </Tooltip>
                         <Tooltip label="Remove from Team" placement="top">
                           <IconButton
                             colorScheme="red"

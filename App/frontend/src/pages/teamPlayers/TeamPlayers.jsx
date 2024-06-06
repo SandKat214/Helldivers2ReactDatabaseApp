@@ -6,7 +6,7 @@
 
 
 import axios from "axios";
-import { VStack } from "@chakra-ui/react";
+import { useDisclosure, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import TeamPlayersTable from "./sections/TeamPlayersTable";
@@ -14,9 +14,15 @@ import TeamPlayersController from "./sections/TeamPlayersController";
 
 const TeamPlayers = () => {
   const location = useLocation();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [status, setStatus] = useState(true);
   const [team, setTeam] = useState(location.state.teamToManage);
+  const [teamPlayer, setTeamPlayer] = useState({
+    id: null,
+    playerID: "",
+  });
+
   const archived = new Date(team.teamMeet) < new Date();
 
   // fetch updated team from db backend
@@ -39,16 +45,24 @@ const TeamPlayers = () => {
   return (
     <VStack gap={20} alignItems="center" w="100%">
       <TeamPlayersController 
-        status={status} 
-        team={team} 
         archived={archived}
         fetchTeam={fetchTeam}
+        isOpen={isOpen}
+        onClose={onClose}
+        onOpen={onOpen}
+        setTeamPlayer={setTeamPlayer}
+        status={status} 
+        team={team}
+        teamPlayer={teamPlayer} 
       />
       <TeamPlayersTable 
-        team={team} 
-        setStatus={setStatus} 
         archived={archived}
-        fetchTeam={fetchTeam}/>
+        fetchTeam={fetchTeam}
+        onOpen={onOpen}
+        setPrevTeamPlayer={setTeamPlayer}
+        setStatus={setStatus} 
+        team={team} 
+      />
     </VStack>
   );
 };

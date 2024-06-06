@@ -16,19 +16,18 @@ import {
   ModalContent,
   ModalHeader,
   ModalBody,
-  useDisclosure,
   Heading,
   FormControl,
   FormLabel,
   FormHelperText,
-  Input,
+  ModalCloseButton,
   ModalFooter,
   Button,
   Select,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaPlus, FaAnglesUp } from "react-icons/fa6";
 import { IoSave } from "react-icons/io5";
@@ -42,13 +41,22 @@ const ControllerButton = ({ icon, label, onClick }) => {
   );
 };
 
-const TeamPlayersController = ({ status, team, archived, fetchTeam }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+const TeamPlayersController = ({ 
+  archived,
+  fetchTeam,
+  isOpen,
+  onClose,
+  onOpen,
+  setTeamPlayer,
+  status, 
+  team,
+  teamPlayer,
+}) => {
   const navigate = useNavigate();
   const toast = useToast();
 
   const [availPlayers, setAvailPlayers] = useState([]);
-  const [player, setPlayer] = useState("");
+  const [isEdited, setIsEdited] = useState(false);
 
   // fetch available players from db backend
   const fetchAvailPlayers = async () => {
@@ -74,6 +82,71 @@ const TeamPlayersController = ({ status, team, archived, fetchTeam }) => {
     }
   };
 
+  const handleEdit = () => {
+    if (!isEdited) {
+      setIsEdited(true);
+    };
+  };
+
+  const handleSubmit = async (e) => {
+    // Prevent page reload & close modal
+    e.preventDefault();
+
+    // Create team player object
+    const newTeamPlayer = {
+      teamID: team.teamID,
+      playerID: teamPlayer.playerID,
+    };
+    if (!teamPlayer.id) {
+      // create team player
+      try {
+        const URL = import.meta.env.VITE_API_URL + "teamPlayers";
+        const response = await axios.post(URL, newTeamPlayer);
+        if (response.status !== 201) {
+          console.log(response.status);
+          toast({ description: "Error saving submission", status: "error" });
+        } else {
+          toast({ description: "Submission saved", status: "success" });
+          fetchTeam();
+        };
+      } catch (err) {
+        toast({ description: "Error creating team player", status: "error" });
+        console.log("Error creating team player:", err);
+      } finally {
+        onClose();
+      };
+    } else {
+      // update team player
+      try {
+        const URL = import.meta.env.VITE_API_URL + "teamPlayers/" + teamPlayer.id;
+        const response = await axios.put(URL, newTeamPlayer);
+        if (response.status !== 200) {
+          console.log(response.status);
+          toast({ description: "Error saving submission", status: "error" });
+        } else {
+          toast({ description: "Submission saved", status: "success" });
+          fetchTeam();
+        };
+      } catch (err) {
+        toast({ description: "Error updating team player", status: "error" });
+        console.error("Error updating team player:", err);
+      } finally {
+        onClose();
+      };
+    }
+    // Reset states
+    resetFormFields();
+    setIsEdited(false);
+  };
+
+  // reset prevTeamPlayer to empty fields
+  const resetFormFields = () => {
+    setTeamPlayer({
+      id: null,
+      playerID: "",
+    });
+  };
+
   useEffect(() => {
     // if adult players only
     if (team.team18Up === 1) {
@@ -82,34 +155,6 @@ const TeamPlayersController = ({ status, team, archived, fetchTeam }) => {
       fetchAvailPlayers();
     };
   }, [team]);
-
-
-  const handleSubmit = async (e) => {
-    // Prevent page reload & close modal
-    e.preventDefault();
-    onClose();
-    // Create team player object
-    const teamPlayer = {
-      teamID: team.teamID,
-      playerID: player,
-    };
-    try {
-      const URL = import.meta.env.VITE_API_URL + "teamPlayers";
-      const response = await axios.post(URL, teamPlayer);
-      if (response.status !== 201) {
-        console.log(response.status);
-        toast({ description: "Error saving submission", status: "error" });
-      } else {
-        toast({ description: "Submission saved", status: "success" });
-        fetchTeam();
-      };
-    } catch (err) {
-      toast({ description: "Error creating team player", status: "error" });
-      console.log("Error creating team player:", err);
-    };
-    // Reset the form fields
-    setPlayer("");
-  };
 
   return (
     <VStack gap={20}>
@@ -127,17 +172,26 @@ const TeamPlayersController = ({ status, team, archived, fetchTeam }) => {
           {team.teamMeet.slice(11, 13) > 11 ? "PM" : "AM"}
         </Text>
       </Heading>
-      <Text color="white" fontSize="x-large">
+      <Text color="white" fontSize="x-large" textAlign="center">
         This team is{" "}
         {archived ? 
         <Text as="span" color="red.500">archived.</Text> : 
-        <Text as="span">
-          currently{" "}
-          <Text as="span" color="red.500">
-          {status ? "open" : "closed"}{" "}
+        <>
+          <Text as="span"> 
+            currently{" "}
+            <Text as="span" color="red.500">
+            {status ? "open" : "closed"}{" "}
+            </Text>
+            to additional recruits.
           </Text>
-          for registration.
-        </Text>
+          <Text>
+            You can{" "} 
+            {status && <Text as="span">
+              add new players, or{" "}
+            </Text>}
+            replace current players via the edit button.
+          </Text>
+        </>
         }
       </Text>
       <HStack justifyContent="center">
@@ -162,15 +216,35 @@ const TeamPlayersController = ({ status, team, archived, fetchTeam }) => {
             onClick={() => navigate("../teams")}
           />
         </HStack>
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <Modal 
+          isOpen={isOpen} 
+          onClose={() => {
+            if (isEdited) {
+              if (
+                window.confirm(
+                  "You have unsaved changes, are you sure you want to leave?"
+                )
+              ) {
+                resetFormFields();
+                setIsEdited(false);
+                onClose();
+              }
+            } else {
+              resetFormFields();
+              setIsEdited(false);
+              onClose();
+            }
+          }}
+        >
           <ModalOverlay />
           <ModalContent backgroundColor="background.300" w="1000px">
             <ModalHeader>
               <Heading as="h3" color="white" fontSize="2xl">
-                Add{" "}
+                {teamPlayer.id ? "Replace" : "Add"}{" "}
                 <Text as="span" color="red.500">
                   Recruit
                 </Text>
+                <ModalCloseButton color="red.500" />
               </Heading>
             </ModalHeader>
             <form onSubmit={handleSubmit}>
@@ -183,8 +257,15 @@ const TeamPlayersController = ({ status, team, archived, fetchTeam }) => {
                       variant="filled"
                       color="background.700"
                       placeholder="Choose..."
-                      onChange={(e) => setPlayer(e.target.value)}
+                      onChange={(e) => {
+                        handleEdit();
+                        setTeamPlayer((prevData) => ({
+                          ...prevData,
+                          playerID: e.target.value,
+                        }));
+                      }}
                       _focus={{ backgroundColor: "white" }}
+                      isRequired
                     >
                       {availPlayers.map((player) => {
                         return (
