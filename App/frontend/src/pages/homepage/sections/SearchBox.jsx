@@ -1,11 +1,19 @@
-import { Button, HStack, Input, Select, Text, VStack } from "@chakra-ui/react";
+import {
+  HStack,
+  Icon,
+  Input,
+  InputGroup,
+  InputRightAddon,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
-import { MdSearch } from "react-icons/md";
+import { useEffect, useRef } from "react";
+import { CiSearch } from "react-icons/ci";
 
-const SearchBox = ({ queryType, setQueryType }) => {
+const MotionVStack = motion(VStack);
+const SearchBox = ({ setTeamTitle, teamTitle }) => {
   const searchRef = useRef(null);
-  const MotionVStack = motion(VStack);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -20,38 +28,27 @@ const SearchBox = ({ queryType, setQueryType }) => {
     };
   }, [searchRef]);
 
-  const handleChange = (e) => {
-    const { value } = e.target;
-    setQueryType(value);
-  };
-
   return (
     <MotionVStack
       initial={{ opacity: 0 }}
       animate={{ opacity: 1, transition: { delay: 1.6, duration: 0.2 } }}
     >
       <HStack w="100%">
-        <Select
-          onChange={handleChange}
-          value={queryType}
-          color="background.700"
-          variant="filled"
-          w="125px"
-          _focus={{ backgroundColor: "white" }}
-        >
-          <option value="planets">Planets</option>
-          <option value="teams">Teams</option>
-        </Select>
-        <Input
-          placeholder="Find teams by planets or missions..."
-          variant="filled"
-          w="400px"
-          ref={searchRef}
-          _focus={{ backgroundColor: "white" }}
-        />
-        <Button rightIcon={<MdSearch />} colorScheme="red" w="125px">
-          Search
-        </Button>
+        <InputGroup>
+          <Input
+            borderWidth={0}
+            placeholder="Find teams by planets or missions..."
+            variant="filled"
+            w="400px"
+            ref={searchRef}
+            _focus={{ backgroundColor: "white" }}
+            value={teamTitle}
+            onChange={(e) => setTeamTitle(e.target.value)}
+          />
+          <InputRightAddon bg="red.500" borderWidth={0}>
+            <Icon as={CiSearch} color="white" />
+          </InputRightAddon>
+        </InputGroup>
       </HStack>
       <Text color="gray.400">Or ⌘ + K</Text>
     </MotionVStack>

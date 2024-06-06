@@ -1,39 +1,41 @@
-import { Box, Grid, GridItem, Spinner } from "@chakra-ui/react";
+import {
+  Grid,
+  GridItem,
+  HStack,
+  Heading,
+  Spinner,
+  useToast,
+} from "@chakra-ui/react";
 import TeamCard from "../components/TeamCard";
-import { teams } from "../../../utils/mockup";
 import { motion } from "framer-motion";
-import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
-const Teams = ({ queryType }) => {
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        delayChildren: 1.7,
-        staggerChildren: 0.1,
-        duration: 0.7,
-      },
-    },
-  };
-  const item = {
-    hidden: { opacity: 0, y: 500 },
-    show: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.33,
-      },
-    },
-  };
+const MotionGrid = motion(Grid);
+const MotionGridItem = motion(GridItem);
+// const item = {
+//   hidden: { opacity: 0 },
+//   show: {
+//     opacity: 1,
+//     y: 0,
+//     transition: {
+//       duration: 0.33,
+//     },
+//   },
+// };
 
-  const MotionGrid = motion(Grid);
-  const MotionGridItem = motion(GridItem);
+const Teams = ({ teamTitle }) => {
+  const toast = useToast();
 
   const { data: teamsData, isLoading } = useQuery({
-    queryKey: [queryType],
+    queryKey: [teamTitle],
     queryFn: async () => {
+      if (teamTitle) {
+        const resp = await axios.get(
+          import.meta.env.VITE_API_URL + "teams/search/" + teamTitle
+        );
+        return resp.data;
+      }
       const resp = await axios.get(import.meta.env.VITE_API_URL + "teams");
       return resp.data;
     },
@@ -46,22 +48,26 @@ const Teams = ({ queryType }) => {
     return <Spinner color="red.500" size="xl" />;
   }
 
-  return (
-    <MotionGrid
-      gridTemplateColumns="repeat(4,1fr)"
-      gap={10}
-      variants={container}
-      initial="hidden"
-      animate="show"
-    >
+  return teamsData.length > 0 ? (
+    <MotionGrid gridTemplateColumns="repeat(4,1fr)" gap={10}>
       {teamsData.map((team) => {
         return (
-          <MotionGridItem key={team.teamMeet + team.teamName} variants={item}>
+          <MotionGridItem key={team.teamMeet + team.teamName}>
             <TeamCard team={team} />
           </MotionGridItem>
         );
       })}
     </MotionGrid>
+  ) : (
+    <HStack
+      width="100%"
+      p={10}
+      borderWidth={1}
+      borderRadius="md"
+      borderColor="gray.700"
+    >
+      <Heading color="white">No teams found</Heading>
+    </HStack>
   );
 };
 

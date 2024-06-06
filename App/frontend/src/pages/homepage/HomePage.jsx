@@ -1,38 +1,25 @@
-import { HStack, Spinner, VStack } from "@chakra-ui/react";
+import { Box, VStack } from "@chakra-ui/react";
 import HeroSection from "./sections/HeroSection";
 import SearchBox from "./sections/SearchBox";
-import { useState } from "react";
 import Teams from "./sections/Teams";
-import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { motion } from "framer-motion";
+
+const MotionBox = motion(Box);
 
 const HomePage = () => {
-  const [queryType, setQueryType] = useState("planets");
-
-  const { data: teamsData, isLoading } = useQuery({
-    queryKey: [queryType],
-    queryFn: async () => {
-      const resp = await axios.get(import.meta.env.VITE_API_URL + "teams");
-      return resp.data;
-    },
-    onError: () => {
-      toast({ description: "Error fetching players", status: "error" });
-    },
-  });
-
-  if (isLoading) {
-    return (
-      <HStack>
-        <Spinner />
-      </HStack>
-    );
-  }
+  const [teamTitle, setTeamTitle] = useState("");
 
   return (
     <VStack gap={20}>
       <HeroSection />
-      <SearchBox queryType={queryType} setQueryType={setQueryType} />
-      <Teams queryType={queryType} />
+      <SearchBox setTeamTitle={setTeamTitle} teamTitle={teamTitle} />
+      <MotionBox
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1, transition: { delay: 1.9, duration: 0.7 } }}
+      >
+        <Teams teamTitle={teamTitle} />
+      </MotionBox>
     </VStack>
   );
 };
