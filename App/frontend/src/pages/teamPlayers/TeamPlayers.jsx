@@ -60,7 +60,7 @@ const TeamPlayers = () => {
         fetchTeam={fetchTeam}
         onOpen={onOpen}
         setPrevTeamPlayer={setTeamPlayer}
-        setStatus={setStatus} 
+        setStatus={setStatus}
         team={team} 
       />
     </VStack>

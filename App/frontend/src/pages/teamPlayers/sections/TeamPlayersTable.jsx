@@ -32,7 +32,7 @@ const TeamPlayersTable = ({
   fetchTeam,
   onOpen,
   setPrevTeamPlayer,
-  setStatus, 
+  setStatus,
   team,
 }) => {
   const toast = useToast();
@@ -89,8 +89,8 @@ const TeamPlayersTable = ({
   return (
     <VStack w="1300px" gap={5}>
       {archived ?
-      <Text color="white" fontSize="large">This campaign has ended...</Text> :
-      <Text color="white" fontSize="large">Teams can register up to 4 players...</Text>
+        <Text color="white" fontSize="large">This campaign has ended...</Text> :
+        <Text color="white" fontSize="large">Teams can register up to 4 players...</Text>
       }
       <Box
         backgroundColor="background.200"

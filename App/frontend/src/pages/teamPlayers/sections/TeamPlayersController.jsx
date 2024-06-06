@@ -157,41 +157,25 @@ const TeamPlayersController = ({
   }, [team]);
 
   return (
-    <VStack gap={20}>
-      <Heading as="h3" color="white" fontSize="3xl">
-        <Text as="span" color="red.500">
-          {team.teamTitle + " "}
-        </Text>
-        on{" "}
-        <Text as="span" color="red.500">
-          {team.teamMeet.slice(0, 10)}
-        </Text>{" "}
-        at{" "}
-        <Text as="span" color="red.500">
-          {team.teamMeet.slice(11, 16)}{" "}
-          {team.teamMeet.slice(11, 13) > 11 ? "PM" : "AM"}
-        </Text>
+    <VStack gap={10}>
+      <Heading as="h3" color="red.500" fontSize="3xl">
+        {team.teamTitle + " "}
+        <Text as="span" color="white" fontSize="2xl">on{" "}</Text>
+        {(new Date(team.teamMeet)).toLocaleDateString() + " "}
+        <Text as="span" color="white" fontSize="2xl">at{" "}</Text>
+        {(new Date(team.teamMeet)).toLocaleTimeString() + " "}
       </Heading>
       <Text color="white" fontSize="x-large" textAlign="center">
         This team is{" "}
         {archived ? 
         <Text as="span" color="red.500">archived.</Text> : 
-        <>
-          <Text as="span"> 
-            currently{" "}
-            <Text as="span" color="red.500">
-            {status ? "open" : "closed"}{" "}
-            </Text>
-            to additional recruits.
+        <Text as="span"> 
+          currently{" "}
+          <Text as="span" color="red.500">
+          {status ? "open" : "closed"}{" "}
           </Text>
-          <Text>
-            You can{" "} 
-            {status && <Text as="span">
-              add new players, or{" "}
-            </Text>}
-            replace current players via the edit button.
-          </Text>
-        </>
+          to additional recruits.
+        </Text>
         }
       </Text>
       <HStack justifyContent="center">
