@@ -12,7 +12,9 @@
   },
   "contributors": [
     "Devin Daniels <github.com/devingdaniels>",
-    "Zac Maes <github.com/zacmaes>"
+    "Zac Maes <github.com/zacmaes>",
+    "Guy Cohen <https://github.com/guycdev>",
+    "Katherine Sandeen <https://github.com/SandKat214>"
   ],
   "dependencies": {
     "@chakra-ui/react": "^2.8.2",
