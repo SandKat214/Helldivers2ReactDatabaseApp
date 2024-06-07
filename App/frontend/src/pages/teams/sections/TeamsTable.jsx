@@ -134,13 +134,12 @@ const TeamsTable = ({ onOpen, setIsChat, setPrevImage, setPrevTeam, teams }) => 
                     <VStack alignItems="stretch">
                       <HStack>
                         <Icon as={FaCalendar} color="red.500" />
-                        <Text>{team.teamMeet.slice(0, 10)}</Text>
+                        <Text>{new Date(team.teamMeet).toLocaleDateString()}</Text>
                       </HStack>
                       <HStack>
                         <Icon as={FaClock} color="red.500" />
                         <Text>
-                          {team.teamMeet.slice(11, 16)}{" "}
-                          {team.teamMeet.slice(11, 13) > 11 ? "PM" : "AM"}
+                          {new Date(team.teamMeet).toLocaleTimeString()}{" "}
                         </Text>
                       </HStack>
                     </VStack>
@@ -162,7 +161,7 @@ const TeamsTable = ({ onOpen, setIsChat, setPrevImage, setPrevTeam, teams }) => 
                       {team.missionName}
                     </Text>
                   </Td>
-                  <Td borderColor="transparent">{team.langName ?? "n/a"}</Td>
+                  <Td borderColor="transparent">{team.langName ?? "null"}</Td>
                   <Td borderColor="transparent" alignContent="center">
                     <HStack>
                       {new Date(team.teamMeet) < new Date() ?
