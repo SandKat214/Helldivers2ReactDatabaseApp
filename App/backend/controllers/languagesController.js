@@ -4,7 +4,6 @@
 // Source URL: https://github.com/osu-cs340-ecampus/react-starter-app
 // Authors: Devin Daniels and Zachary Maes
 
-
 // Load db config
 const db = require("../database/config");
 // Load .env variables

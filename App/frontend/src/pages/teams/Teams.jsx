@@ -1,4 +1,4 @@
-// Citation for fetch, add, & update functions:
+// Citation for fetch functions:
 // Date: 5/19/2024
 // Copied & Adapted from React-Starter-App
 // Source URL: https://github.com/osu-cs340-ecampus/react-starter-app

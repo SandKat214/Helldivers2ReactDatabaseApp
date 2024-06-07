@@ -1,4 +1,4 @@
-// Citation for handleSubmit() function:
+// Citation for handle functions:
 // Date: 5/17/2024
 // Copied & Adapted from React-Starter-App
 // Source URL: https://github.com/osu-cs340-ecampus/react-starter-app

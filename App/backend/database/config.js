@@ -1,3 +1,9 @@
+// Citation for the following source code:
+// Date: 5/17/2024
+// Copied & Adapted from React-Starter-App
+// Source URL: https://github.com/osu-cs340-ecampus/react-starter-app
+// Authors: Devin Daniels and Zachary Maes
+
 // Get an instance of mysql we can use in the app
 const mysql = require("mysql2");
 require("dotenv").config();

@@ -1,4 +1,4 @@
-// Citation for fetchLanguages() function:
+// Citation for fetch function:
 // Date: 5/17/2024
 // Copied & Adapted from React-Starter-App
 // Source URL: https://github.com/osu-cs340-ecampus/react-starter-app
