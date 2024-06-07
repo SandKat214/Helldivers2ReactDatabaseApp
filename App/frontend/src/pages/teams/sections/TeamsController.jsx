@@ -388,24 +388,6 @@ const TeamsController = ({
                   </FormHelperText>
                 </FormControl>
                 <FormControl color="white">
-                  <FormLabel>Is chat friendly</FormLabel>
-                  <Select
-                    name="chat"
-                    variant="filled"
-                    color="background.700"
-                    defaultValue={teamData.chat}
-                    onChange={handleChatChange}
-                    isRequired
-                    placeholder="Choose..."
-                  >
-                    <option value="1">True</option>
-                    <option value="0">False</option>
-                  </Select>
-                  <FormHelperText color="gray.400">
-                    Select between true and false.
-                  </FormHelperText>
-                </FormControl>
-                <FormControl color="white">
                   <FormLabel>Planet</FormLabel>
                   <Select
                     name="planet"
@@ -456,32 +438,49 @@ const TeamsController = ({
                     Choose from available.
                   </FormHelperText>
                 </FormControl>
-                {isChat && (
-                  <FormControl color="white">
-                    <FormLabel>Language</FormLabel>
-                    <Select
-                      name="language"
-                      variant="filled"
-                      color="background.700"
-                      placeholder="Choose..."
-                      defaultValue={teamData.language}
-                      onChange={handleChange}
-                      isRequired
-                    >
-                      {languages.map((language) => {
-                        return (
-                          <option key={language.langID} value={language.langID}>
-                            {language.langName}
-                          </option>
-                        );
-                      })}
-                      ;
-                    </Select>
-                    <FormHelperText color="gray.400">
-                      Select from available.
-                    </FormHelperText>
-                  </FormControl>
-                )}
+                <FormControl color="white">
+                  <FormLabel>Is chat friendly</FormLabel>
+                  <Select
+                    name="chat"
+                    variant="filled"
+                    color="background.700"
+                    defaultValue={teamData.chat}
+                    onChange={handleChatChange}
+                    isRequired
+                    placeholder="Choose..."
+                  >
+                    <option value="1">True</option>
+                    <option value="0">False</option>
+                  </Select>
+                  <FormHelperText color="gray.400">
+                    Select between true and false.
+                  </FormHelperText>
+                </FormControl>
+                <FormControl color="white">
+                  <FormLabel>Language</FormLabel>
+                  <Select
+                    name="language"
+                    variant="filled"
+                    color="background.700"
+                    placeholder={isChat ? "Choose..." : "null"}
+                    value={isChat ? teamData.language : "null"}
+                    onChange={handleChange}
+                    isDisabled={!isChat}
+                    isRequired
+                  >
+                    {languages.map((language) => {
+                      return (
+                        <option key={language.langID} value={language.langID}>
+                          {language.langName}
+                        </option>
+                      );
+                    })}
+                    ;
+                  </Select>
+                  <FormHelperText color="gray.400">
+                    {isChat ? "Select from available." : "Language nulled if no team chat."}
+                  </FormHelperText>
+                </FormControl>
               </VStack>
             </ModalBody>
             <ModalFooter>
