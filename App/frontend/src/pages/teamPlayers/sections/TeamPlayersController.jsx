@@ -31,6 +31,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaPlus, FaAnglesUp } from "react-icons/fa6";
 import { IoSave } from "react-icons/io5";
+import { MdEdit } from "react-icons/md";
 
 const ControllerButton = ({ icon, label, onClick }) => {
   return (
@@ -269,8 +270,11 @@ const TeamPlayersController = ({
                 </VStack>
               </ModalBody>
               <ModalFooter>
-                <Button type="submit" colorScheme="red" rightIcon={<IoSave />}>
-                  Save
+                <Button 
+                  type="submit"
+                  colorScheme="red" 
+                  rightIcon={teamPlayer.id ? <MdEdit /> : <IoSave />}>
+                  {teamPlayer.id ? "Edit" : "Save"}
                 </Button>
               </ModalFooter>
             </form>
