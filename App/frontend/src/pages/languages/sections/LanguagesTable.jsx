@@ -1,14 +1,11 @@
 import {
   Box,
-  HStack,
-  IconButton,
   Table,
   TableContainer,
   Tbody,
   Td,
   Th,
   Thead,
-  Tooltip,
   Tr,
 } from "@chakra-ui/react";
 

@@ -1,4 +1,4 @@
-import { VStack, useDisclosure } from "@chakra-ui/react";
+import { VStack, useDisclosure, useToast } from "@chakra-ui/react";
 import PlayerTable from "./sections/PlayerTable";
 import PlayerController from "./sections/PlayerController";
 import { useState } from "react";
@@ -8,6 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 const Player = () => {
   const [selectedRow, setSelectedRow] = useState(undefined);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["people"],

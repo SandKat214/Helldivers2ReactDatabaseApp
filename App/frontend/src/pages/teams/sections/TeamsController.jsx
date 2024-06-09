@@ -88,7 +88,7 @@ const TeamsController = ({
   const handleEdit = () => {
     if (!isEdited) {
       setIsEdited(true);
-    };
+    }
   };
 
   // keep track of new form data
@@ -100,7 +100,7 @@ const TeamsController = ({
       const tzoffset = (new Date()).getTimezoneOffset() * 60000;     //offset in milliseconds
       const valDate = new Date(value);
       value = new Date(valDate - tzoffset).toISOString().slice(0, 19);
-    };
+    }
     setTeamData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -125,11 +125,11 @@ const TeamsController = ({
       if (prevImage) {
         if (prevImage !== teamData.image) {
           imageUrl = await uploadFile();
-        };
+        }
       } else {
         imageUrl = await uploadFile();
-      };
-    };
+      }
+    }
 
     // Create a new team object from the teamData
     const newTeam = {
@@ -153,13 +153,13 @@ const TeamsController = ({
           fetchTeams();
         } else {
           toast({ description: "Error saving submission", status: "error" });
-        };
+        }
       } catch (error) {
         toast({ description: "Error creating team", status: "error" });
         console.error("Error creating team:", error);
       } finally {
         onClose();
-      };
+      }
     } else {
       // update team
       try {
@@ -170,14 +170,14 @@ const TeamsController = ({
         } else {
           toast({ description: "Submission saved", status: "success" });
           fetchTeams();
-        };
+        }
       } catch (err) {
         toast({ description: err.response.data.error.message || "Error updating team", status: "error" });
         console.error("Error updating team:", err);
       } finally {
         onClose();
-      };
-    };
+      }
+    }
     // Reset states
     setIsLoading(false);
     setIsEdited(false);

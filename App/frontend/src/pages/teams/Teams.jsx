@@ -44,7 +44,7 @@ const Teams = () => {
       for (const team of teams) {
         const valDate = new Date(team.teamMeet);
         team.teamMeet = new Date(valDate - tzoffset).toISOString().slice(0, 19);
-      };
+      }
       setTeams(teams);
     } catch (error) {
       toast({ description: "Error fetching teams from server", status: "error" });

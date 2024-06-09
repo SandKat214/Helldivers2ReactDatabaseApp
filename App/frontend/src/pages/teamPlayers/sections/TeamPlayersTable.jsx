@@ -83,7 +83,7 @@ const TeamPlayersTable = ({
       setStatus(false);
     } else {
       setStatus(true);
-    };
+    }
   }, [team]);
 
   return (

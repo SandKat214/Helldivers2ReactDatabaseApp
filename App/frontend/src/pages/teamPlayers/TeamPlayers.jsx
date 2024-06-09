@@ -6,7 +6,7 @@
 
 
 import axios from "axios";
-import { useDisclosure, VStack } from "@chakra-ui/react";
+import { useDisclosure, VStack, useToast } from "@chakra-ui/react";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import TeamPlayersTable from "./sections/TeamPlayersTable";
@@ -15,6 +15,7 @@ import TeamPlayersController from "./sections/TeamPlayersController";
 const TeamPlayers = () => {
   const location = useLocation();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
 
   const [status, setStatus] = useState(true);
   const [team, setTeam] = useState(location.state.teamToManage);

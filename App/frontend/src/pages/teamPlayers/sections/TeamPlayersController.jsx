@@ -6,7 +6,6 @@
 
 
 import {
-  Center,
   HStack,
   Icon,
   Text,
@@ -86,7 +85,7 @@ const TeamPlayersController = ({
   const handleEdit = () => {
     if (!isEdited) {
       setIsEdited(true);
-    };
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -109,13 +108,13 @@ const TeamPlayersController = ({
         } else {
           toast({ description: "Submission saved", status: "success" });
           fetchTeam();
-        };
+        }
       } catch (err) {
         toast({ description: "Error creating team player", status: "error" });
         console.log("Error creating team player:", err);
       } finally {
         onClose();
-      };
+      }
     } else {
       // update team player
       try {
@@ -127,13 +126,13 @@ const TeamPlayersController = ({
         } else {
           toast({ description: "Submission saved", status: "success" });
           fetchTeam();
-        };
+        }
       } catch (err) {
         toast({ description: "Error updating team player", status: "error" });
         console.error("Error updating team player:", err);
       } finally {
         onClose();
-      };
+      }
     }
     // Reset states
     resetFormFields();
@@ -154,7 +153,7 @@ const TeamPlayersController = ({
       fetchAdultPlayers();
     } else {
       fetchAvailPlayers();
-    };
+    }
   }, [team]);
 
   return (

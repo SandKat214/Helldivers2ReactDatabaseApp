@@ -1,5 +1,4 @@
 import {
-  Center,
   HStack,
   Icon,
   Text,
@@ -18,7 +17,6 @@ import {
   Input,
   ModalFooter,
   Button,
-  Select,
   Textarea,
   useToast,
 } from "@chakra-ui/react";

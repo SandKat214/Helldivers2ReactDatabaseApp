@@ -10,7 +10,6 @@ import {
   HStack,
   Icon,
   IconButton,
-  Image,
   Table,
   TableContainer,
   Tbody,

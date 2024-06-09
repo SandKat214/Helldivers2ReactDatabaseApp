@@ -1,4 +1,4 @@
-import { Button, HStack, Heading, Text, VStack } from "@chakra-ui/react";
+import { Button, Heading, Text, VStack } from "@chakra-ui/react";
 import { IoHome } from "react-icons/io5";
 import { Link } from "react-router-dom";
 

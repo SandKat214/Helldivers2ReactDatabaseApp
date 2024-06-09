@@ -8,9 +8,7 @@ import {
   ListIcon,
   Flex,
 } from "@chakra-ui/react";
-import { FaLink } from "react-icons/fa6";
 import { IoIosLink } from "react-icons/io";
-import { MdCheckCircle } from "react-icons/md";
 
 const TableLayout = ({ children, header, desc, relationships }) => {
   return (

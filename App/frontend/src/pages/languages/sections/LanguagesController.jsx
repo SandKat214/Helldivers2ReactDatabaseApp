@@ -54,7 +54,7 @@ const LanguagesController = ({ fetchLanguages }) => {
   const handleEdit = () => {
     if (!isEdited) {
       setIsEdited(true);
-    };
+    }
   };
 
   // keep track of new form data
@@ -87,13 +87,13 @@ const LanguagesController = ({ fetchLanguages }) => {
         fetchLanguages();
       } else {
         toast({ description: "Error saving submission", status: "error" });
-      };
+      }
     } catch (error) {
       toast({ description: "Error creating language", status: "error" });
       console.error("Error creating language:", error);
     } finally {
       onClose();
-    };
+    }
     // Reset states
     setIsLoading(false);
     setIsEdited(false);
