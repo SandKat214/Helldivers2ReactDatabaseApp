@@ -4,16 +4,19 @@ This database driven app will venture to create the first leg of such a hub, whi
 
 ## Home Page
 The home page includes a high level overview for the purpose of our application, and provides an explicit interface for users to search for existing teams.
+![UI](https://github.com/guycdev/react-starter-app/blob/main/images-readme/READ_index_page.png?raw=true)
 
 ## Players Page
 The Players page gives users access to the player registration tab. Users input their information and can upload a profile photo that is stored on Cloudinary as well.
 ### Players Relationships
 - M:M relationship between Players and Teams, with playerID and teamID as FKs inside the TeamPlayers intersection table. A player can be a recruit for zero or more teams.
+![UI](https://github.com/guycdev/react-starter-app/blob/main/images-readme/READ_players_page.png?raw=true)
 
 ## Planets Page
 The Planets page gives users access to what planets exist in the Helldivers ecosystem, Planet types are confined to a set of Enums.
 ### Planets Relationships 
 - 1:M relationship between Planets and Teams, with planetID as a FK inside Teams. A planet can be linked to zero or more team recruitments.
+![UI](https://github.com/guycdev/react-starter-app/blob/main/images-readme/READ_planets_page.png?raw=true)
 
 ## Teams Page
 The Teams page shows users what teams are registered, users can create teams, upload team cover photos, and explore potential teams to join.
@@ -22,19 +25,23 @@ The Teams page shows users what teams are registered, users can create teams, up
 - M:1 relationship between Teams and MissionTypes, with missionID as a FK inside of Teams. A team must have one and only one mission type associated with it.
 - M:1 relationship between Teams and Planets, with planetID as a FK inside of Teams. A team must have one and only one planet associated with it.
 - M:0 relationship between Teams and Languages, with languageID as a FK inside of Teams. A team will only have an associated language if a team chat will be active, otherwise languageID will be NULL.
+![UI](https://github.com/guycdev/react-starter-app/blob/main/images-readme/READ_teams_page.png?raw=true)
 
 ## MissionTypes Page
 Mission types shows users the what mission types exist in the game.
 ### MissionTypes Relationships
 - 1:M relationship between MissionTypes and Teams, with missionID as a FK inside Teams. A mission type can be linked to zero or more team recruitments.
+![UI](https://github.com/guycdev/react-starter-app/blob/main/images-readme/READ_mission_types_page.png?raw=true)
 
 ## Languages Page
 Langauges page shows users what languages are used to communicate between teams. It is a nullable relationship for when teams don't want to communicate.
 ### Languages Relationships
 - 0:M relationship between Languages and Teams, with languageID as a FK inside Teams. A language can be linked to zero or more team recruitments.
+![UI](https://github.com/guycdev/react-starter-app/blob/main/images-readme/READ_languages_page.png?raw=true)
 
 ## TeamsPlayers Page
 Teams players is an intersection table between players and teams.
 ### TeamPlayers Relationships
 - M:1 relationship between TeamPlayers and Players, with playerID as a FK inside TeamPlayers. Each table entry must have one and only one player.
 - M:1 relationship between TeamPlayers and Teams, with teamID as a FK inside TeamPlayers.
+![UI](https://github.com/guycdev/react-starter-app/blob/main/images-readme/READ_team_players_page.png?raw=true)
